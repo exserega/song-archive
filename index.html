@@ -1,121 +1,119 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Song Archive</title>
+    <title>Песни</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding: 20px;
-        }
-        .song-list {
-            list-style: none;
-            padding: 0;
-            margin: 20px;
-        }
-        .song-list li {
-            background: #fff;
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .song-list a {
-            text-decoration: none;
-            color: #333;
-        }
-        .transposition {
-            margin: 20px;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html { font-family: 'Arial', sans-serif; height: 100%; width: 100%; background: #222; color: #fff; display: flex; justify-content: center; align-items: center; }
+        .container { width: 80%; max-width: 900px; padding: 20px; background: #333; border-radius: 8px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+        h1 { color: #fff; text-align: center; }
+        select { width: 200px; margin: 10px; padding: 10px; }
+        #lyrics { white-space: pre-wrap; font-family: 'Garamond', serif; background-color: #f8f8f8; padding: 15px; border-radius: 5px; max-height: 300px; overflow-y: auto; }
+        .chord { font-weight: bold; color: indigo; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <h1>Песни</h1>
+        <div>
+            <select id="songSelect" onchange="displaySongData()"></select>
+            <select id="keySelect" onchange="transposeSong()"></select>
+            <div id="bpmDisplay"></div>
+        </div>
+        <div id="lyrics"></div>
+        <div id="sourceLink"></div>
+    </div>
 
-<header>
-    <h1>Song Archive</h1>
-</header>
+    <script>
+        let songsData = []; // Здесь будут храниться данные песен
 
-<div class="transposition">
-    <label for="keySelect">Select Key:</label>
-    <select id="keySelect">
-        <option value="C">C</option>
-        <option value="D">D</option>
-        <option value="E">E</option>
-        <option value="F">F</option>
-        <option value="G">G</option>
-        <option value="A">A</option>
-        <option value="B">B</option>
-    </select>
-    <button id="transposeBtn">Transpose</button>
-</div>
+        // Загружаем данные из JSON файла
+        fetch('songs.json')
+            .then(response => response.json())
+            .then(data => {
+                songsData = data;
+                loadSongOptions();
+            });
 
-<h2>Song List</h2>
-<ul class="song-list">
-    <li><a href="#" onclick="showSong('letItBe')">Let It Be</a></li>
-</ul>
-
-<div id="songDetails"></div>
-
-<script>
-    const songs = {
-        letItBe: {
-            title: "Let It Be",
-            lyrics: `When I find myself in times of trouble
-            C            G        Am    F
-            Mother Mary comes to me
-            C            G        F   C
-            Speaking words of wisdom
-            Let it be
-
-            And in my hour of darkness
-            C            G        Am    F
-            She is standing right in front of me
-            C            G        F   C
-            Speaking words of wisdom
-            Let it be`,
-            chords: ["C", "G", "Am", "F"]
+        // Загружаем песни в список
+        function loadSongOptions() {
+            const songSelect = document.getElementById('songSelect');
+            songsData.forEach(song => {
+                const option = document.createElement('option');
+                option.value = song.title;
+                option.textContent = song.title;
+                songSelect.appendChild(option);
+            });
+            displaySongData();
         }
-    };
 
-    function showSong(songId) {
-        const song = songs[songId];
-        let songContent = `<h3>${song.title}</h3>`;
-        songContent += `<pre>${song.lyrics}</pre>`;
-        document.getElementById("songDetails").innerHTML = songContent;
-    }
+        // Отображаем данные песни
+        function displaySongData() {
+            const selectedSongTitle = document.getElementById('songSelect').value;
+            const song = songsData.find(s => s.title === selectedSongTitle);
 
-    function transposeChords(songId, key) {
-        const song = songs[songId];
-        const transposedChords = song.chords.map(chord => transposeChord(chord, key));
-        return transposedChords;
-    }
+            if (song) {
+                document.getElementById('lyrics').innerHTML = song.lyricsAndChords
+                    .replace(/([A-GH][#b]?)([a-z0-9]*)/g, '<span class="chord">$&</span>');
+                document.getElementById('sourceLink').innerHTML = `<a href="${song.sourceLink}" target="_blank">Источник</a>`;
+                document.getElementById('bpmDisplay').innerText = `BPM: ${song.bpm}`;
+                loadKeyOptions(song.originalKey);
+            }
+        }
 
-    function transposeChord(chord, key) {
-        const noteOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-        const currentIndex = noteOrder.indexOf(chord);
-        const targetIndex = noteOrder.indexOf(key);
-        const transposedIndex = (currentIndex + (targetIndex - noteOrder.indexOf("C"))) % noteOrder.length;
-        return noteOrder[transposedIndex];
-    }
+        // Загружаем доступные тональности
+        function loadKeyOptions(originalKey) {
+            const keySelect = document.getElementById('keySelect');
+            const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+            keySelect.innerHTML = '';
+            keys.forEach(key => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = key;
+                if (key === originalKey) option.selected = true;
+                keySelect.appendChild(option);
+            });
+        }
 
-    document.getElementById("transposeBtn").addEventListener("click", function () {
-        const key = document.getElementById("keySelect").value;
-        const songId = Object.keys(songs)[0]; // Transpose first song
-        const transposedChords = transposeChords(songId, key);
-        const song = songs[songId];
-        song.lyrics = song.lyrics.replace(/C|D|E|F|G|A|B/g, (match) => transposedChords.shift());
-        showSong(songId);
-    });
-</script>
+        // Транспонирование аккордов
+        function transposeSong() {
+            const selectedSongTitle = document.getElementById('songSelect').value;
+            const song = songsData.find(s => s.title === selectedSongTitle);
+            const newKey = document.getElementById('keySelect').value;
 
+            if (song) {
+                const transposedLyrics = transposeChords(song.lyricsAndChords, song.originalKey, newKey);
+                document.getElementById('lyrics').innerHTML = transposedLyrics
+                    .replace(/([A-GH][#b]?)([a-z0-9]*)/g, '<span class="chord">$&</span>');
+            }
+        }
+
+        // Функция для транспонирования аккордов
+        function transposeChords(lyrics, originalKey, newKey) {
+            const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+            const transposition = getTransposition(originalKey, newKey);
+
+            return lyrics.split('\n').map(line => {
+                return line.split(' ').map(word => {
+                    const chord = chords.find(chord => word.startsWith(chord));
+                    if (chord) {
+                        const chordIndex = chords.indexOf(chord);
+                        const newChordIndex = (chordIndex + transposition + chords.length) % chords.length;
+                        return word.replace(chord, chords[newChordIndex]);
+                    }
+                    return word;
+                }).join(' ');
+            }).join('\n');
+        }
+
+        // Определяем шаг транспонирования
+        function getTransposition(originalKey, newKey) {
+            const majorKeys = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+            const originalIndex = majorKeys.indexOf(originalKey);
+            const newIndex = majorKeys.indexOf(newKey);
+            return newIndex - originalIndex;
+        }
+    </script>
 </body>
 </html>
