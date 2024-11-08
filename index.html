@@ -23,10 +23,10 @@
         let songData = [];  // Массив для хранения данных о песнях
         let originalLyricsAndChords = ''; // Оригинальные аккорды для транспонирования
 
-        // Функция для загрузки песен из файла songs.json
+        // Функция для загрузки песен из файла songs.json на GitHub
         async function loadSongs() {
             try {
-                const response = await fetch('songs.json');
+                const response = await fetch('https://raw.githubusercontent.com/exserega/song-archive/main/songs.json');
                 songData = await response.json();
                 populateSongOptions();
             } catch (error) {
