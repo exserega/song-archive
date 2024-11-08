@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Song Archive</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .song-list {
+            list-style: none;
+            padding: 0;
+            margin: 20px;
+        }
+        .song-list li {
+            background: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .song-list a {
+            text-decoration: none;
+            color: #333;
+        }
+        .transposition {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Song Archive</h1>
+</header>
+
+<div class="transposition">
+    <label for="keySelect">Select Key:</label>
+    <select id="keySelect">
+        <option value="C">C</option>
+        <option value="D">D</option>
+        <option value="E">E</option>
+        <option value="F">F</option>
+        <option value="G">G</option>
+        <option value="A">A</option>
+        <option value="B">B</option>
+    </select>
+    <button id="transposeBtn">Transpose</button>
+</div>
+
+<h2>Song List</h2>
+<ul class="song-list">
+    <li><a href="#" onclick="showSong('song1')">Song 1</a></li>
+    <li><a href="#" onclick="showSong('song2')">Song 2</a></li>
+    <li><a href="#" onclick="showSong('song3')">Song 3</a></li>
+</ul>
+
+<div id="songDetails"></div>
+
+<script>
+    const songs = {
+        song1: {
+            title: "Song 1",
+            lyrics: "C G Am F\nThis is the verse of song 1.",
+            chords: ["C", "G", "Am", "F"]
+        },
+        song2: {
+            title: "Song 2",
+            lyrics: "D A Bm G\nThis is the verse of song 2.",
+            chords: ["D", "A", "Bm", "G"]
+        },
+        song3: {
+            title: "Song 3",
+            lyrics: "E B C#m A\nThis is the verse of song 3.",
+            chords: ["E", "B", "C#m", "A"]
+        }
+    };
+
+    function showSong(songId) {
+        const song = songs[songId];
+        let songContent = `<h3>${song.title}</h3>`;
+        songContent += `<pre>${song.lyrics}</pre>`;
+        document.getElementById("songDetails").innerHTML = songContent;
+    }
+
+    function transposeChords(songId, key) {
+        const song = songs[songId];
+        const transposedChords = song.chords.map(chord => transposeChord(chord, key));
+        return transposedChords;
+    }
+
+    function transposeChord(chord, key) {
+        const noteOrder = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+        const currentIndex = noteOrder.indexOf(chord);
+        const targetIndex = noteOrder.indexOf(key);
+        const transposedIndex = (currentIndex + (targetIndex - noteOrder.indexOf("C"))) % noteOrder.length;
+        return noteOrder[transposedIndex];
+    }
+
+    document.getElementById("transposeBtn").addEventListener("click", function () {
+        const key = document.getElementById("keySelect").value;
+        const songId = Object.keys(songs)[0]; // Transpose first song
+        const transposedChords = transposeChords(songId, key);
+        const song = songs[songId];
+        song.lyrics = song.lyrics.replace(/C|D|E|F|G|A|B/g, (match) => transposedChords.shift());
+        showSong(songId);
+    });
+</script>
+
+</body>
+</html>
