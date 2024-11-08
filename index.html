@@ -60,29 +60,29 @@
 
 <h2>Song List</h2>
 <ul class="song-list">
-    <li><a href="#" onclick="showSong('song1')">Song 1</a></li>
-    <li><a href="#" onclick="showSong('song2')">Song 2</a></li>
-    <li><a href="#" onclick="showSong('song3')">Song 3</a></li>
+    <li><a href="#" onclick="showSong('letItBe')">Let It Be</a></li>
 </ul>
 
 <div id="songDetails"></div>
 
 <script>
     const songs = {
-        song1: {
-            title: "Song 1",
-            lyrics: "C G Am F\nThis is the verse of song 1.",
+        letItBe: {
+            title: "Let It Be",
+            lyrics: `When I find myself in times of trouble
+            C            G        Am    F
+            Mother Mary comes to me
+            C            G        F   C
+            Speaking words of wisdom
+            Let it be
+
+            And in my hour of darkness
+            C            G        Am    F
+            She is standing right in front of me
+            C            G        F   C
+            Speaking words of wisdom
+            Let it be`,
             chords: ["C", "G", "Am", "F"]
-        },
-        song2: {
-            title: "Song 2",
-            lyrics: "D A Bm G\nThis is the verse of song 2.",
-            chords: ["D", "A", "Bm", "G"]
-        },
-        song3: {
-            title: "Song 3",
-            lyrics: "E B C#m A\nThis is the verse of song 3.",
-            chords: ["E", "B", "C#m", "A"]
         }
     };
 
