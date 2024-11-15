@@ -25,19 +25,19 @@
   <script>
     // Конфигурация Firebase
     const firebaseConfig = {
-      apiKey: "AIzaSyBlkjVQFtFpMRFexAi6nBqEkIfjFlU5cDo",
-      authDomain: "song-archive-389a6.firebaseapp.com",
-      projectId: "song-archive-389a6",
-      storageBucket: "song-archive-389a6.firebasestorage.app",
-      messagingSenderId: "619735277668",
-      appId: "1:619735277668:web:51d2684bd8d4444eaf3f71",
-      measurementId: "G-Z6QYH5YD2E"
+      apiKey: "AIzaSyBtvSSa3LvLR6cPaA4lY2ir1SsnNQgA80c",
+      authDomain: "agapeworship-4fae1.firebaseapp.com",
+      projectId: "agapeworship-4fae1",
+      storageBucket: "agapeworship-4fae1.firebasestorage.app",
+      messagingSenderId: "74864209414",
+      appId: "1:74864209414:web:23d4ad190b4d17d9b11d87",
+      measurementId: "G-PF4MKSJKMW"
     };
 
     // Инициализация Firebase
-    const app = firebase.initializeApp(firebaseConfig);
+   const app = initializeApp(firebaseConfig);
     const db = firebase.firestore(app);
-    const analytics = firebase.analytics(app);
+  const analytics = getAnalytics(app);
 
     // Функция для получения данных из Firestore
     const getSongs = async () => {
