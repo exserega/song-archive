@@ -8,9 +8,26 @@
   
   <!-- Подключение Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
-</head>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js"></script>
+
 <body>
   <header>
     <h1>Song Archive</h1>
   </header>
+<script>
+    const firebaseConfig = {
+    apiKey: "AIzaSyBlkjVQFtFpMRFexAi6nBqEkIfjFlU5cDo",
+    authDomain: "song-archive-389a6.firebaseapp.com",
+    projectId: "song-archive-389a6",
+    storageBucket: "song-archive-389a6.firebasestorage.app",
+    messagingSenderId: "619735277668",
+    appId: "1:619735277668:web:51d2684bd8d4444eaf3f71",
+    measurementId: "G-Z6QYH5YD2E"
+  };
+
+  // Инициализация Firebase
+  const app = firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore(app);
+  const analytics = firebase.analytics(app);
+</script>
