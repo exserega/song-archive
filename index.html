@@ -6,10 +6,9 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 
-<!-- Подключение Firebase SDK -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
-  import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+  import { getFirestore, collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
   import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
 
   // Конфигурация Firebase
@@ -29,14 +28,21 @@
   const analytics = getAnalytics(app);
 
   // Функция для получения данных из Firestore
-  const getSongs = async () => {
+  const getSongs = async (searchTerm = "") => {
     try {
-      const songsRef = collection(db, "songs"); // Получаем ссылку на коллекцию "songs"
-      const snapshot = await getDocs(songsRef); // Получаем все документы из коллекции
+      // Поиск по названию песни, если указано
+      const songsRef = collection(db, "songs");
+      let q = songsRef;
+      if (searchTerm) {
+        q = query(songsRef, where("title", ">=", searchTerm), where("title", "<=", searchTerm + "\uf8ff"));
+      }
+
+      const snapshot = await getDocs(q); // Получаем все документы из коллекции
       const songsList = snapshot.docs.map(doc => doc.data()); // Получаем данные песен из документов
 
       // Отображаем данные на странице
       const songListContainer = document.getElementById("song-list");
+      songListContainer.innerHTML = ""; // Очищаем список перед добавлением новых данных
       songsList.forEach(song => {
         const songElement = document.createElement("div");
 
@@ -44,11 +50,20 @@
         const songDetails = `
           <h3>${song.title}</h3>
           <p><strong>Исполнитель:</strong> ${song.artist}</p>
-          <p><strong>Аккорды:</strong> ${song.chords}</p>
-          <p><strong>Текст песни:</strong><br>${song.lyrics}</p>
         `;
+
+        songElement.innerHTML = songDetails; // Вставляем общие данные (название, исполнитель)
         
-        songElement.innerHTML = songDetails; // Вставляем все данные в элемент
+        // Добавляем текст и аккорды
+        song.lyrics.forEach(line => {
+          const lineElement = document.createElement("div");
+          const chordsLine = line.chords.map(chord => `<span class="chord">${chord}</span>`).join(" ");
+          const lyricsLine = `<p>${line.text}</p>`;
+
+          lineElement.innerHTML = `<div class="chords">${chordsLine}</div>${lyricsLine}`;
+          songElement.appendChild(lineElement);
+        });
+
         songListContainer.appendChild(songElement); // Добавляем элемент на страницу
       });
     } catch (error) {
@@ -56,8 +71,18 @@
     }
   };
 
-  // Вызываем функцию получения данных
+  // Функция для поиска песен
+  const searchSongs = () => {
+    const searchTerm = document.getElementById("search").value;
+    getSongs(searchTerm);
+  };
+
+  // Вызов функции получения данных по умолчанию
   getSongs();
+
+  // Обработчик событий для поиска
+  document.getElementById("search").addEventListener("input", searchSongs);
+
 </script>
 
 <body>
@@ -69,5 +94,6 @@
     <input type="text" id="search" placeholder="Поиск песни...">
     <div id="song-list"></div>
   </main>
+
 </body>
 </html>
