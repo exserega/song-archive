@@ -2,9 +2,9 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Song Archive</title>
   <link rel="stylesheet" href="styles.css">
+</head>
   
   <!-- Подключение Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
@@ -15,6 +15,11 @@
   <header>
     <h1>Song Archive</h1>
   </header>
+
+  <main>
+    <input type="text" id="search" placeholder="Поиск песни...">
+    <div id="song-list"></div>
+  </main>
 <script>
     const firebaseConfig = {
     apiKey: "AIzaSyBlkjVQFtFpMRFexAi6nBqEkIfjFlU5cDo",
