@@ -1,100 +1,16 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <title>Песни</title>
-    <style>
-        /* Ваши стили остаются здесь */
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Song Archive</title>
+  <link rel="stylesheet" href="styles.css">
+  
+  <!-- Подключение Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Worship <span class="agape">Agape</span></h1>
-        <div style="display: flex; align-items: center; width: 100%;">
-            <select id="songSelect" class="dropdown" onchange="displaySongData()"></select>
-            <select id="keySelect" class="dropdown" onchange="transposeSong()"></select>
-            <div id="bpmDisplay" style="margin-left: 10px; font-size: 18px; font-weight: bold; color: #ffffff;"></div>
-        </div>
-        <div id="lyrics"></div>
-        <div id="sourceLink"></div>
-    </div>
-
-    <script>
-        let songData = [];  // Массив для хранения данных о песнях
-        let originalLyricsAndChords = ''; // Оригинальные аккорды для транспонирования
-
-        // Функция для загрузки песен из файла songs.json на GitHub
-        async function loadSongs() {
-            try {
-                const response = await fetch('https://raw.githubusercontent.com/exserega/song-archive/main/songs.json');
-                songData = await response.json();
-                populateSongOptions();
-            } catch (error) {
-                console.error('Ошибка загрузки песен:', error);
-            }
-        }
-
-        // Заполнение выпадающего списка песен
-        function populateSongOptions() {
-            const songSelect = document.getElementById('songSelect');
-            songSelect.innerHTML = songData.map(song => `<option value="${song.title}">${song.title}</option>`).join('');
-            displaySongData(); // Показать первую песню по умолчанию
-        }
-
-        // Отображение данных о выбранной песне
-        function displaySongData() {
-            const selectedTitle = document.getElementById('songSelect').value;
-            const selectedSong = songData.find(song => song.title === selectedTitle);
-            if (selectedSong) {
-                document.getElementById('lyrics').innerHTML = formatChords(selectedSong.lyricsAndChords);
-                document.getElementById('sourceLink').innerHTML = `<a href="${selectedSong.sourceLink}" target="_blank">Holychords</a>`;
-                document.getElementById('bpmDisplay').textContent = `BPM: ${selectedSong.bpm}`;
-                populateKeyOptions(selectedSong.originalKey);
-                originalLyricsAndChords = selectedSong.lyricsAndChords;
-            }
-        }
-
-        // Функция для отображения аккордов с форматированием
-        function formatChords(lyrics) {
-            return lyrics.replace(/([A-G][#b]?)([a-z0-9]*)/g, '<span class="chord">$&</span>');
-        }
-
-        // Заполнение списка ключей (тональностей)
-        function populateKeyOptions(originalKey) {
-            const keySelect = document.getElementById('keySelect');
-            const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-            keySelect.innerHTML = keys.map(key => 
-                `<option value="${key}" ${key === originalKey ? 'selected' : ''}>${key}</option>`
-            ).join('');
-        }
-
-        // Функция для транспонирования аккордов
-        function transposeSong() {
-            const newKey = document.getElementById('keySelect').value;
-            const originalKey = songData.find(song => song.title === document.getElementById('songSelect').value).originalKey;
-            const transposedLyrics = transposeChords(originalLyricsAndChords, originalKey, newKey);
-            document.getElementById('lyrics').innerHTML = formatChords(transposedLyrics);
-        }
-
-        // Функция для расчета транспонирования
-        function transposeChords(lyrics, originalKey, newKey) {
-            const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-            const transposition = chords.indexOf(newKey) - chords.indexOf(originalKey);
-
-            return lyrics.split(' ').map(word => {
-                const match = word.match(/^([A-G][#b]?)(.*)$/);
-                if (match) {
-                    const chordIndex = chords.indexOf(match[1]);
-                    if (chordIndex !== -1) {
-                        const newIndex = (chordIndex + transposition + chords.length) % chords.length;
-                        return chords[newIndex] + match[2];
-                    }
-                }
-                return word;
-            }).join(' ');
-        }
-
-        window.onload = loadSongs;
-    </script>
-</body>
-</html>
+  <header>
+    <h1>Song Archive</h1>
+  </header>
