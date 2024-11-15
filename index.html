@@ -39,8 +39,17 @@
       const songListContainer = document.getElementById("song-list");
       songsList.forEach(song => {
         const songElement = document.createElement("div");
-        songElement.innerText = `${song.title} - ${song.artist}`; // Выводим название и исполнителя
-        songListContainer.appendChild(songElement);
+
+        // Создаем HTML элемент для каждого поля
+        const songDetails = `
+          <h3>${song.title}</h3>
+          <p><strong>Исполнитель:</strong> ${song.artist}</p>
+          <p><strong>Аккорды:</strong> ${song.chords}</p>
+          <p><strong>Текст песни:</strong><br>${song.lyrics}</p>
+        `;
+        
+        songElement.innerHTML = songDetails; // Вставляем все данные в элемент
+        songListContainer.appendChild(songElement); // Добавляем элемент на страницу
       });
     } catch (error) {
       console.error("Ошибка при получении песен: ", error);
