@@ -12,7 +12,7 @@ const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
 
 async function fetchSheetData(sheetName) {
-    const range = `${sheetName}!A2:E100`; // Ограничиваем до 100 строк
+    const range = `${sheetName}!A2:E`; // Увеличен диапазон до последней строки
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     const response = await fetch(url);
     return response.json();
@@ -20,31 +20,21 @@ async function fetchSheetData(sheetName) {
 
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) {
-        songSelect.disabled = true;
-        songSelect.innerHTML = '<option value="">-- Сначала выберите лист --</option>';
-        songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
-        return;
-    }
+    if (!sheetName) return;
 
     const data = await fetchSheetData(sheetName);
     const rows = data.values || [];
 
     // Очистка списка песен
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
-    songSelect.disabled = true; // Делаем кнопку неактивной
+    rows.forEach((row, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = row[0]; // Название песни
+        songSelect.appendChild(option);
+    });
 
-    if (rows.length > 0) {
-        rows.forEach((row, index) => {
-            if (row[0]) { // Проверка на пустые строки
-                const option = document.createElement('option');
-                option.value = index;
-                option.textContent = row[0]; // Название песни из колонки А
-                songSelect.appendChild(option);
-            }
-        });
-        songSelect.disabled = false; // Включаем кнопку выбора песни, если строки есть
-    }
+    songSelect.disabled = rows.length === 0;
 });
 
 songSelect.addEventListener('change', async () => {
