@@ -4,63 +4,108 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: row;
+            gap: 20px;
+            margin: 20px;
+        }
+        #song-list {
+            width: 30%;
+            border-right: 1px solid #ddd;
+            padding-right: 20px;
+        }
+        #song-list li {
+            cursor: pointer;
+            margin: 10px 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            list-style: none;
+        }
+        #song-list li:hover {
+            background-color: #e6e6e6;
+        }
+        #song-display {
+            width: 70%;
+        }
+        #song-display pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "Courier New", monospace;
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Список песен</h1>
-    <div>
-        <h2>Быстрые (вертикаль)</h2>
-        <ul id="fast-vertical"></ul>
-
-        <h2>Быстрые (горизонталь)</h2>
-        <ul id="fast-horizontal"></ul>
-
-        <h2>Поклонение (вертикаль)</h2>
-        <ul id="worship-vertical"></ul>
-
-        <h2>Поклонение (горизонталь)</h2>
-        <ul id="worship-horizontal"></ul>
+    <div id="song-list">
+        <h2>Список песен</h2>
+        <ul id="songs"></ul>
+    </div>
+    <div id="song-display">
+        <h2 id="song-title">Выберите песню</h2>
+        <pre id="song-text"></pre>
     </div>
 
     <script>
         const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
         const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // ID таблицы
-
-        // Конфигурация листов
         const sheets = [
-            { id: 'fast-vertical', name: 'Быстрые (вертикаль)', range: 'A2:E' },
-            { id: 'fast-horizontal', name: 'Быстрые (горизонталь)', range: 'A2:E' },
-            { id: 'worship-vertical', name: 'Поклонение (вертикаль)', range: 'A2:E' },
-            { id: 'worship-horizontal', name: 'Поклонение (горизонталь)', range: 'A2:E' }
+            { name: 'Быстрые (вертикаль)', range: 'A2:E' },
+            { name: 'Быстрые (горизонталь)', range: 'A2:E' },
+            { name: 'Поклонение (вертикаль)', range: 'A2:E' },
+            { name: 'Поклонение (горизонталь)', range: 'A2:E' }
         ];
 
-        // Функция для загрузки данных с одного листа
-        async function fetchSheetData(sheet) {
-            try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'${sheet.name}'!${sheet.range}?key=${API_KEY}`;
-                const response = await fetch(url);
-                const data = await response.json();
+        const songsElement = document.getElementById('songs');
+        const songTitleElement = document.getElementById('song-title');
+        const songTextElement = document.getElementById('song-text');
 
-                const list = document.getElementById(sheet.id);
-                if (data.values) {
-                    data.values.forEach(row => {
-                        const li = document.createElement('li');
-                        li.innerHTML = `
-                            <strong>${row[0]}</strong> — ${row[2]} (BPM: ${row[4]})<br>
-                            <a href="${row[3]}" target="_blank">Оригинал</a><br>
-                            <pre>${row[1]}</pre>
-                        `;
-                        list.appendChild(li);
-                    });
-                } else {
-                    list.innerHTML = '<li>Нет данных</li>';
-                }
-            } catch (error) {
-                console.error('Ошибка загрузки данных:', error);
+        async function fetchSheetData(sheet) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'${sheet.name}'!${sheet.range}?key=${API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            return data.values || [];
+        }
+
+        async function loadSongs() {
+            for (const sheet of sheets) {
+                const rows = await fetchSheetData(sheet);
+                rows.forEach(row => {
+                    const li = document.createElement('li');
+                    li.textContent = row[0]; // Название песни
+                    li.dataset.text = row[1]; // Текст с аккордами
+                    li.dataset.key = row[2]; // Тональность
+                    li.dataset.link = row[3]; // Ссылка на оригинал
+                    li.dataset.bpm = row[4]; // BPM
+                    li.addEventListener('click', () => displaySong(li));
+                    songsElement.appendChild(li);
+                });
             }
         }
 
-        // Загрузка данных для всех листов
-        sheets.forEach(fetchSheetData);
+        function displaySong(songElement) {
+            const title = songElement.textContent;
+            const text = songElement.dataset.text;
+            const key = songElement.dataset.key || 'N/A';
+            const bpm = songElement.dataset.bpm || 'N/A';
+            const link = songElement.dataset.link;
+
+            songTitleElement.innerHTML = `
+                ${title} <small>(Тональность: ${key}, BPM: ${bpm})</small>
+            `;
+            songTextElement.innerHTML = `
+                ${text}<br><br>
+                <a href="${link}" target="_blank">Ссылка на оригинал</a>
+            `;
+        }
+
+        loadSongs();
     </script>
 </body>
 </html>
