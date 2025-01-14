@@ -22,32 +22,40 @@
     </div>
 
     <script>
-        const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Вставьте сюда ваш API-ключ
-        const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Вставьте сюда ID таблицы
+        const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
+        const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // ID таблицы
 
         // Конфигурация листов
         const sheets = [
-            { id: 'fast-vertical', name: 'Быстрые (вертикаль)', range: 'A2:C10' },
-            { id: 'fast-horizontal', name: 'Быстрые (горизонталь)', range: 'A2:C10' },
-            { id: 'worship-vertical', name: 'Поклонение (вертикаль)', range: 'A2:C10' },
-            { id: 'worship-horizontal', name: 'Поклонение (горизонталь)', range: 'A2:C10' }
+            { id: 'fast-vertical', name: 'Быстрые (вертикаль)', range: 'A2:E' },
+            { id: 'fast-horizontal', name: 'Быстрые (горизонталь)', range: 'A2:E' },
+            { id: 'worship-vertical', name: 'Поклонение (вертикаль)', range: 'A2:E' },
+            { id: 'worship-horizontal', name: 'Поклонение (горизонталь)', range: 'A2:E' }
         ];
 
         // Функция для загрузки данных с одного листа
         async function fetchSheetData(sheet) {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'${sheet.name}'!${sheet.range}?key=${API_KEY}`;
-            const response = await fetch(url);
-            const data = await response.json();
+            try {
+                const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'${sheet.name}'!${sheet.range}?key=${API_KEY}`;
+                const response = await fetch(url);
+                const data = await response.json();
 
-            const list = document.getElementById(sheet.id);
-            if (data.values) {
-                data.values.forEach(row => {
-                    const li = document.createElement('li');
-                    li.textContent = `${row[0]} - ${row[1]} (BPM: ${row[2]})`;
-                    list.appendChild(li);
-                });
-            } else {
-                list.innerHTML = '<li>Нет данных</li>';
+                const list = document.getElementById(sheet.id);
+                if (data.values) {
+                    data.values.forEach(row => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            <strong>${row[0]}</strong> — ${row[2]} (BPM: ${row[4]})<br>
+                            <a href="${row[3]}" target="_blank">Оригинал</a><br>
+                            <pre>${row[1]}</pre>
+                        `;
+                        list.appendChild(li);
+                    });
+                } else {
+                    list.innerHTML = '<li>Нет данных</li>';
+                }
+            } catch (error) {
+                console.error('Ошибка загрузки данных:', error);
             }
         }
 
