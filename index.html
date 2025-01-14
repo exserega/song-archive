@@ -4,7 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.6;
+        }
+        h1 {
+            text-align: center;
+        }
+        .controls {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 20px;
+        }
+        select {
+            padding: 10px;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        #song-content {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            white-space: pre-wrap;
+        }
+    </style>
 </head>
 <body>
     <h1>Список песен</h1>
@@ -26,6 +52,67 @@
     <div id="song-content">
         Выберите песню, чтобы увидеть её текст и аккорды.
     </div>
-    <script src="script.js"></script>
+    <script>
+        const API_KEY = 'Ваш_API_ключ'; // Вставьте сюда ваш API-ключ
+        const SHEET_ID = 'Ваш_ID_таблицы'; // Вставьте сюда ID вашей таблицы
+        const SHEETS = {
+             'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
+             'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
+             'Поклонение (вертикаль)': 'Поклонение (вертикаль)',
+             'Поклонение (горизонталь)': 'Поклонение (горизонталь)'
+        };
+
+        const sheetSelect = document.getElementById('sheet-select');
+        const songSelect = document.getElementById('song-select');
+        const songContent = document.getElementById('song-content');
+
+        async function fetchSheetData(sheetName) {
+            const range = `${sheetName}!A2:E`;
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        sheetSelect.addEventListener('change', async () => {
+            const sheetName = SHEETS[sheetSelect.value];
+            if (!sheetName) return;
+
+            const data = await fetchSheetData(sheetName);
+            const rows = data.values || [];
+
+            // Очистка списка песен
+            songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
+            rows.forEach((row, index) => {
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = row[0]; // Название песни
+                songSelect.appendChild(option);
+            });
+
+            songSelect.disabled = rows.length === 0;
+        });
+
+        songSelect.addEventListener('change', () => {
+            const sheetName = SHEETS[sheetSelect.value];
+            const songIndex = songSelect.value;
+
+            if (sheetName && songIndex !== '') {
+                fetchSheetData(sheetName).then(data => {
+                    const rows = data.values || [];
+                    const songData = rows[songIndex];
+                    if (songData) {
+                        const [title, lyrics, key, link, bpm] = songData;
+                        songContent.innerHTML = `
+                            <h2>${title} — ${key} (BPM: ${bpm || 'N/A'})</h2>
+                            <a href="${link}" target="_blank">Оригинал</a>
+                            <pre>${lyrics}</pre>
+                        `;
+                    }
+                });
+            } else {
+                songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
+            }
+        });
+    </script>
 </body>
 </html>
