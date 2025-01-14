@@ -27,6 +27,8 @@ sheetSelect.addEventListener('change', async () => {
 
     // Очистка списка песен
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
+    songSelect.disabled = true; // Делаем кнопку неактивной
+
     rows.forEach((row, index) => {
         const option = document.createElement('option');
         option.value = index;
@@ -34,7 +36,7 @@ sheetSelect.addEventListener('change', async () => {
         songSelect.appendChild(option);
     });
 
-    songSelect.disabled = rows.length === 0;
+    songSelect.disabled = rows.length === 0; // Включаем кнопку только если строки есть
 });
 
 songSelect.addEventListener('change', async () => {
