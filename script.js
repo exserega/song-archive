@@ -12,7 +12,7 @@ const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
 
 async function fetchSheetData(sheetName) {
-    const range = `${sheetName}!A2:E`;
+    const range = `${sheetName}!A2:E100`; // Ограничиваем до 100 строк
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     const response = await fetch(url);
     return response.json();
