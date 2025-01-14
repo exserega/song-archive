@@ -1,5 +1,5 @@
-const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Вставьте сюда ваш API-ключ
-const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Вставьте сюда ID вашей таблицы
+const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
+const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
@@ -14,17 +14,9 @@ const songContent = document.getElementById('song-content');
 async function fetchSheetData(sheetName) {
     const range = `${sheetName}!A2:E`; // Увеличен диапазон до последней строки
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
-        }
-        const data = await response.json();
-        return data.values || [];
-    } catch (error) {
-        console.error(error);
-        return [];
-    }
+    const response = await fetch(url);
+    const data = await response.json();
+    return data.values || [];
 }
 
 sheetSelect.addEventListener('change', async () => {
