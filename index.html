@@ -2,30 +2,29 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Песни</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список песен</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Песни</h1>
-        <div class="controls">
-            <label for="sheet-select">Выберите лист:</label>
-            <select id="sheet-select">
-                <option value="">-- Выберите лист --</option>
-                <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
-                <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
-                <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
-                <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
-            </select>
+    <h1>Список песен</h1>
+    <div class="controls">
+        <label for="sheet-select">Выберите лист:</label>
+        <select id="sheet-select">
+            <option value="">-- Выберите лист --</option>
+            <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
+            <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
+            <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
+            <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
+        </select>
 
-            <label for="song-select">Выберите песню:</label>
-            <select id="song-select" disabled>
-                <option value="">-- Сначала выберите лист --</option>
-            </select>
-        </div>
-        <div id="song-content">
-            Выберите песню, чтобы увидеть её текст и аккорды.
-        </div>
+        <label for="song-select">Выберите песню:</label>
+        <select id="song-select" disabled>
+            <option value="">-- Сначала выберите лист --</option>
+        </select>
+    </div>
+    <div id="song-content">
+        Выберите песню, чтобы увидеть её текст и аккорды.
     </div>
     <script src="script.js"></script>
 </body>
