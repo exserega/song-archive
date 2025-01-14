@@ -7,18 +7,39 @@
 </head>
 <body>
     <h1>Список песен</h1>
-    <ul id="song-archive"></ul>
+    <div>
+        <h2>Быстрые (вертикаль)</h2>
+        <ul id="fast-vertical"></ul>
+
+        <h2>Быстрые (горизонталь)</h2>
+        <ul id="fast-horizontal"></ul>
+
+        <h2>Поклонение (вертикаль)</h2>
+        <ul id="worship-vertical"></ul>
+
+        <h2>Поклонение (горизонталь)</h2>
+        <ul id="worship-horizontal"></ul>
+    </div>
+
     <script>
         const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Вставьте сюда ваш API-ключ
         const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Вставьте сюда ID таблицы
-        const RANGE = 'Лист1!A2:C10'; // Укажите диапазон данных
 
-        async function fetchSongs() {
-            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+        // Конфигурация листов
+        const sheets = [
+            { id: 'fast-vertical', name: 'Быстрые (вертикаль)', range: 'A2:C10' },
+            { id: 'fast-horizontal', name: 'Быстрые (горизонталь)', range: 'A2:C10' },
+            { id: 'worship-vertical', name: 'Поклонение (вертикаль)', range: 'A2:C10' },
+            { id: 'worship-horizontal', name: 'Поклонение (горизонталь)', range: 'A2:C10' }
+        ];
+
+        // Функция для загрузки данных с одного листа
+        async function fetchSheetData(sheet) {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/'${sheet.name}'!${sheet.range}?key=${API_KEY}`;
             const response = await fetch(url);
             const data = await response.json();
 
-            const list = document.getElementById('song-list');
+            const list = document.getElementById(sheet.id);
             if (data.values) {
                 data.values.forEach(row => {
                     const li = document.createElement('li');
@@ -30,7 +51,8 @@
             }
         }
 
-        fetchSongs();
+        // Загрузка данных для всех листов
+        sheets.forEach(fetchSheetData);
     </script>
 </body>
 </html>
