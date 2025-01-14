@@ -14,9 +14,17 @@ const songContent = document.getElementById('song-content');
 async function fetchSheetData(sheetName) {
     const range = `${sheetName}!A2:E`; // Увеличен диапазон до последней строки
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
-    return data.values || [];
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`Ошибка загрузки данных: ${response.statusText}`);
+        }
+        const data = await response.json();
+        return data.values || [];
+    } catch (error) {
+        console.error(error);
+        return [];
+    }
 }
 
 sheetSelect.addEventListener('change', async () => {
