@@ -20,7 +20,12 @@ async function fetchSheetData(sheetName) {
 
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) return;
+    if (!sheetName) {
+        songSelect.disabled = true;
+        songSelect.innerHTML = '<option value="">-- Сначала выберите лист --</option>';
+        songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
+        return;
+    }
 
     const data = await fetchSheetData(sheetName);
     const rows = data.values || [];
@@ -39,8 +44,6 @@ sheetSelect.addEventListener('change', async () => {
             }
         });
         songSelect.disabled = false; // Включаем кнопку выбора песни, если строки есть
-    } else {
-        songSelect.disabled = true; // Делаем кнопку неактивной, если строк нет
     }
 });
 
