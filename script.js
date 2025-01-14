@@ -37,23 +37,22 @@ sheetSelect.addEventListener('change', async () => {
     songSelect.disabled = rows.length === 0;
 });
 
-songSelect.addEventListener('change', () => {
+songSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     const songIndex = songSelect.value;
 
     if (sheetName && songIndex !== '') {
-        fetchSheetData(sheetName).then(data => {
-            const rows = data.values || [];
-            const songData = rows[songIndex];
-            if (songData) {
-                const [title, lyrics, key, link, bpm] = songData;
-                songContent.innerHTML = `
-                    <h2>${title} — ${key} (BPM: ${bpm || 'N/A'})</h2>
-                    <a href="${link}" target="_blank">Оригинал</a>
-                    <pre>${lyrics}</pre>
-                `;
-            }
-        });
+        const data = await fetchSheetData(sheetName);
+        const rows = data.values || [];
+        const songData = rows[songIndex];
+        if (songData) {
+            const [title, lyrics, key, link, bpm] = songData;
+            songContent.innerHTML = `
+                <h2>${title} — ${key} (BPM: ${bpm || 'N/A'})</h2>
+                <a href="${link}" target="_blank">Оригинал</a>
+                <pre>${lyrics}</pre>
+            `;
+        }
     } else {
         songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
     }
