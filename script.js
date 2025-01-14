@@ -36,10 +36,10 @@ sheetSelect.addEventListener('change', async () => {
 
     if (rows.length > 0) {
         rows.forEach((row, index) => {
-            if (row.length > 0 && row[0]) { // Проверка на пустые строки
+            if (row[0]) { // Проверка на пустые строки
                 const option = document.createElement('option');
                 option.value = index;
-                option.textContent = row[0]; // Название песни
+                option.textContent = row[0]; // Название песни из колонки А
                 songSelect.appendChild(option);
             }
         });
