@@ -31,10 +31,12 @@ sheetSelect.addEventListener('change', async () => {
 
     if (rows.length > 0) {
         rows.forEach((row, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = row[0]; // Название песни
-            songSelect.appendChild(option);
+            if (row.length > 0 && row[0]) { // Проверка на пустые строки
+                const option = document.createElement('option');
+                option.value = index;
+                option.textContent = row[0]; // Название песни
+                songSelect.appendChild(option);
+            }
         });
         songSelect.disabled = false; // Включаем кнопку выбора песни, если строки есть
     } else {
