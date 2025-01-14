@@ -1,1 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список песен</title>
+</head>
+<body>
+    <h1>Список песен</h1>
+    <ul id="song-archive"></ul>
+    <script>
+        const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Вставьте сюда ваш API-ключ
+        const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Вставьте сюда ID таблицы
+        const RANGE = 'Лист1!A2:C10'; // Укажите диапазон данных
 
+        async function fetchSongs() {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`;
+            const response = await fetch(url);
+            const data = await response.json();
+
+            const list = document.getElementById('song-list');
+            if (data.values) {
+                data.values.forEach(row => {
+                    const li = document.createElement('li');
+                    li.textContent = `${row[0]} - ${row[1]} (BPM: ${row[2]})`;
+                    list.appendChild(li);
+                });
+            } else {
+                list.innerHTML = '<li>Нет данных</li>';
+            }
+        }
+
+        fetchSongs();
+    </script>
+</body>
+</html>
