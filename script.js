@@ -29,14 +29,17 @@ sheetSelect.addEventListener('change', async () => {
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
     songSelect.disabled = true; // Делаем кнопку неактивной
 
-    rows.forEach((row, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = row[0]; // Название песни
-        songSelect.appendChild(option);
-    });
-
-    songSelect.disabled = rows.length === 0; // Включаем кнопку только если строки есть
+    if (rows.length > 0) {
+        rows.forEach((row, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = row[0]; // Название песни
+            songSelect.appendChild(option);
+        });
+        songSelect.disabled = false; // Включаем кнопку выбора песни, если строки есть
+    } else {
+        songSelect.disabled = true; // Делаем кнопку неактивной, если строк нет
+    }
 });
 
 songSelect.addEventListener('change', async () => {
