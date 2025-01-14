@@ -15,15 +15,15 @@ async function fetchSheetData(sheetName) {
     const range = `${sheetName}!A2:E`; // Увеличен диапазон до последней строки
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     const response = await fetch(url);
-    return response.json();
+    const data = await response.json();
+    return data.values || [];
 }
 
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
 
-    const data = await fetchSheetData(sheetName);
-    const rows = data.values || [];
+    const rows = await fetchSheetData(sheetName);
 
     // Очистка списка песен
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
@@ -42,8 +42,7 @@ songSelect.addEventListener('change', async () => {
     const songIndex = songSelect.value;
 
     if (sheetName && songIndex !== '') {
-        const data = await fetchSheetData(sheetName);
-        const rows = data.values || [];
+        const rows = await fetchSheetData(sheetName);
         const songData = rows[songIndex];
         if (songData) {
             const [title, lyrics, key, link, bpm] = songData;
