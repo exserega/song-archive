@@ -75,6 +75,37 @@ function transposeLyrics(lyrics, transposition) {
     ).join('\n');
 }
 
+function updateChordsDisplay(chords) {
+    const chordsDiv = document.getElementById('chords');
+    chordsDiv.innerHTML = chords;
+}
+
+function updateTransposedLyrics() {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+    const newKey = keySelect.value;
+
+    if (!sheetName || songIndex === '' || !newKey) return;
+
+    fetchSheetData(sheetName).then(rows => {
+        const songData = rows[songIndex];
+        if (songData) {
+            const [, lyrics, originalKey, chords] = songData;
+            const transposition = getTransposition(originalKey, newKey);
+            const transposedLyrics = transposeLyrics(lyrics, transposition);
+            const transposedChords = transposeChord(chords, transposition);
+            songContent.innerHTML = `
+                <h2>${songData[0]} — ${newKey}</h2>
+                <div id="chords">${transposedChords}</div> 
+                <pre>${transposedLyrics}</pre>
+                <p>
+                    <a href="${songData[3]}" target="_blank">Ссылка на Holychords</a>
+                </p>
+            `;
+        }
+    });
+}
+
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
