@@ -9,7 +9,7 @@
 <body>
     <h1>Список песен</h1>
 
-    <!-- Контейнер для выбора листа, песни, тональности и кнопок + и - -->
+    <!-- Контейнер для выбора листа, песни и тональности -->
     <div class="controls">
         <div class="control-group">
             <!-- Выбор листа -->
@@ -31,8 +31,8 @@
             </select>
         </div>
 
-        <div id="transpose-controls" class="control-group">
-            <!-- Контейнер для выбора тональности и управления -->
+        <div class="control-group">
+            <!-- Выбор тональности -->
             <label for="key-select">Тональность:</label>
             <select id="key-select">
                 <option value="C">C</option>
@@ -48,8 +48,6 @@
                 <option value="A#">A#</option>
                 <option value="H">H</option>
             </select>
-            <button id="transpose-down">-</button>
-            <button id="transpose-up">+</button>
         </div>
 
         <div class="control-group">
@@ -62,7 +60,7 @@
         <div id="search-results"></div>
     </div>
 
-    <!-- Контейнер для отображения текста песни и результатов поиска -->
+    <!-- Контейнер для отображения текста песни -->
     <div id="song-content">
         <div id="results-container"></div>
     </div>
