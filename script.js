@@ -1,5 +1,5 @@
-const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
-const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
+const API_KEY = 'Ваш_API_KEY';
+const SHEET_ID = 'Ваш_SHEET_ID';
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
@@ -7,13 +7,15 @@ const SHEETS = {
     'Поклонение (горизонталь)': 'Поклонение (горизонталь)'
 };
 
-const NOTES = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
-const REGEX_CHORD = /\b[A-G](#|b)?(m|M|dim|aug|sus[24]?|add\d?|7|9|11|13)?\b/g;
-
 const sheetSelect = document.getElementById('sheet-select');
 const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
 const transposeControls = document.getElementById('transpose-controls');
+const keySelect = document.getElementById('key-select');
+const transposeUp = document.getElementById('transpose-up');
+const transposeDown = document.getElementById('transpose-down');
+
+const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
 
 async function fetchSheetData(sheetName) {
     const range = `${sheetName}!A2:E`;
@@ -23,23 +25,22 @@ async function fetchSheetData(sheetName) {
     return data.values || [];
 }
 
-function transposeChord(chord, semitones) {
-    return chord.replace(REGEX_CHORD, (match) => {
-        const [note, modifier] = match.match(/^[A-G](#|b)?/)[0].split(/(?=#|b)/);
-        const baseIndex = NOTES.indexOf(note + (modifier || ''));
-        if (baseIndex === -1) return match; // Если аккорд не найден в списке
-        const newIndex = (baseIndex + semitones + NOTES.length) % NOTES.length;
-        return NOTES[newIndex] + match.slice((note + (modifier || '')).length);
-    });
+function getTransposition(originalKey, newKey) {
+    const originalIndex = chords.indexOf(originalKey);
+    const newIndex = chords.indexOf(newKey);
+    return newIndex - originalIndex;
 }
 
-function renderSong(title, lyrics, key, link, bpm, transposeBy = 0) {
-    const transposedLyrics = lyrics.replace(REGEX_CHORD, (chord) => transposeChord(chord, transposeBy));
-    songContent.innerHTML = `
-        <h2>${title} — ${key} (BPM: ${bpm || 'N/A'})</h2>
-        <a href="${link}" target="_blank">Оригинал</a>
-        <pre>${transposedLyrics}</pre>
-    `;
+function transposeChord(chord, transposition) {
+    // Логика транспонирования аккорда
+}
+
+function transposeLyrics(lyrics, transposition) {
+    return lyrics.split('\n').map(line =>
+        line.split(' ').map(word =>
+            chords.some(ch => word.startsWith(ch)) ? transposeChord(word, transposition) : word
+        ).join(' ')
+    ).join('\n');
 }
 
 sheetSelect.addEventListener('change', async () => {
@@ -47,18 +48,15 @@ sheetSelect.addEventListener('change', async () => {
     if (!sheetName) return;
 
     const rows = await fetchSheetData(sheetName);
-
-    // Очистка списка песен
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
     rows.forEach((row, index) => {
         const option = document.createElement('option');
         option.value = index;
-        option.textContent = row[0]; // Название песни
+        option.textContent = row[0];
         songSelect.appendChild(option);
     });
 
     songSelect.disabled = rows.length === 0;
-    songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
 });
 
 songSelect.addEventListener('change', async () => {
@@ -69,17 +67,10 @@ songSelect.addEventListener('change', async () => {
         const rows = await fetchSheetData(sheetName);
         const songData = rows[songIndex];
         if (songData) {
-            const [title, lyrics, key, link, bpm] = songData;
-
-            // Отображение текста песни
-            renderSong(title, lyrics, key, link, bpm);
-
-            // Показ контролов транспонирования
-            transposeControls.style.display = 'flex';
-
-            // Сброс транспонирования
-            transposeControls.dataset.key = key;
-            transposeControls.dataset.lyrics = lyrics;
+            const [title, lyrics, key] = songData;
+            songContent.innerHTML = `<h2>${title} — ${key}</h2><pre>${lyrics}</pre>`;
+            keySelect.value = key;
+            transposeControls.style.display = 'block';
         }
     } else {
         songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
@@ -87,19 +78,32 @@ songSelect.addEventListener('change', async () => {
     }
 });
 
-// Добавление событий для транспонирования
-document.getElementById('transpose-up').addEventListener('click', () => {
-    const transposeBy = 1;
-    const lyrics = transposeControls.dataset.lyrics;
-    const key = transposeControls.dataset.key;
-    const transposedKey = transposeChord(key, transposeBy);
-    renderSong(songSelect.options[songSelect.selectedIndex].textContent, lyrics, transposedKey, '', '', transposeBy);
+transposeUp.addEventListener('click', () => {
+    const currentKey = keySelect.value;
+    const newKey = chords[(chords.indexOf(currentKey) + 1) % chords.length];
+    keySelect.value = newKey;
+    updateTransposedLyrics();
 });
 
-document.getElementById('transpose-down').addEventListener('click', () => {
-    const transposeBy = -1;
-    const lyrics = transposeControls.dataset.lyrics;
-    const key = transposeControls.dataset.key;
-    const transposedKey = transposeChord(key, transposeBy);
-    renderSong(songSelect.options[songSelect.selectedIndex].textContent, lyrics, transposedKey, '', '', transposeBy);
+transposeDown.addEventListener('click', () => {
+    const currentKey = keySelect.value;
+    const newKey = chords[(chords.indexOf(currentKey) - 1 + chords.length) % chords.length];
+    keySelect.value = newKey;
+    updateTransposedLyrics();
 });
+
+function updateTransposedLyrics() {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+    const newKey = keySelect.value;
+
+    fetchSheetData(sheetName).then(rows => {
+        const songData = rows[songIndex];
+        if (songData) {
+            const [, lyrics, originalKey] = songData;
+            const transposition = getTransposition(originalKey, newKey);
+            const transposedLyrics = transposeLyrics(lyrics, transposition);
+            songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
+        }
+    });
+}
