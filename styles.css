@@ -68,6 +68,23 @@ select, input {
     background-color: #f0f0f0;
 }
 
+#hidden-controls button {
+    font-size: 14px;
+    padding: 8px;
+    width: auto;
+    display: inline-block;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+#hidden-controls button:hover {
+    background-color: #0056b3;
+}
+
 @media (min-width: 768px) {
     .controls {
         flex-direction: row;
