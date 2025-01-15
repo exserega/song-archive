@@ -14,6 +14,7 @@
 <body>
     <h1>Список песен</h1>
 
+    <!-- Контейнер для выбора листа, песни, тональности и кнопок + и - -->
     <div class="controls">
         <!-- Выбор листа -->
         <label for="sheet-select">Выберите лист:</label>
@@ -31,16 +32,7 @@
             <option value="">-- Сначала выберите лист --</option>
         </select>
 
-        <!-- Поиск песни -->
-        <label for="search-input">Поиск песни:</label>
-        <input type="text" id="search-input" placeholder="Введите название песни...">
-
-        <!-- Контейнер для результатов поиска -->
-        <div id="search-results"></div>
-    </div>
-
-    <!-- Контейнер для отображения текста песни и результатов поиска -->
-    <div id="song-content">
+        <!-- Контейнер для выбора тональности и управления -->
         <div id="transpose-controls" style="display: flex; justify-content: space-between; align-items: center;">
             <label for="key-select">Тональность:</label>
             <select id="key-select">
@@ -61,6 +53,16 @@
             <button id="transpose-up">+</button>
         </div>
 
+        <!-- Поиск песни -->
+        <label for="search-input">Поиск песни:</label>
+        <input type="text" id="search-input" placeholder="Введите название песни...">
+
+        <!-- Контейнер для результатов поиска -->
+        <div id="search-results"></div>
+    </div>
+
+    <!-- Контейнер для отображения текста песни и результатов поиска -->
+    <div id="song-content">
         <div id="results-container"></div>
     </div>
 
