@@ -99,8 +99,17 @@ songSelect.addEventListener('change', async () => {
         const rows = await fetchSheetData(sheetName);
         const songData = rows[songIndex];
         if (songData) {
-            const [title, lyrics, key] = songData;
-            songContent.innerHTML = `<h2>${title} — ${key}</h2><pre>${lyrics}</pre>`;
+            const [title, lyrics, key, holychordsLink, bpm] = songData;
+
+            // Формируем содержимое с новыми данными
+            songContent.innerHTML = `
+                <h2>${title} — ${key}</h2>
+                <p>BPM: ${bpm || 'N/A'}</p>
+                <pre>${lyrics}</pre>
+                <p>
+                    <a href="${holychordsLink}" target="_blank">Ссылка на Holychords</a>
+                </p>
+            `;
             keySelect.value = key;
             transposeControls.style.display = 'block';
         }
