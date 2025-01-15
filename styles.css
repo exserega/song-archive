@@ -45,6 +45,8 @@ select, input {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     margin-top: 10px;
+    line-height: 1.8;
+    overflow-x: auto; /* Для предотвращения вылетов за границы контейнера */
 }
 
 #search-results {
