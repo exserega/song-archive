@@ -36,6 +36,7 @@ select, button {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     margin-top: 10px;
+    z-index: 1; /* Устанавливаем z-index выше поиска */
 }
 
 #search-results {
@@ -47,12 +48,14 @@ select, button {
     max-height: 200px;
     overflow-y: auto;
     position: relative;
-    z-index: 10;
+    z-index: 2; /* Устанавливаем z-index выше, чтобы перекрывать другие элементы */
 }
+
 .search-result {
     padding: 10px;
     cursor: pointer;
 }
+
 .search-result:hover {
     background-color: #f0f0f0;
 }
