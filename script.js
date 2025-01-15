@@ -191,13 +191,13 @@ async function searchSongs(query) {
     const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
     // Очищаем контейнер для результатов поиска
-    const searchResults = document.getElementById('search-results');
-    searchResults.innerHTML = '';
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.innerHTML = '';
 
     if (matchingSongs.length === 0) {
         const noResults = document.createElement('div');
         noResults.textContent = 'Ничего не найдено';
-        searchResults.appendChild(noResults);
+        resultsContainer.appendChild(noResults);
     } else {
         matchingSongs.forEach((song, index) => {
             const resultItem = document.createElement('div');
@@ -206,9 +206,9 @@ async function searchSongs(query) {
             resultItem.addEventListener('click', () => {
                 songSelect.value = index;
                 updateTransposedLyrics();
-                searchResults.innerHTML = ''; // Скрыть результаты поиска
+                resultsContainer.innerHTML = ''; // Скрыть результаты поиска
             });
-            searchResults.appendChild(resultItem);
+            resultsContainer.appendChild(resultItem);
         });
     }
 }
