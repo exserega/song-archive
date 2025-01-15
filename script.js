@@ -185,6 +185,12 @@ transposeDown.addEventListener('click', () => {
     updateTransposedLyrics();
 });
 
+function displaySongDetails(songData, songIndex) {
+    const lyrics = songData[1]; // Текст песни
+    const chords = songData[2]; // Аккорды из столбца C
+    songContent.innerHTML = `<h2>${songData[0]}</h2><pre>${lyrics}\n\nАккорды: ${chords}</pre>`;
+}
+
 keySelect.addEventListener('change', () => {
     updateTransposedLyrics();
 });
