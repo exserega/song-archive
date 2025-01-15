@@ -51,7 +51,6 @@ select, input {
 #chords {
     font-size: 18px;
     color: #666;
-    display: inline-block; /* Устанавливаем отображение на одной строке */
     margin-right: 5px; /* Управляем расстоянием между аккордами */
 }
 
