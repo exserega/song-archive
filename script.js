@@ -144,6 +144,27 @@ sheetSelect.addEventListener('change', async () => {
     songSelect.disabled = rows.length === 0;
     searchInput.value = ''; // Сбрасываем поле поиска
     searchResults.innerHTML = ''; // Очищаем результаты поиска
+
+    // Показать первый аккорд, если доступен
+    if (rows.length > 0) {
+        displaySongDetails(rows[0], 0);
+    }
+});
+
+songSelect.addEventListener('change', async () => {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (sheetName && songIndex !== '') {
+        const rows = await fetchSheetData(sheetName);
+        const songData = rows[songIndex];
+        if (songData) {
+            displaySongDetails(songData, songIndex);
+        }
+    } else {
+        songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
+        transposeControls.style.display = 'none';
+    }
 });
 
 searchInput.addEventListener('input', () => {
