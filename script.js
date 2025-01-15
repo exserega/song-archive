@@ -1,5 +1,5 @@
-const API_KEY = 'Ваш_API_ключ'; // Ваш API-ключ
-const SHEET_ID = 'Ваш_ID_таблицы'; // Ваш ID таблицы
+const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
+const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
