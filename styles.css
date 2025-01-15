@@ -29,8 +29,6 @@ select, button {
 }
 
 #song-content {
-    display: flex;
-    flex-direction: column;
     background-color: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -38,21 +36,6 @@ select, button {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     margin-top: 10px;
-}
-
-#song-content h2 {
-    margin: 0 0 10px;
-}
-
-#chords {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 10px;
-}
-
-#lyrics {
-    font-size: 16px;
-    color: #333;
 }
 
 a {
@@ -87,4 +70,10 @@ a:hover {
     #transpose-controls button {
         margin: 5px 0;
     }
+}
+
+#chords {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 10px;
 }
