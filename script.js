@@ -182,6 +182,45 @@ function updateTransposedLyrics() {
     });
 }
 
+// Функция для поиска песен по названию
+async function searchSongs(query) {
+    const sheetName = SHEETS[sheetSelect.value];
+    if (!sheetName) return;
+
+    const rows = await fetchSheetData(sheetName);
+    const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
+
+    // Создаем элементы для отображения найденных песен
+    const searchResults = document.getElementById('search-results');
+    searchResults.innerHTML = '';
+    matchingSongs.forEach((song, index) => {
+        const resultItem = document.createElement('div');
+        resultItem.textContent = song[0];
+        resultItem.className = 'search-result';
+        resultItem.addEventListener('click', () => {
+            songSelect.value = index;
+            updateTransposedLyrics();
+            searchResults.innerHTML = ''; // Скрыть результаты поиска
+        });
+        searchResults.appendChild(resultItem);
+    });
+}
+
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim();
+    if (query) {
+        searchSongs(query);
+    } else {
+        document.getElementById('search-results').innerHTML = ''; // Скрыть результаты поиска при пустом поиске
+    }
+});
+
+sheetSelect.addEventListener('change', () => {
+    searchInput.value = ''; // Очищаем поиск при изменении листа
+    document.getElementById('search-results').innerHTML = ''; // Скрываем результаты поиска при изменении листа
+});
+
+
 // Обработчик для изменения тональности в списке
 keySelect.addEventListener('change', () => {
     updateTransposedLyrics();
