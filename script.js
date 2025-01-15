@@ -129,6 +129,8 @@ function updateTransposedLyrics() {
     const songIndex = songSelect.value;
     const newKey = keySelect.value;
 
+    if (!sheetName || songIndex === '' || !newKey) return;
+
     fetchSheetData(sheetName).then(rows => {
         const songData = rows[songIndex];
         if (songData) {
@@ -139,3 +141,8 @@ function updateTransposedLyrics() {
         }
     });
 }
+
+// Обработчик для изменения тональности в списке
+keySelect.addEventListener('change', () => {
+    updateTransposedLyrics();
+});
