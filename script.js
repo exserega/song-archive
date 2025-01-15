@@ -1,5 +1,5 @@
-const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
-const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
+const API_KEY = 'Ваш_API_ключ'; // Ваш API-ключ
+const SHEET_ID = 'Ваш_ID_таблицы'; // Ваш ID таблицы
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
@@ -15,7 +15,34 @@ const keySelect = document.getElementById('key-select');
 const transposeUp = document.getElementById('transpose-up');
 const transposeDown = document.getElementById('transpose-down');
 
-const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
+// Получение данных из localStorage
+function loadFromLocalStorage() {
+    const selectedSheet = localStorage.getItem('selectedSheet');
+    const selectedSong = localStorage.getItem('selectedSong');
+    const selectedKey = localStorage.getItem('selectedKey');
+
+    if (selectedSheet) {
+        sheetSelect.value = selectedSheet;
+        updateSongs(selectedSheet);
+    }
+
+    if (selectedSong) {
+        songSelect.value = selectedSong;
+        loadSongData(selectedSheet, selectedSong);
+    }
+
+    if (selectedKey) {
+        keySelect.value = selectedKey;
+        updateTransposedLyrics();
+    }
+}
+
+// Сохранение данных в localStorage
+function saveToLocalStorage(sheet, song, key) {
+    localStorage.setItem('selectedSheet', sheet);
+    localStorage.setItem('selectedSong', song);
+    localStorage.setItem('selectedKey', key);
+}
 
 async function fetchSheetData(sheetName) {
     const range = `${sheetName}!A2:E`;
@@ -26,12 +53,14 @@ async function fetchSheetData(sheetName) {
 }
 
 function getTransposition(originalKey, newKey) {
+    const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
     const originalIndex = chords.indexOf(originalKey);
     const newIndex = chords.indexOf(newKey);
     return newIndex - originalIndex;
 }
 
 function transposeChord(chord, transposition) {
+    let chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
     let chordType = '';
     let baseChord = chord;
     let bassNote = '';
@@ -70,7 +99,7 @@ function transposeChord(chord, transposition) {
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line =>
         line.split(' ').map(word =>
-            chords.some(ch => word.startsWith(ch)) ? transposeChord(word, transposition) : word
+            ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"].some(ch => word.startsWith(ch)) ? transposeChord(word, transposition) : word
         ).join(' ')
     ).join('\n');
 }
@@ -79,6 +108,7 @@ sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
 
+    saveToLocalStorage(sheetName, '', '');
     const rows = await fetchSheetData(sheetName);
     songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
     rows.forEach((row, index) => {
@@ -96,20 +126,12 @@ songSelect.addEventListener('change', async () => {
     const songIndex = songSelect.value;
 
     if (sheetName && songIndex !== '') {
+        saveToLocalStorage(sheetName, songIndex, keySelect.value);
         const rows = await fetchSheetData(sheetName);
         const songData = rows[songIndex];
         if (songData) {
-            const [title, lyrics, key, holychordsLink, bpm] = songData;
-
-            // Формируем содержимое с новыми данными
-            songContent.innerHTML = `
-                <h2>${title} — ${key}</h2>
-                <p>BPM: ${bpm || 'N/A'}</p>
-                <pre>${lyrics}</pre>
-                <p>
-                    <a href="${holychordsLink}" target="_blank">Ссылка на Holychords</a>
-                </p>
-            `;
+            const [title, lyrics, key] = songData;
+            songContent.innerHTML = `<h2>${title} — ${key}</h2><pre>${lyrics}</pre>`;
             keySelect.value = key;
             transposeControls.style.display = 'block';
         }
@@ -151,7 +173,5 @@ function updateTransposedLyrics() {
     });
 }
 
-// Обработчик для изменения тональности в списке
-keySelect.addEventListener('change', () => {
-    updateTransposedLyrics();
-});
+// Загружаем данные из localStorage при инициализации страницы
+document.addEventListener('DOMContentLoaded', loadFromLocalStorage);
