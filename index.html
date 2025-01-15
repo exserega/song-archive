@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        #transpose-controls {
+            margin-bottom: 1rem;
+        }
+    </style>
 </head>
 <body>
     <h1>Список песен</h1>
@@ -36,7 +41,7 @@
 
     <!-- Контейнер для отображения текста песни и результатов поиска -->
     <div id="song-content">
-        <div id="transpose-controls" style="display: none;">
+        <div id="transpose-controls" style="display: flex; justify-content: space-between; align-items: center;">
             <label for="key-select">Тональность:</label>
             <select id="key-select">
                 <option value="C">C</option>
@@ -52,7 +57,6 @@
                 <option value="A#">A#</option>
                 <option value="H">H</option>
             </select>
-
             <button id="transpose-down">-</button>
             <button id="transpose-up">+</button>
         </div>
