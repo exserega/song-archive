@@ -25,6 +25,36 @@ async function fetchSheetData(sheetName) {
     return data.values || [];
 }
 
+// Функция для поиска песен по названию
+async function searchSongs(query) {
+    const sheetName = SHEETS[sheetSelect.value];
+    if (!sheetName) return;
+
+    const rows = await fetchSheetData(sheetName);
+    const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
+
+    // Очищаем контейнер результатов
+    searchResults.innerHTML = '';
+
+    if (matchingSongs.length === 0) {
+        searchResults.innerHTML = '<p>Ничего не найдено</p>';
+    } else {
+        matchingSongs.forEach((song, index) => {
+            const resultItem = document.createElement('div');
+            resultItem.textContent = song[0];
+            resultItem.className = 'search-result';
+            resultItem.addEventListener('click', () => {
+                songSelect.value = index;
+                displaySongDetails(song, index);
+                searchResults.innerHTML = ''; // Убираем результаты поиска после выбора песни
+            });
+            searchResults.appendChild(resultItem);
+        });
+    }
+}
+
+
+
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
     const newIndex = chords.indexOf(newKey);
@@ -120,6 +150,17 @@ sheetSelect.addEventListener('change', async () => {
     });
 
     songSelect.disabled = rows.length === 0;
+    searchInput.value = ''; // Сбрасываем поле поиска
+    searchResults.innerHTML = ''; // Очищаем результаты поиска
+});
+
+searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim();
+    if (query) {
+        searchSongs(query);
+    } else {
+        searchResults.innerHTML = ''; // Скрываем результаты, если поле пустое
+    }
 });
 
 songSelect.addEventListener('change', async () => {
@@ -130,19 +171,7 @@ songSelect.addEventListener('change', async () => {
         const rows = await fetchSheetData(sheetName);
         const songData = rows[songIndex];
         if (songData) {
-            const [title, lyrics, key, holychordsLink, bpm] = songData;
-
-            // Формируем содержимое с новыми данными
-            songContent.innerHTML = `
-                <h2>${title} — ${key}</h2>
-                <p>BPM: ${bpm || 'N/A'}</p>
-                <pre>${lyrics}</pre>
-                <p>
-                    <a href="${holychordsLink}" target="_blank">Ссылка на Holychords</a>
-                </p>
-            `;
-            keySelect.value = key;
-            transposeControls.style.display = 'block';
+            displaySongDetails(songData, songIndex);
         }
     } else {
         songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
@@ -180,37 +209,6 @@ function updateTransposedLyrics() {
             songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
         }
     });
-}
-
-// Функция для поиска песен по названию
-async function searchSongs(query) {
-    const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) return;
-
-    const rows = await fetchSheetData(sheetName);
-    const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
-
-    // Очищаем контейнер для результатов поиска
-    const resultsContainer = document.getElementById('results-container');
-    resultsContainer.innerHTML = '';
-
-    if (matchingSongs.length === 0) {
-        const noResults = document.createElement('div');
-        noResults.textContent = 'Ничего не найдено';
-        resultsContainer.appendChild(noResults);
-    } else {
-        matchingSongs.forEach((song, index) => {
-            const resultItem = document.createElement('div');
-            resultItem.textContent = song[0];
-            resultItem.className = 'search-result';
-            resultItem.addEventListener('click', () => {
-                songSelect.value = index;
-                updateTransposedLyrics();
-                resultsContainer.innerHTML = ''; // Скрыть результаты поиска
-            });
-            resultsContainer.appendChild(resultItem);
-        });
-    }
 }
 
 sheetSelect.addEventListener('change', () => {
