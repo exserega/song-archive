@@ -8,7 +8,9 @@
 </head>
 <body>
     <h1>Список песен</h1>
+
     <div class="controls">
+        <!-- Выбор листа -->
         <label for="sheet-select">Выберите лист:</label>
         <select id="sheet-select">
             <option value="">-- Выберите лист --</option>
@@ -18,17 +20,26 @@
             <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
         </select>
 
+        <!-- Выбор песни -->
         <label for="song-select">Выберите песню:</label>
         <select id="song-select" disabled>
             <option value="">-- Сначала выберите лист --</option>
         </select>
 
+        <!-- Поиск песни -->
         <label for="search-input">Поиск песни:</label>
         <input type="text" id="search-input" placeholder="Введите название песни...">
 
-        <div id="search-results"></div> <!-- Добавили контейнер для результатов поиска -->
+        <!-- Контейнер для результатов поиска -->
+        <div id="search-results"></div>
     </div>
 
+    <!-- Контейнер для отображения текста песни и результатов поиска -->
+    <div id="song-content">
+        <div id="results-container"></div>
+    </div>
+
+    <!-- Контролы для транспонирования -->
     <div id="transpose-controls" style="display: none;">
         <label for="key-select">Тональность:</label>
         <select id="key-select">
@@ -48,10 +59,6 @@
 
         <button id="transpose-down">-</button>
         <button id="transpose-up">+</button>
-    </div>
-
-    <div id="song-content">
-        Выберите песню, чтобы увидеть её текст и аккорды.
     </div>
 
     <script src="script.js"></script>
