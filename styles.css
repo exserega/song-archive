@@ -17,6 +17,15 @@ h1 {
     margin-bottom: 20px;
 }
 
+
+#transpose-controls, #key-select {
+    margin-top: 20px; /* Поднимаем выше текста песни */
+    display: flex;
+    justify-content: space-between; /* Равномерное распределение кнопок */
+    flex-direction: row; /* Горизонтальное расположение кнопок */
+}
+
+
 select, button {
     padding: 12px;
     margin-bottom: 10px;
