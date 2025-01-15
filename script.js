@@ -1,5 +1,5 @@
-const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ';
-const SHEET_ID = 'const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s';
+const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
+const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
@@ -32,7 +32,39 @@ function getTransposition(originalKey, newKey) {
 }
 
 function transposeChord(chord, transposition) {
-    // Логика транспонирования аккорда
+    let chordType = '';
+    let baseChord = chord;
+    let bassNote = '';
+
+    const suffixes = ['maj7', 'm7', '7', 'm', 'dim', 'aug', 'sus2', 'sus4', 'add9', 'dim7', 'aug7', 'sus'];
+
+    if (chord.includes('/')) {
+        [baseChord, bassNote] = chord.split('/');
+    }
+
+    for (let suffix of suffixes) {
+        if (baseChord.endsWith(suffix)) {
+            baseChord = baseChord.slice(0, -suffix.length);
+            chordType = suffix;
+            break;
+        }
+    }
+
+    const currentIndex = chords.indexOf(baseChord);
+    if (currentIndex === -1) return chord;
+
+    const newIndex = (currentIndex + transposition + chords.length) % chords.length;
+    const transposedBaseChord = chords[newIndex] + chordType;
+
+    if (bassNote) {
+        const bassIndex = chords.indexOf(bassNote);
+        if (bassIndex !== -1) {
+            const newBassIndex = (bassIndex + transposition + chords.length) % chords.length;
+            return `${transposedBaseChord}/${chords[newBassIndex]}`;
+        }
+    }
+
+    return transposedBaseChord;
 }
 
 function transposeLyrics(lyrics, transposition) {
