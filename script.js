@@ -190,30 +190,28 @@ async function searchSongs(query) {
     const rows = await fetchSheetData(sheetName);
     const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
-    // Создаем элементы для отображения найденных песен
+    // Очищаем контейнер для результатов поиска
     const searchResults = document.getElementById('search-results');
     searchResults.innerHTML = '';
-    matchingSongs.forEach((song, index) => {
-        const resultItem = document.createElement('div');
-        resultItem.textContent = song[0];
-        resultItem.className = 'search-result';
-        resultItem.addEventListener('click', () => {
-            songSelect.value = index;
-            updateTransposedLyrics();
-            searchResults.innerHTML = ''; // Скрыть результаты поиска
-        });
-        searchResults.appendChild(resultItem);
-    });
-}
 
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim();
-    if (query) {
-        searchSongs(query);
+    if (matchingSongs.length === 0) {
+        const noResults = document.createElement('div');
+        noResults.textContent = 'Ничего не найдено';
+        searchResults.appendChild(noResults);
     } else {
-        document.getElementById('search-results').innerHTML = ''; // Скрыть результаты поиска при пустом поиске
+        matchingSongs.forEach((song, index) => {
+            const resultItem = document.createElement('div');
+            resultItem.textContent = song[0];
+            resultItem.className = 'search-result';
+            resultItem.addEventListener('click', () => {
+                songSelect.value = index;
+                updateTransposedLyrics();
+                searchResults.innerHTML = ''; // Скрыть результаты поиска
+            });
+            searchResults.appendChild(resultItem);
+        });
     }
-});
+}
 
 sheetSelect.addEventListener('change', () => {
     searchInput.value = ''; // Очищаем поиск при изменении листа
