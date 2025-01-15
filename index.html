@@ -24,19 +24,31 @@
         </select>
     </div>
 
-    <!-- Панель транспонирования -->
-    <div id="transpose-controls" style="display: none; margin: 10px 0;">
-        <button id="transpose-down" style="margin-right: 5px;">-</button>
-        <span>Транспонировать</span>
-        <button id="transpose-up" style="margin-left: 5px;">+</button>
+    <div id="transpose-controls" style="display: none;">
+        <label for="key-select">Тональность:</label>
+        <select id="key-select">
+            <option value="C">C</option>
+            <option value="C#">C#</option>
+            <option value="D">D</option>
+            <option value="D#">D#</option>
+            <option value="E">E</option>
+            <option value="F">F</option>
+            <option value="F#">F#</option>
+            <option value="G">G</option>
+            <option value="G#">G#</option>
+            <option value="A">A</option>
+            <option value="A#">A#</option>
+            <option value="H">H</option>
+        </select>
+
+        <button id="transpose-down">-</button>
+        <button id="transpose-up">+</button>
     </div>
 
-    <!-- Содержимое песни -->
     <div id="song-content">
         Выберите песню, чтобы увидеть её текст и аккорды.
     </div>
 
-    <!-- Подключение скрипта -->
     <script src="script.js"></script>
 </body>
 </html>
