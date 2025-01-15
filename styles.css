@@ -51,7 +51,7 @@ select, input {
 #chords {
     font-size: 18px;
     color: #666;
-    margin-bottom: 5px; /* Уменьшил расстояние между аккордами */
+    margin-bottom: 1px; /* Уменьшил расстояние между аккордами */
 }
 
 #search-results {
