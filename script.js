@@ -209,6 +209,11 @@ transposeDown.addEventListener('click', () => {
 function displaySongDetails(songData, songIndex) {
     const lyrics = songData[1]; // Текст песни
     const chords = songData[2]; // Аккорды из столбца C
+
+      // Разделение аккордов и текста
+    const parts = chordsText.split(' '); // Разделяем на аккорды через пробел
+    const chordsHTML = parts.map(chord => `<span id="chords">${chord}</span>`).join(' ');
+    
     songContent.innerHTML = `<h2>${songData[0]}</h2><pre>${lyrics}\n\nАккорды: ${chords}</pre>`;
     transposeControls.style.display = 'block'; // Показать контрол транспонирования
 }
