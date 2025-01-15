@@ -3,34 +3,30 @@ body {
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    background-color: #f4f7f9;
+    background-color: #f9f9f9;
 }
 
 h1 {
     text-align: center;
     color: #333;
+    margin-bottom: 20px;
 }
 
 .controls {
     display: flex;
-    flex-wrap: wrap; /* Для поддержки адаптивности */
+    flex-wrap: wrap;
+    gap: 15px;  /* Пространство между элементами */
     margin-bottom: 20px;
 }
 
 .control-group {
     flex: 1 1 30%;
-    margin-right: 15px;
-    margin-bottom: 15px;
-}
-
-#transpose-controls, #key-select {
-    margin-top: 20px;
+    min-width: 250px;  /* Минимальная ширина элемента */
     display: flex;
-    justify-content: space-between;
-    flex-direction: row;
+    flex-direction: column;
 }
 
-select, button {
+select, input {
     padding: 12px;
     width: 100%;
     border: 1px solid #ddd;
@@ -38,6 +34,7 @@ select, button {
     font-size: 16px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
 }
 
 #song-content {
@@ -74,7 +71,7 @@ select, button {
 @media (min-width: 768px) {
     .controls {
         flex-direction: row;
-        flex-wrap: wrap;
+        justify-content: space-between;
         align-items: center;
     }
     select {
@@ -83,16 +80,10 @@ select, button {
 }
 
 @media (max-width: 600px) {
-    select, button {
+    select, input {
         font-size: 14px;
     }
     #song-content {
         padding: 15px;
-    }
-    #transpose-controls {
-        flex-direction: column;
-    }
-    #transpose-controls button {
-        margin: 5px 0;
     }
 }
