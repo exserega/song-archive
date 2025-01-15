@@ -6,23 +6,6 @@ body {
     background-color: #f9f9f9;
 }
 
-#lyrics {
-            width: 100%;
-            flex-grow: 1;
-            white-space: pre-wrap;
-            font-family: 'Garamond', serif;
-            background-color: #ecf0f1;
-            padding: 20px;
-            border-radius: 8px;
-            overflow-y: auto;
-            font-size: 1.1em;
-            line-height: 1.6;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-            max-height: calc(100vh - 180px);
-            font-weight: bold;
-            color: #34495e;
-        }
-
 h1 {
     text-align: center;
     color: #333;
@@ -56,14 +39,19 @@ select, input {
 
 #song-content {
     background-color: #fff;
-    padding: 20px;
+    padding: 15px; /* Уменьшил отступы */
     border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     margin-top: 10px;
-    line-height: 1.8;
-    overflow-x: auto; /* Для предотвращения вылетов за границы контейнера */
+    line-height: 1.6; /* Уменьшил расстояние между строками */
+}
+
+#chords {
+    font-size: 18px;
+    color: #666;
+    margin-bottom: 5px; /* Уменьшил расстояние между аккордами */
 }
 
 #search-results {
