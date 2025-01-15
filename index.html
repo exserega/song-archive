@@ -5,36 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Список песен</title>
     <link rel="stylesheet" href="styles.css">
-    <style>
-        #transpose-controls {
-            margin-bottom: 1rem;
-        }
-    </style>
 </head>
 <body>
     <h1>Список песен</h1>
 
     <!-- Контейнер для выбора листа, песни, тональности и кнопок + и - -->
     <div class="controls">
-        <!-- Выбор листа -->
-        <label for="sheet-select">Выберите лист:</label>
-        <select id="sheet-select">
-            <option value="">-- Выберите лист --</option>
-            <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
-            <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
-            <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
-            <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
-        </select>
+        <div class="control-group">
+            <!-- Выбор листа -->
+            <label for="sheet-select">Выберите лист:</label>
+            <select id="sheet-select">
+                <option value="">-- Выберите лист --</option>
+                <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
+                <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
+                <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
+                <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
+            </select>
+        </div>
 
-        <!-- Выбор песни -->
-        <label for="song-select">Выберите песню:</label>
-        <select id="song-select" disabled>
-            <option value="">-- Сначала выберите лист --</option>
-        </select>
+        <div class="control-group">
+            <!-- Выбор песни -->
+            <label for="song-select">Выберите песню:</label>
+            <select id="song-select" disabled>
+                <option value="">-- Сначала выберите лист --</option>
+            </select>
+        </div>
 
-        <!-- Контейнер для выбора тональности и управления -->
-        <div id="transpose-controls" style="display: flex; align-items: center; gap: 10px;">
-            <label for="key-select" style="margin: 0;">Тональность:</label>
+        <div id="transpose-controls" class="control-group">
+            <!-- Контейнер для выбора тональности и управления -->
+            <label for="key-select">Тональность:</label>
             <select id="key-select">
                 <option value="C">C</option>
                 <option value="C#">C#</option>
@@ -53,9 +52,11 @@
             <button id="transpose-up">+</button>
         </div>
 
-        <!-- Поиск песни -->
-        <label for="search-input">Поиск песни:</label>
-        <input type="text" id="search-input" placeholder="Введите название песни...">
+        <div class="control-group">
+            <!-- Поиск песни -->
+            <label for="search-input">Поиск песни:</label>
+            <input type="text" id="search-input" placeholder="Введите название песни...">
+        </div>
 
         <!-- Контейнер для результатов поиска -->
         <div id="search-results"></div>
