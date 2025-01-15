@@ -93,6 +93,13 @@ a:hover {
     }
 }
 
+/* Уменьшение размера кнопок транспонирования */
+#transpose-controls button {
+    font-size: 14px;  /* Уменьшение размера кнопок */
+    padding: 8px;     /* Уменьшение отступов */
+    width: auto;
+}
+
 #chords {
     font-size: 18px;
     color: #666;
