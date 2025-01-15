@@ -23,11 +23,18 @@
             <option value="">-- Сначала выберите лист --</option>
         </select>
 
-        <label for="search-input">Поиск песни:</label>
-        <input type="text" id="search-input" placeholder="Введите название песни...">
+        <div class="controls">
+    <!-- Контейнер для поиска -->
+    <label for="search-input">Поиск песни:</label>
+    <input type="text" id="search-input" placeholder="Введите название песни...">
 
-        <div id="search-results"></div> <!-- Добавили контейнер для результатов поиска -->
-    </div>
+    <div id="search-results"></div> <!-- Контейнер для отображения результатов поиска -->
+</div>
+
+<div id="song-content">
+    <!-- Контейнер для отображения текста песни и результатов поиска -->
+    <div id="results-container"></div>
+</div>
 
 <div id="song-content">
         <div id="results-container"></div> <!-- Контейнер для отображения текста песни и результатов поиска -->
