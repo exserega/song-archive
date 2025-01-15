@@ -14,15 +14,23 @@ const transposeControls = document.getElementById('transpose-controls');
 const keySelect = document.getElementById('key-select');
 const transposeUp = document.getElementById('transpose-up');
 const transposeDown = document.getElementById('transpose-down');
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
 
 const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
+let cachedData = {}; // Кэш для данных таблицы
 
+// Функция для получения данных из Google Sheets с кэшированием
 async function fetchSheetData(sheetName) {
+    if (cachedData[sheetName]) return cachedData[sheetName]; // Если данные уже есть в кэше, возвращаем их
+
     const range = `${sheetName}!A2:E`;
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
-    return data.values || [];
+
+    cachedData[sheetName] = data.values || []; // Сохраняем в кэш
+    return cachedData[sheetName];
 }
 
 // Функция для поиска песен по названию
@@ -30,11 +38,10 @@ async function searchSongs(query) {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
 
-    const rows = await fetchSheetData(sheetName);
+    const rows = await fetchSheetData(sheetName); // Используем кэшированные данные
     const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
-    // Очищаем контейнер результатов
-    searchResults.innerHTML = '';
+    searchResults.innerHTML = ''; // Очищаем результаты поиска
 
     if (matchingSongs.length === 0) {
         searchResults.innerHTML = '<p>Ничего не найдено</p>';
@@ -52,8 +59,6 @@ async function searchSongs(query) {
         });
     }
 }
-
-
 
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
@@ -105,11 +110,6 @@ function transposeLyrics(lyrics, transposition) {
     ).join('\n');
 }
 
-function updateChordsDisplay(chords) {
-    const chordsDiv = document.getElementById('chords');
-    chordsDiv.innerHTML = chords;
-}
-
 function updateTransposedLyrics() {
     const sheetName = SHEETS[sheetSelect.value];
     const songIndex = songSelect.value;
@@ -120,18 +120,10 @@ function updateTransposedLyrics() {
     fetchSheetData(sheetName).then(rows => {
         const songData = rows[songIndex];
         if (songData) {
-            const [, lyrics, originalKey, chords] = songData;
+            const [, lyrics, originalKey] = songData;
             const transposition = getTransposition(originalKey, newKey);
             const transposedLyrics = transposeLyrics(lyrics, transposition);
-            const transposedChords = transposeChord(chords, transposition);
-            songContent.innerHTML = `
-                <h2>${songData[0]} — ${newKey}</h2>
-                <div id="chords">${transposedChords}</div> 
-                <pre>${transposedLyrics}</pre>
-                <p>
-                    <a href="${songData[3]}" target="_blank">Ссылка на Holychords</a>
-                </p>
-            `;
+            songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
         }
     });
 }
@@ -193,31 +185,6 @@ transposeDown.addEventListener('click', () => {
     updateTransposedLyrics();
 });
 
-function updateTransposedLyrics() {
-    const sheetName = SHEETS[sheetSelect.value];
-    const songIndex = songSelect.value;
-    const newKey = keySelect.value;
-
-    if (!sheetName || songIndex === '' || !newKey) return;
-
-    fetchSheetData(sheetName).then(rows => {
-        const songData = rows[songIndex];
-        if (songData) {
-            const [, lyrics, originalKey] = songData;
-            const transposition = getTransposition(originalKey, newKey);
-            const transposedLyrics = transposeLyrics(lyrics, transposition);
-            songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
-        }
-    });
-}
-
-sheetSelect.addEventListener('change', () => {
-    searchInput.value = ''; // Очищаем поиск при изменении листа
-    document.getElementById('search-results').innerHTML = ''; // Скрываем результаты поиска при изменении листа
-});
-
-
-// Обработчик для изменения тональности в списке
 keySelect.addEventListener('change', () => {
     updateTransposedLyrics();
 });
