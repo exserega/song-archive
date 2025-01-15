@@ -13,22 +13,25 @@ h1 {
 
 .controls {
     display: flex;
-    flex-direction: column;
+    flex-wrap: wrap; /* Для поддержки адаптивности */
     margin-bottom: 20px;
 }
 
-
-#transpose-controls, #key-select {
-    margin-top: 20px; /* Поднимаем выше текста песни */
-    display: flex;
-    justify-content: space-between; /* Равномерное распределение кнопок */
-    flex-direction: row; /* Горизонтальное расположение кнопок */
+.control-group {
+    flex: 1 1 30%;
+    margin-right: 15px;
+    margin-bottom: 15px;
 }
 
+#transpose-controls, #key-select {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+}
 
 select, button {
     padding: 12px;
-    margin-bottom: 10px;
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 5px;
@@ -68,18 +71,10 @@ select, button {
     background-color: #f0f0f0;
 }
 
-a {
-    color: #007bff;
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
 @media (min-width: 768px) {
     .controls {
         flex-direction: row;
+        flex-wrap: wrap;
         align-items: center;
     }
     select {
@@ -100,17 +95,4 @@ a:hover {
     #transpose-controls button {
         margin: 5px 0;
     }
-}
-
-/* Уменьшение размера кнопок транспонирования */
-#transpose-controls button {
-    font-size: 14px;  /* Уменьшение размера кнопок */
-    padding: 8px;     /* Уменьшение отступов */
-    width: auto;
-}
-
-#chords {
-    font-size: 18px;
-    color: #666;
-    margin-bottom: 10px;
 }
