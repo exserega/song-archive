@@ -25,30 +25,6 @@ async function fetchSheetData(sheetName) {
     return data.values || [];
 }
 
-async function searchSongs(query) {
-    const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName || query.trim() === '') return [];
-
-    const rows = await fetchSheetData(sheetName);
-    return rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
-}
-
-const songSearch = document.getElementById('song-search');
-songSearch.addEventListener('input', async () => {
-    const query = songSearch.value;
-    const results = await searchSongs(query);
-
-    songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
-    results.forEach((row, index) => {
-        const option = document.createElement('option');
-        option.value = index;
-        option.textContent = row[0];
-        songSelect.appendChild(option);
-    });
-
-    songSelect.disabled = results.length === 0;
-});
-
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
     const newIndex = chords.indexOf(newKey);
