@@ -197,7 +197,7 @@ function displaySongDetails(songData, songIndex) {
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
         <pre>${lyrics}</pre>
-        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
+        <p><a href="${holychordsLink}" target="_blank">Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
 }
