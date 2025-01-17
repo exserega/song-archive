@@ -190,10 +190,15 @@ transposeDown.addEventListener('click', () => {
 function displaySongDetails(songData, songIndex) {
     const lyrics = songData[1]; // Текст песни
     const bpm = songData[4] || 'N/A'; // BPM из столбца E
+    const holychordsLink = songData[3] || '#'; // Ссылка на Holychords из столбца D
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
-    songContent.innerHTML = `<h2>${songData[0]}</h2><pre>${lyrics}</pre>`;
+    songContent.innerHTML = `
+        <h2>${songData[0]}</h2>
+        <pre>${lyrics}</pre>
+        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
+    `;
     transposeControls.style.display = 'block';
 }
 
