@@ -194,6 +194,13 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
+    // Используем регулярное выражение для выделения аккордов и вставки их над строкой текста
+    const formattedLyrics = lyrics.split('\n').map(line => {
+        const chords = line.match(/([A-Ga-g#b/dm]+)(?:\s|$)/g) || [];
+        return chords.reduce((formattedLine, chord) => 
+            formattedLine.replace(chord.trim(), `<span class="chord">${chord.trim()}</span>`), line).replace(/\s+/g, ' '); // Убираем лишние пробелы
+    }).join('\n');
+
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
         <pre>${formattedLyrics}</pre>
