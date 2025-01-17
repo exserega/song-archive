@@ -9,29 +9,29 @@ body {
 h1 {
     text-align: center;
     color: #333;
-    margin-bottom: 20px;
+    margin-bottom: 10px;  /* Уменьшил отступ снизу */
 }
 
 .controls {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;  /* Пространство между элементами */
-    margin-bottom: 20px;
+    gap: 10px;  /* Уменьшил пространство между элементами */
+    margin-bottom: 10px;  /* Уменьшил отступ снизу */
 }
 
 .control-group {
     flex: 1 1 30%;
-    min-width: 250px;  /* Минимальная ширина элемента */
+    min-width: 200px;  /* Минимальная ширина элемента */
     display: flex;
     flex-direction: column;
 }
 
 select, input {
-    padding: 12px;
+    padding: 8px;
     width: 100%;
     border: 1px solid #ddd;
     border-radius: 5px;
-    font-size: 16px;
+    font-size: 14px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
@@ -39,12 +39,11 @@ select, input {
 
 #song-content {
     background-color: #fff;
-    padding: 15px; /* Уменьшил отступы */
+    padding: 10px; /* Уменьшил отступы */
     border-radius: 8px;
     border: 1px solid #ddd;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
-    margin-top: 10px;
     line-height: 1.2; /* Уменьшил расстояние между строками */
 }
 
@@ -54,7 +53,7 @@ select, input {
 }
 
 #chords {
-    font-size: 100px;
+    font-size: 90px;
     color: #666;
     display: inline-block; /* Устанавливаем отображение на одной строке */
     margin-right: 1px; /* Управляем расстоянием между аккордами */
@@ -66,7 +65,7 @@ select, input {
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-top: 5px;
-    max-height: 200px;
+    max-height: 150px;
     overflow-y: auto;
     position: relative;
     z-index: 10;
@@ -103,6 +102,7 @@ select, input {
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        gap: 8px;
     }
     select {
         width: auto;
