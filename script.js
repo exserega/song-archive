@@ -198,7 +198,7 @@ function displaySongDetails(songData, songIndex) {
     const formattedLyrics = lyrics.split('\n').map(line => {
         const chords = line.match(/([A-Ga-g#b/dm]+)/g) || [];
         return chords.reduce((formattedLine, chord) => 
-            formattedLine.replace(chord, `<span class="chord">${chord}</span>`), line);
+            formattedLine.replace(chord, `<span class="chord">${chord}</span>`), line).replace(/\s+/g, ' '); // Убираем лишние пробелы
     }).join('\n');
 
     songContent.innerHTML = `
@@ -208,7 +208,6 @@ function displaySongDetails(songData, songIndex) {
     `;
     transposeControls.style.display = 'block';
 }
-
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
