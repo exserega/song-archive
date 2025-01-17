@@ -50,6 +50,12 @@
             </select>
         </div>
 
+        <!-- Элемент для отображения BPM -->
+        <div class="control-group">
+            <label for="bpm-display">BPM:</label>
+            <span id="bpm-display">-</span>
+        </div>
+
         <div id="hidden-controls" style="display: none;">
             <button id="transpose-down">-</button>
             <button id="transpose-up">+</button>
@@ -61,14 +67,19 @@
             <input type="text" id="search-input" placeholder="Введите название песни...">
         </div>
 
+        <!-- Кнопка для перехода на Holychords -->
+        <div class="control-group">
+            <button id="holychords-button" onclick="window.open('https://holychords.com', '_blank')">Holychords</button>
+        </div>
+
         <!-- Контейнер для результатов поиска -->
         <div id="search-results"></div>
     </div>
 
     <!-- Контейнер для отображения текста песни -->
-   <div id="song-content">
-    <div id="results-container"></div>
-</div>
+    <div id="song-content">
+        <div id="results-container"></div>
+    </div>
 
     <script src="script.js"></script>
 </body>
