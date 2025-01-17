@@ -16,6 +16,8 @@ const transposeUp = document.getElementById('transpose-up');
 const transposeDown = document.getElementById('transpose-down');
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
+const bpmDisplay = document.getElementById('bpm-display'); // Новый элемент для отображения BPM
+const holychordsButton = document.getElementById('holychords-button'); // Кнопка перехода
 
 const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
 let cachedData = {}; // Кэш для данных таблицы
@@ -144,11 +146,6 @@ sheetSelect.addEventListener('change', async () => {
     songSelect.disabled = rows.length === 0;
     searchInput.value = ''; // Сбрасываем поле поиска
     searchResults.innerHTML = ''; // Очищаем результаты поиска
-
-    // Показать первый аккорд, если доступен
-    if (rows.length > 0) {
-        displaySongDetails(rows[0], 0);
-    }
 });
 
 songSelect.addEventListener('change', async () => {
@@ -176,22 +173,6 @@ searchInput.addEventListener('input', () => {
     }
 });
 
-songSelect.addEventListener('change', async () => {
-    const sheetName = SHEETS[sheetSelect.value];
-    const songIndex = songSelect.value;
-
-    if (sheetName && songIndex !== '') {
-        const rows = await fetchSheetData(sheetName);
-        const songData = rows[songIndex];
-        if (songData) {
-            displaySongDetails(songData, songIndex);
-        }
-    } else {
-        songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
-        transposeControls.style.display = 'none';
-    }
-});
-
 transposeUp.addEventListener('click', () => {
     const currentKey = keySelect.value;
     const newKey = chords[(chords.indexOf(currentKey) + 1) % chords.length];
@@ -208,15 +189,18 @@ transposeDown.addEventListener('click', () => {
 
 function displaySongDetails(songData, songIndex) {
     const lyrics = songData[1]; // Текст песни
-    const chords = songData[2]; // Аккорды из столбца C
+    const bpm = songData[4] || 'N/A'; // BPM из столбца E
 
-    // Разделение аккордов
-    const parts = chords.split(' '); // Разделяем на аккорды через пробел
-    const chordsHTML = parts.map(chord => `<span>${chord}</span>`).join(' '); // Исправленный подход
+    bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
-    songContent.innerHTML = `<h2>${songData[0]}</h2><pre>${lyrics}\n\n${chordsHTML}</pre>`;
-    transposeControls.style.display = 'block'; // Показать контрол транспонирования
+    songContent.innerHTML = `<h2>${songData[0]}</h2><pre>${lyrics}</pre>`;
+    transposeControls.style.display = 'block';
 }
+
+// Обработчик кнопки Holychords
+holychordsButton.addEventListener('click', () => {
+    window.open('https://holychords.com', '_blank');
+});
 
 keySelect.addEventListener('change', () => {
     updateTransposedLyrics();
