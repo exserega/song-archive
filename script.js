@@ -194,10 +194,17 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
+    // Используем регулярное выражение для выделения аккордов и вставки их над строкой текста
+    const formattedLyrics = lyrics.split('\n').map(line => {
+        const chords = line.match(/([A-Ga-g#b/dm]+)/g) || [];
+        return chords.reduce((formattedLine, chord) => 
+            formattedLine.replace(chord, `<span class="chord">${chord}</span>`), line);
+    }).join('\n');
+
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
-        <pre>${lyrics}</pre>
-        <p><a href="${holychordsLink}" target="_blank">Holychords</a></p>
+        <pre>${formattedLyrics}</pre>
+        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
 }
