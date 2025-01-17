@@ -45,14 +45,14 @@ select, input {
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
     margin-top: 10px;
-    line-height: 1.6; /* Уменьшил расстояние между строками */
+    line-height: 1.2; /* Уменьшил расстояние между строками */
 }
 
 #chords {
     font-size: 18px;
     color: #666;
     display: inline-block; /* Устанавливаем отображение на одной строке */
-    margin-right: 5px; /* Управляем расстоянием между аккордами */
+    margin-right: 1px; /* Управляем расстоянием между аккордами */
 }
 
 #search-results {
