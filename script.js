@@ -69,6 +69,7 @@ async function searchSongs(query) {
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
     const newIndex = chords.indexOf(newKey);
+    if (originalIndex === -1 || newIndex === -1) return 0; // Если тональности не найдены, возвращаем 0
     return newIndex - originalIndex;
 }
 
@@ -92,7 +93,7 @@ function transposeChord(chord, transposition) {
     }
 
     const currentIndex = chords.indexOf(baseChord);
-    if (currentIndex === -1) return chord;
+    if (currentIndex === -1) return chord; // Если аккорд не найден, возвращаем его без изменений
 
     const newIndex = (currentIndex + transposition + chords.length) % chords.length;
     const transposedBaseChord = chords[newIndex] + chordType;
@@ -127,7 +128,10 @@ function updateTransposedLyrics() {
         const songData = rows[songIndex];
         if (songData) {
             const [, lyrics, originalKey] = songData;
+            console.log('Original Key:', originalKey); // Отладка
+            console.log('New Key:', newKey); // Отладка
             const transposition = getTransposition(originalKey, newKey);
+            console.log('Transposition:', transposition); // Отладка
             const transposedLyrics = transposeLyrics(lyrics, transposition);
             songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
         }
@@ -161,6 +165,7 @@ songSelect.addEventListener('change', async () => {
         const songData = rows[songIndex];
         if (songData) {
             displaySongDetails(songData, songIndex);
+            updateTransposedLyrics(); // Добавлен вызов функции
         }
     } else {
         songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
@@ -168,6 +173,9 @@ songSelect.addEventListener('change', async () => {
     }
 });
 
+keySelect.addEventListener('change', () => {
+    updateTransposedLyrics(); // Вызов функции при изменении тональности
+});
 searchInput.addEventListener('input', () => {
     const query = searchInput.value.trim();
     if (query) {
