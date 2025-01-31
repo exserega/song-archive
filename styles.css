@@ -67,9 +67,16 @@ button:hover {
     white-space: pre-wrap;
 }
 
+pre {
+    font-family: monospace; /* Используем моноширинный шрифт для точного выравнивания */
+    white-space: pre-wrap; /* Сохраняем пробелы и переносы строк */
+    line-height: 1.5; /* Увеличиваем расстояние между строками для удобства */
+}
+
 .chord {
     font-weight: bold;
-    color: var(--primary-color);
+    color: #007bff; /* Цвет аккордов */
+    margin-right: 2px; /* Небольшой отступ между аккордами */
 }
 
 #search-results {
