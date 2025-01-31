@@ -115,13 +115,14 @@ function cleanChord(chord) {
 
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
-        const parts = line.split(/(\s+)/); // Разделяем строку на аккорды и пробелы
+        const parts = line.split(/(\S+)/); // Разделяем по аккордам
         return parts.map(part => {
-            if (chords.some(ch => part.trim().startsWith(ch))) {
+            if (chords.some(ch => part.startsWith(ch))) {
                 const cleanedChord = cleanChord(part);
-                return transposeChord(cleanedChord, transposition);
+                const transposed = transposeChord(cleanedChord, transposition);
+                return transposed.split('').map(char => char + ' ').join('').trim();
             }
-            return part; // Возвращаем пробелы без изменений
+            return part;
         }).join('');
     }).join('\n');
 }
@@ -214,10 +215,23 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`;
 
-    // Отображаем текст без изменений, сохраняя пробелы
+    // Форматируем текст песни с учетом выравнивания аккордов
+    const formattedLyrics = lyrics.split('\n').map(line => {
+        // Разделяем строку на аккорды и текст/пробелы
+        const parts = line.split(/(\S+)/); // Разделяем по аккордам (не пробелы)
+        return parts.map(part => {
+            // Если часть строки — аккорд, заменяем каждый символ на два пробела
+            if (chords.some(ch => part.startsWith(ch))) {
+                return part.split('').map(char => char + ' ').join('').trim();
+            }
+            // Иначе оставляем пробелы и текст без изменений
+            return part;
+        }).join('');
+    }).join('\n');
+
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
-        <pre>${lyrics}</pre>
+        <pre>${formattedLyrics}</pre>
         <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
