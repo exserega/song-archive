@@ -127,6 +127,19 @@ function transposeLyrics(lyrics, transposition) {
     }).join('\n');
 }
 
+function processLyrics(lyrics) {
+    return lyrics.split('\n').map(line => {
+        // Проверяем, содержит ли строка аккорды
+        const isChordLine = chords.some(ch => line.includes(ch));
+        
+        if (isChordLine) {
+            // Уменьшаем количество пробелов в 2 раза только для строк с аккордами
+            return line.replace(/ {2}/g, ' '); // Заменяем каждые 2 пробела на 1
+        }
+        return line; // Текстовые строки оставляем без изменений
+    }).join('\n');
+}
+
 
 function updateTransposedLyrics() {
     const sheetName = SHEETS[sheetSelect.value];
@@ -209,25 +222,20 @@ transposeDown.addEventListener('click', () => {
 });
 
 function displaySongDetails(songData, songIndex) {
-    const lyrics = songData[1];
+    const rawLyrics = songData[1];
     const bpm = songData[4] || 'N/A';
     const holychordsLink = songData[3] || '#';
+    
+    // Обрабатываем текст перед отображением
+    const processedLyrics = processLyrics(rawLyrics);
 
     bpmDisplay.textContent = `BPM: ${bpm}`;
-
-    // Форматируем текст песни с учетом выравнивания аккордов
-    const formattedLyrics = lyrics.split('\n').map(line => {
-        // Разделяем строку на аккорды и текст/пробелы
-        const parts = line.split(/(\S+)/); // Разделяем по аккордам (не пробелы)
-        return parts.map(part => {
-            // Если часть строки — аккорд, заменяем каждый символ на два пробела
-            if (chords.some(ch => part.startsWith(ch))) {
-                return part.split('').map(char => char + ' ').join('').trim();
-            }
-            // Иначе оставляем пробелы и текст без изменений
-            return part;
-        }).join('');
-    }).join('\n');
+    songContent.innerHTML = `
+        <h2>${songData[0]}</h2>
+        <pre>${processedLyrics}</pre>
+        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
+    `;
+}
 
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
