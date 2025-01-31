@@ -110,12 +110,12 @@ function transposeChord(chord, transposition) {
 }
 
 function transposeLyrics(lyrics, transposition) {
-    return lyrics.split('\n').map(line =>
-        line.split(' ').map(word => {
+    return lyrics.split('\n').map(line => {
+        return line.split(' ').map(word => {
             const isChord = chords.some(ch => word.startsWith(ch));
             return isChord ? transposeChord(word, transposition) : word;
-        }).join(' ')
-    ).join('\n');
+        }).join(' ');
+    }).join('\n');
 }
 
 function updateTransposedLyrics() {
@@ -129,10 +129,7 @@ function updateTransposedLyrics() {
         const songData = rows[songIndex];
         if (songData) {
             const [, lyrics, originalKey] = songData;
-            console.log('Original Key:', originalKey); // Отладка
-            console.log('New Key:', newKey); // Отладка
             const transposition = getTransposition(originalKey, newKey);
-            console.log('Transposition:', transposition); // Отладка
             const transposedLyrics = transposeLyrics(lyrics, transposition);
             songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
         }
@@ -208,16 +205,10 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
-    const formattedLyrics = lyrics.split('\n').map(line => {
-        return line.trim().split(/\s+/).map(word => {
-            const isChord = chords.some(ch => word.startsWith(ch));
-            return isChord ? `<span class="chord">${word}</span>` : word;
-        }).join(' ');
-    }).join('\n');
-
+    // Отображаем текст песни без подсветки аккордов
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
-        <pre>${formattedLyrics}</pre>
+        <pre>${lyrics}</pre>
         <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
