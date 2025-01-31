@@ -111,9 +111,10 @@ function transposeChord(chord, transposition) {
 
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line =>
-        line.split(' ').map(word =>
-            chords.some(ch => word.startsWith(ch)) ? transposeChord(word, transposition) : word
-        ).join(' ')
+        line.split(' ').map(word => {
+            const isChord = chords.some(ch => word.startsWith(ch));
+            return isChord ? transposeChord(word, transposition) : word;
+        }).join(' ')
     ).join('\n');
 }
 
@@ -207,11 +208,11 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
-    // Используем регулярное выражение для выделения аккордов и вставки их над строкой текста
     const formattedLyrics = lyrics.split('\n').map(line => {
-        const chords = line.match(/([A-Ga-g#b/dm]+)(?:\s|$)/g) || [];
-        return chords.reduce((formattedLine, chord) => 
-            formattedLine.replace(chord.trim(), `<span class="chord">${chord.trim()}</span>`), line).replace(/\s+/g, ' '); // Убираем лишние пробелы
+        return line.trim().split(/\s+/).map(word => {
+            const isChord = chords.some(ch => word.startsWith(ch));
+            return isChord ? `<span class="chord">${word}</span>` : word;
+        }).join(' ');
     }).join('\n');
 
     songContent.innerHTML = `
