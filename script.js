@@ -109,12 +109,17 @@ function transposeChord(chord, transposition) {
     return transposedBaseChord;
 }
 
+function cleanChord(chord) {
+    return chord.replace(/\s+/g, ''); // Убираем все пробелы внутри аккорда
+}
+
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
         const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
         return parts.map(part => {
-            if (chords.some(ch => part.startsWith(ch))) {
-                return transposeChord(part, transposition);
+            if (chords.some(ch => part.trim().startsWith(ch))) {
+                const cleanedChord = cleanChord(part); // Убираем пробелы внутри аккорда
+                return transposeChord(cleanedChord, transposition);
             }
             return part;
         }).join('');
@@ -211,8 +216,9 @@ function displaySongDetails(songData, songIndex) {
     const formattedLyrics = lyrics.split('\n').map(line => {
         const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
         return parts.map(part => {
-            if (chords.some(ch => part.startsWith(ch))) {
-                return part.split('').map(char => char + ' ').join('').trim(); // Каждая буква = 2 символа
+            if (chords.some(ch => part.trim().startsWith(ch))) {
+                const cleanedChord = cleanChord(part); // Убираем пробелы внутри аккорда
+                return cleanedChord.split('').map(char => char + ' ').join('').trim(); // Каждая буква = 2 символа
             }
             return part;
         }).join('');
@@ -225,6 +231,7 @@ function displaySongDetails(songData, songIndex) {
     `;
     transposeControls.style.display = 'block';
 }
+
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
