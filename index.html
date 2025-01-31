@@ -7,78 +7,69 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Agape Worship</h1>
+    <div class="container">
+        <h1>Agape Worship</h1>
 
-    <!-- Контейнер для выбора листа, песни и тональности -->
-    <div class="controls">
-        <div class="control-group">
-            <!-- Выбор листа -->
-            <label for="sheet-select">Выберите лист:</label>
-            <select id="sheet-select">
-                <option value="">-- Выберите лист --</option>
-                <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
-                <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
-                <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
-                <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
-            </select>
-        </div>
+        <!-- Контейнер для управления -->
+        <div class="controls">
+            <div class="control-group">
+                <label for="sheet-select">Выберите лист:</label>
+                <select id="sheet-select">
+                    <option value="">-- Выберите лист --</option>
+                    <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
+                    <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
+                    <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
+                    <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
+                </select>
+            </div>
 
-        <div class="control-group">
-            <!-- Выбор песни -->
-            <label for="song-select">Выберите песню:</label>
-            <select id="song-select" disabled>
-                <option value="">-- Сначала выберите лист --</option>
-            </select>
-        </div>
+            <div class="control-group">
+                <label for="song-select">Выберите песню:</label>
+                <select id="song-select" disabled>
+                    <option value="">-- Сначала выберите лист --</option>
+                </select>
+            </div>
 
-        <div class="control-group">
-            <!-- Выбор тональности -->
-            <label for="key-select">Тональность:</label>
-            <select id="key-select">
-                <option value="C">C</option>
-                <option value="C#">C#</option>
-                <option value="D">D</option>
-                <option value="D#">D#</option>
-                <option value="E">E</option>
-                <option value="F">F</option>
-                <option value="F#">F#</option>
-                <option value="G">G</option>
-                <option value="G#">G#</option>
-                <option value="A">A</option>
-                <option value="A#">A#</option>
-                <option value="H">H</option>
-            </select>
-        </div>
+            <div class="control-group">
+                <label for="key-select">Тональность:</label>
+                <select id="key-select">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="H">H</option>
+                </select>
+            </div>
 
-        <!-- Элемент для отображения BPM -->
-        <div class="control-group">
-            <label for="bpm-display">BPM:</label>
-            <span id="bpm-display">-</span>
-        </div>
+            <div class="control-group">
+                <label for="bpm-display">BPM:</label>
+                <span id="bpm-display">-</span>
+            </div>
 
-        <div id="hidden-controls" style="display: none;">
-            <button id="transpose-down">-</button>
-            <button id="transpose-up">+</button>
-        </div>
+            <div class="control-group">
+                <label for="search-input">Поиск песни:</label>
+                <input type="text" id="search-input" placeholder="Введите название песни...">
+            </div>
 
-        <div class="control-group">
-            <!-- Поиск песни -->
-            <label for="search-input">Поиск песни:</label>
-            <input type="text" id="search-input" placeholder="Введите название песни...">
-        </div>
-
-        <!-- Кнопка для перехода на Holychords -->
-        <div class="control-group">
-            <button id="holychords-button" onclick="window.open('https://holychords.com', '_blank')">Holychords</button>
+            <div class="control-group">
+                <button id="holychords-button">Holychords</button>
+            </div>
         </div>
 
         <!-- Контейнер для результатов поиска -->
         <div id="search-results"></div>
-    </div>
 
-    <!-- Контейнер для отображения текста песни -->
-    <div id="song-content">
-        <div id="results-container"></div>
+        <!-- Контейнер для текста песни -->
+        <div id="song-content">
+            <div id="results-container"></div>
+        </div>
     </div>
 
     <script src="script.js"></script>
