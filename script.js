@@ -110,21 +110,22 @@ function transposeChord(chord, transposition) {
 }
 
 function cleanChord(chord) {
-    return chord.replace(/\s+/g, ''); // Убираем все пробелы внутри аккорда
+    return chord.replace(/\s+/g, ''); // Удаляет все пробелы внутри аккорда
 }
 
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
-        const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
+        const parts = line.split(/(\s+)/); // Разделяем строку на аккорды и пробелы
         return parts.map(part => {
             if (chords.some(ch => part.trim().startsWith(ch))) {
-                const cleanedChord = cleanChord(part); // Убираем пробелы внутри аккорда
+                const cleanedChord = cleanChord(part);
                 return transposeChord(cleanedChord, transposition);
             }
-            return part;
+            return part; // Возвращаем пробелы без изменений
         }).join('');
     }).join('\n');
 }
+
 
 function updateTransposedLyrics() {
     const sheetName = SHEETS[sheetSelect.value];
@@ -207,26 +208,16 @@ transposeDown.addEventListener('click', () => {
 });
 
 function displaySongDetails(songData, songIndex) {
-    const lyrics = songData[1]; // Текст песни
-    const bpm = songData[4] || 'N/A'; // BPM из столбца E
-    const holychordsLink = songData[3] || '#'; // Ссылка на Holychords из столбца D
+    const lyrics = songData[1];
+    const bpm = songData[4] || 'N/A';
+    const holychordsLink = songData[3] || '#';
 
-    bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
+    bpmDisplay.textContent = `BPM: ${bpm}`;
 
-    const formattedLyrics = lyrics.split('\n').map(line => {
-        const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
-        return parts.map(part => {
-            if (chords.some(ch => part.trim().startsWith(ch))) {
-                const cleanedChord = cleanChord(part); // Убираем пробелы внутри аккорда
-                return cleanedChord.split('').map(char => char + ' ').join('').trim(); // Каждая буква = 2 символа
-            }
-            return part;
-        }).join('');
-    }).join('\n');
-
+    // Отображаем текст без изменений, сохраняя пробелы
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
-        <pre>${formattedLyrics}</pre>
+        <pre>${lyrics}</pre>
         <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
