@@ -113,50 +113,42 @@ function cleanChord(chord) {
     return chord.replace(/\s+/g, ''); // Удаляет все пробелы внутри аккорда
 }
 
+// Обработка текста с аккордами и транспонирование
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
-        const parts = line.split(/(\S+)/); // Разделяем по аккордам
-        return parts.map(part => {
-            if (chords.some(ch => part.startsWith(ch))) {
-                const cleanedChord = cleanChord(part);
-                const transposed = transposeChord(cleanedChord, transposition);
-                return transposed.split('').map(char => char + ' ').join('').trim();
-            }
-            return part;
+        if (line.trim() === '') return line;
+        return line.split(/(\S+)/).map(word => {
+            return chords.includes(cleanChord(word)) ? transposeChord(cleanChord(word), transposition) : word;
         }).join('');
     }).join('\n');
 }
 
+// Функция для обработки строк с аккордами и уменьшения пробелов
 function processLyrics(lyrics) {
     return lyrics.split('\n').map(line => {
-        // Проверяем, содержит ли строка аккорды
-        const isChordLine = chords.some(ch => line.includes(ch));
-        
-        if (isChordLine) {
-            // Уменьшаем количество пробелов в 2 раза только для строк с аккордами
-            return line.replace(/ {2}/g, ' '); // Заменяем каждые 2 пробела на 1
-        }
-        return line; // Текстовые строки оставляем без изменений
+        return line.replace(/ {2,}/g, match => ' '.repeat(Math.ceil(match.length / 2)));
     }).join('\n');
 }
 
 
+// Функция обновления транспонированного текста
 function updateTransposedLyrics() {
+    const index = keySelect.dataset.index;
+    if (!index) return;
+    
     const sheetName = SHEETS[sheetSelect.value];
-    const songIndex = songSelect.value;
+    if (!sheetName) return;
+    
+    const songData = cachedData[sheetName][index];
+    const originalKey = songData[1];
+    const lyrics = songData[2] || '';
     const newKey = keySelect.value;
-
-    if (!sheetName || songIndex === '' || !newKey) return;
-
-    fetchSheetData(sheetName).then(rows => {
-        const songData = rows[songIndex];
-        if (songData) {
-            const [, lyrics, originalKey] = songData;
-            const transposition = getTransposition(originalKey, newKey);
-            const transposedLyrics = transposeLyrics(lyrics, transposition);
-            songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${transposedLyrics}</pre>`;
-        }
-    });
+    
+    const transposition = getTransposition(originalKey, newKey);
+    const transposedLyrics = transposeLyrics(lyrics, transposition);
+    const processedLyrics = processLyrics(transposedLyrics);
+    
+    songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${processedLyrics}</pre>`;
 }
 
 sheetSelect.addEventListener('change', async () => {
@@ -178,33 +170,17 @@ sheetSelect.addEventListener('change', async () => {
 });
 
 // Обработчики событий
-songSelect.addEventListener('change', async () => {
+searchInput.addEventListener('input', () => searchSongs(searchInput.value));
+sheetSelect.addEventListener('change', loadSheetSongs);
+songSelect.addEventListener('change', () => {
     const sheetName = SHEETS[sheetSelect.value];
-    const songIndex = songSelect.value;
-
-    if (sheetName && songIndex !== '') {
-        const rows = await fetchSheetData(sheetName);
-        const songData = rows[songIndex];
-        if (songData) {
-            displaySongDetails(songData, songIndex);
-            updateTransposedLyrics(); // Добавлен вызов функции
-        }
-    } else {
-        songContent.innerHTML = 'Выберите песню, чтобы увидеть её текст и аккорды.';
-        transposeControls.style.display = 'none';
-    }
+    if (!sheetName) return;
+    displaySongDetails(cachedData[sheetName][songSelect.value], songSelect.value);
 });
-
-keySelect.addEventListener('change', () => {
-    updateTransposedLyrics(); // Вызов функции при изменении тональности
-});
-searchInput.addEventListener('input', () => {
-    const query = searchInput.value.trim();
-    if (query) {
-        searchSongs(query);
-    } else {
-        searchResults.innerHTML = ''; // Скрываем результаты, если поле пустое
-    }
+keySelect.addEventListener('change', updateTransposedLyrics);
+transposeUp.addEventListener('click', () => {
+    keySelect.selectedIndex = (keySelect.selectedIndex + 1) % keySelect.options.length;
+    updateTransposedLyrics();
 });
 
 transposeUp.addEventListener('click', () => {
@@ -221,28 +197,21 @@ transposeDown.addEventListener('click', () => {
     updateTransposedLyrics();
 });
 
-function displaySongDetails(songData, songIndex) {
-    const rawLyrics = songData[1];
+// Функция отображения деталей песни
+function displaySongDetails(songData, index) {
+    const originalKey = songData[1];
     const bpm = songData[4] || 'N/A';
-    const holychordsLink = songData[3] || '#';
+    const lyrics = songData[2] || '';
+    const sourceUrl = songData[3] || '#';
     
-    // Обрабатываем текст перед отображением
-    const processedLyrics = processLyrics(rawLyrics);
-
     bpmDisplay.textContent = `BPM: ${bpm}`;
-    songContent.innerHTML = `
-        <h2>${songData[0]}</h2>
-        <pre>${processedLyrics}</pre>
-        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
-    `;
-}
-
-    songContent.innerHTML = `
-        <h2>${songData[0]}</h2>
-        <pre>${formattedLyrics}</pre>
-        <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
-    `;
+    holychordsButton.href = sourceUrl;
+    
+    songContent.innerHTML = `<h2>${songData[0]} — ${originalKey}</h2><pre>${processLyrics(lyrics)}</pre>`;
+    keySelect.value = originalKey;
+    keySelect.dataset.index = index;
     transposeControls.style.display = 'block';
+    saveLastSession();
 }
 
 // Обработчик кнопки Holychords
