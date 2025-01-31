@@ -20,18 +20,22 @@ const bpmDisplay = document.getElementById('bpm-display'); // Новый эле�
 const holychordsButton = document.getElementById('holychords-button'); // Кнопка перехода
 
 const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
-let cachedData = {}; // Кэш для данных таблицы
+let cachedData = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+    loadLastSession();
+});
 
 // Функция для получения данных из Google Sheets с кэшированием
 async function fetchSheetData(sheetName) {
-    if (cachedData[sheetName]) return cachedData[sheetName]; // Если данные уже есть в кэше, возвращаем их
+    if (cachedData[sheetName]) return cachedData[sheetName];
 
     const range = `${sheetName}!A2:E`;
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
 
-    cachedData[sheetName] = data.values || []; // Сохраняем в кэш
+    cachedData[sheetName] = data.values || [];
     return cachedData[sheetName];
 }
 
