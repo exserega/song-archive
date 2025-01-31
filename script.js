@@ -111,10 +111,13 @@ function transposeChord(chord, transposition) {
 
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
-        return line.split(' ').map(word => {
-            const isChord = chords.some(ch => word.startsWith(ch));
-            return isChord ? transposeChord(word, transposition) : word;
-        }).join(' ');
+        const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
+        return parts.map(part => {
+            if (chords.some(ch => part.startsWith(ch))) {
+                return transposeChord(part, transposition);
+            }
+            return part;
+        }).join('');
     }).join('\n');
 }
 
@@ -205,15 +208,23 @@ function displaySongDetails(songData, songIndex) {
 
     bpmDisplay.textContent = `BPM: ${bpm}`; // Отображаем BPM
 
-    // Отображаем текст песни без подсветки аккордов
+    const formattedLyrics = lyrics.split('\n').map(line => {
+        const parts = line.split(/(\s+)/); // Разделяем по пробелам, сохраняя их
+        return parts.map(part => {
+            if (chords.some(ch => part.startsWith(ch))) {
+                return part.split('').map(char => char + ' ').join('').trim(); // Каждая буква = 2 символа
+            }
+            return part;
+        }).join('');
+    }).join('\n');
+
     songContent.innerHTML = `
         <h2>${songData[0]}</h2>
-        <pre>${lyrics}</pre>
+        <pre>${formattedLyrics}</pre>
         <p><a href="${holychordsLink}" target="_blank">Посмотреть на Holychords</a></p>
     `;
     transposeControls.style.display = 'block';
 }
-
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
