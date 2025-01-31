@@ -1,74 +1,85 @@
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #0056b3;
+    --background-color: #f9f9f9;
+    --text-color: #333;
+    --border-color: #ddd;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
     line-height: 1.6;
-    background-color: #f9f9f9;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 h1 {
     text-align: center;
-    color: #333;
-    margin-bottom: 10px;  /* Уменьшил отступ снизу */
+    color: var(--text-color);
+    margin-bottom: 20px;
 }
 
 .controls {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;  /* Уменьшил пространство между элементами */
-    margin-bottom: 10px;  /* Уменьшил отступ снизу */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .control-group {
-    flex: 1 1 30%;
-    min-width: 200px;  /* Минимальная ширина элемента */
     display: flex;
     flex-direction: column;
 }
 
-select, input {
-    padding: 8px;
-    width: 100%;
-    border: 1px solid #ddd;
+select, input, button {
+    padding: 10px;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     font-size: 14px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: #fff;
+    cursor: pointer;
+    border: none;
+}
+
+button:hover {
+    background-color: var(--secondary-color);
 }
 
 #song-content {
     background-color: #fff;
-    padding: 10px; /* Уменьшил отступы */
+    padding: 20px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     white-space: pre-wrap;
-    line-height: 1.2; /* Уменьшил расстояние между строками */
 }
 
 .chord {
-    padding-right: 5px; /* Добавляет небольшое расстояние справа от аккордов */
-    font-weight: bold; /* Делает аккорды немного более выделенными */
-}
-
-#chords {
-    font-size: 90px;
-    color: #666;
-    display: inline-block; /* Устанавливаем отображение на одной строке */
-    margin-right: 1px; /* Управляем расстоянием между аккордами */
+    font-weight: bold;
+    color: var(--primary-color);
 }
 
 #search-results {
     background-color: #fff;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-color);
     border-radius: 5px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-top: 5px;
+    margin-top: 10px;
     max-height: 150px;
     overflow-y: auto;
-    position: relative;
-    z-index: 10;
 }
 
 .search-result {
