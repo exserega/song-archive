@@ -156,6 +156,7 @@ sheetSelect.addEventListener('change', async () => {
     searchResults.innerHTML = ''; // Очищаем результаты поиска
 });
 
+// Обработчики событий
 songSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     const songIndex = songSelect.value;
