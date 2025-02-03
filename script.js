@@ -312,23 +312,36 @@ function displaySongDetails(songData, index) {
 }
 
 const splitTextButton = document.getElementById('split-text-button');
-const songContent = document.getElementById('song-content');
+let isTextSplit = false;
+let textParts = [];
 
 splitTextButton.addEventListener('click', () => {
     const lyricsElement = document.querySelector('#song-content pre');
-    if (!lyricsElement || !lyricsElement.textContent.trim()) {
-        alert('Текст песни отсутствует или пуст.');
-        return;
-    }
+    if (!lyricsElement) return;
 
-    // Переключаем класс для разделения текста на две колонки
-    songContent.classList.toggle('split-columns');
+    if (!isTextSplit) {
+        // Разделяем текст на две части
+        const lyrics = lyricsElement.textContent;
+        const middle = Math.ceil(lyrics.split('\n').length / 2);
+        textParts = [
+            lyrics.split('\n').slice(0, middle).join('\n'),
+            lyrics.split('\n').slice(middle).join('\n')
+        ];
 
-    // Меняем текст кнопки
-    if (songContent.classList.contains('split-columns')) {
-        splitTextButton.textContent = 'Объединить текст';
+        // Отображаем первую часть
+        lyricsElement.textContent = textParts[0];
+        splitTextButton.textContent = 'Показать вторую часть';
+        isTextSplit = true;
     } else {
-        splitTextButton.textContent = 'Разделить текст';
+        // Переключаем между частями
+        const currentText = lyricsElement.textContent;
+        if (currentText === textParts[0]) {
+            lyricsElement.textContent = textParts[1];
+            splitTextButton.textContent = 'Показать первую часть';
+        } else {
+            lyricsElement.textContent = textParts[0];
+            splitTextButton.textContent = 'Показать вторую часть';
+        }
     }
 });
 
