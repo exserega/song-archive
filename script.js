@@ -174,8 +174,12 @@ searchInput.addEventListener('input', () => searchSongs(searchInput.value));
 sheetSelect.addEventListener('change', loadSheetSongs);
 songSelect.addEventListener('change', () => {
     const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) return;
-    displaySongDetails(cachedData[sheetName][songSelect.value], songSelect.value);
+    if (!sheetName || !cachedData[sheetName]) return;
+    
+    const songIndex = parseInt(songSelect.value); // Преобразуем в число
+    if (isNaN(songIndex)) return;
+
+    displaySongDetails(cachedData[sheetName][songIndex], songIndex);
 });
 keySelect.addEventListener('change', updateTransposedLyrics);
 transposeUp.addEventListener('click', () => {
@@ -197,21 +201,48 @@ transposeDown.addEventListener('click', () => {
     updateTransposedLyrics();
 });
 
-// Функция отображения деталей песни
+// Добавляем отсутствующую функцию loadSheetSongs
+async function loadSheetSongs() {
+    const sheetName = SHEETS[sheetSelect.value];
+    if (!sheetName) return;
+
+    const rows = await fetchSheetData(sheetName);
+    songSelect.innerHTML = '<option value="">-- Выберите песню --</option>';
+    rows.forEach((row, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = row[0];
+        songSelect.appendChild(option);
+    });
+    songSelect.disabled = false;
+}
+
 function displaySongDetails(songData, index) {
-    const originalKey = songData[1];
-    const bpm = songData[4] || 'N/A';
-    const lyrics = songData[2] || '';
-    const sourceUrl = songData[3] || '#';
-    
+    if (!songData) return;
+
+    // Исправляем индексы столбцов согласно структуре данных:
+    // A - название (0)
+    // B - текст (1)
+    // C - тональность (2)
+    // D - ссылка (3)
+    // E - BPM (4)
+    const originalKey = songData[2]; // Столбец C
+    const bpm = songData[4] || 'N/A'; // Столбец E
+    const lyrics = songData[1] || ''; // Столбец B
+    const sourceUrl = songData[3] || '#'; // Столбец D
+
     bpmDisplay.textContent = `BPM: ${bpm}`;
     holychordsButton.href = sourceUrl;
+
+    // Добавляем обработку текста
+    songContent.innerHTML = `
+        <h2>${songData[0]} — ${originalKey}</h2>
+        <pre>${processLyrics(lyrics)}</pre>
+    `;
     
-    songContent.innerHTML = `<h2>${songData[0]} — ${originalKey}</h2><pre>${processLyrics(lyrics)}</pre>`;
     keySelect.value = originalKey;
     keySelect.dataset.index = index;
     transposeControls.style.display = 'block';
-    saveLastSession();
 }
 
 // Обработчик кнопки Holychords
