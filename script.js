@@ -22,6 +22,7 @@ const bpmDisplay = document.getElementById('bpm-display');
 const holychordsButton = document.getElementById('holychords-button');
 const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
+const splitTextButton = document.getElementById('split-text-button'); // Добавлено здесь
 
 // Загрузка данных при старте
 document.addEventListener('DOMContentLoaded', () => {
