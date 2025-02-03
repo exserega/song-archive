@@ -312,39 +312,7 @@ function displaySongDetails(songData, index) {
 }
 
 const splitTextButton = document.getElementById('split-text-button');
-let isTextSplit = false;
-let textParts = [];
-
-splitTextButton.addEventListener('click', () => {
-    const lyricsElement = document.querySelector('#song-content pre');
-    if (!lyricsElement) return;
-
-    if (!isTextSplit) {
-        // Разделяем текст на две части
-        const lyrics = lyricsElement.textContent;
-        const middle = Math.ceil(lyrics.split('\n').length / 2);
-        textParts = [
-            lyrics.split('\n').slice(0, middle).join('\n'),
-            lyrics.split('\n').slice(middle).join('\n')
-        ];
-
-        // Отображаем первую часть
-        lyricsElement.textContent = textParts[0];
-        splitTextButton.textContent = 'Показать вторую часть';
-        isTextSplit = true;
-    } else {
-        // Переключаем между частями
-        const currentText = lyricsElement.textContent;
-        if (currentText === textParts[0]) {
-            lyricsElement.textContent = textParts[1];
-            splitTextButton.textContent = 'Показать первую часть';
-        } else {
-            lyricsElement.textContent = textParts[0];
-            splitTextButton.textContent = 'Показать вторую часть';
-        }
-    }
-});
-
+const songContent = document.getElementById('song-content');
 
 splitTextButton.addEventListener('click', () => {
     const lyricsElement = document.querySelector('#song-content pre');
@@ -363,6 +331,7 @@ splitTextButton.addEventListener('click', () => {
         splitTextButton.textContent = 'Разделить текст';
     }
 });
+
 
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
