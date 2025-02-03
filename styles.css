@@ -1,42 +1,43 @@
 :root {
-    --primary-color: #4a90e2; /* Современный синий */
-    --secondary-color: #357abd; /* Темный синий */
-    --background-color: #f5f7fa; /* Светлый фон */
-    --text-color: #2c3e50; /* Темный текст */
-    --border-color: #dfe3e8; /* Светлая граница */
-    --hover-color: #e9ecef; /* Цвет при наведении */
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
-    --radius: 8px; /* Скругление углов */
+    --primary-color: #4a90e2;
+    --secondary-color: #357abd;
+    --background-color: #f5f7fa;
+    --text-color: #2c3e50;
+    --border-color: #dfe3e8;
+    --hover-color: #e9ecef;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --radius: 8px;
 }
 
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
-    padding: 20px;
+    padding: 10px;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
+    overflow-x: hidden; /* Убираем горизонтальную прокрутку */
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 h1 {
     text-align: center;
     color: var(--text-color);
-    margin-bottom: 30px;
-    font-size: 2.5rem;
+    margin-bottom: 20px;
+    font-size: 2rem;
     font-weight: 700;
 }
 
 .controls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
 }
 
 .control-group {
@@ -45,13 +46,14 @@ h1 {
 }
 
 select, input, button {
-    padding: 12px;
+    padding: 10px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-    font-size: 16px;
+    font-size: 14px;
     background-color: #fff;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
+    width: 100%; /* Занимаем всю ширину */
 }
 
 select:focus, input:focus, button:focus {
@@ -66,7 +68,6 @@ button {
     cursor: pointer;
     border: none;
     font-weight: 600;
-    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 button:hover {
@@ -76,34 +77,53 @@ button:hover {
 
 #song-content {
     background-color: #fff;
-    padding: 25px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
-    margin-top: 20px;
-    transform: scale(1.05);
-}
-
-/* Улучшаем отображение текста песен */
-pre {
-    font-family: 'Courier New', Courier, monospace;
-    white-space: pre-wrap;
-    line-height: 1.8;
-    font-size: 16px;
-    color: var(--text-color);
-    margin: 0;
-    background-color: #f9f9f9;
     padding: 15px;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
+    box-shadow: var(--shadow);
+    margin-top: 10px;
+    overflow-wrap: break-word; /* Перенос длинных слов */
+}
+
+pre {
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+    line-height: 1.6;
+    font-size: 14px;
+    color: var(--text-color);
+    margin: 0;
+    overflow-x: auto; /* Горизонтальная прокрутка только при необходимости */
+}
+
+#search-results {
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    margin-top: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    position: absolute;
+    width: calc(100% - 20px);
+    z-index: 10;
+}
+
+.search-result {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-result:hover {
+    background-color: var(--hover-color);
 }
 
 /* Добавляем стили для индикатора загрузки */
 .loading {
     display: none;
     text-align: center;
-    padding: 20px;
-    font-size: 18px;
+    padding: 10px;
+    font-size: 16px;
     color: var(--primary-color);
 }
 
