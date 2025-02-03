@@ -291,6 +291,17 @@ function displaySongDetails(songData, index) {
     keySelect.dataset.index = index;
 }
 
+// Обработчик для мобильных устройств
+document.addEventListener('touchstart', function () {}, { passive: true });
+
+// Улучшение отображения текста на мобильных устройствах
+function processLyrics(lyrics) {
+    return lyrics.split('\n').map(line => {
+        // Уменьшаем пробелы между аккордами и текстом
+        return line.replace(/\s+/g, ' ').trim();
+    }).join('\n');
+}
+
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
