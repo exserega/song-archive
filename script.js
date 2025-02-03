@@ -172,6 +172,26 @@ favoriteButton.addEventListener('click', () => {
     }
 });
 
+function displayFavorites() {
+    const favoritesContainer = document.createElement('div');
+    favoritesContainer.id = 'favorites-container';
+    favoritesContainer.innerHTML = '<h2>Избранное</h2>';
+
+    favorites.forEach(fav => {
+        const favoriteItem = document.createElement('div');
+        favoriteItem.textContent = fav.name;
+        favoriteItem.className = 'favorite-item';
+        favoriteItem.addEventListener('click', () => {
+            sheetSelect.value = fav.sheet;
+            songSelect.value = fav.index;
+            displaySongDetails(cachedData[fav.sheet][fav.index], fav.index);
+        });
+        favoritesContainer.appendChild(favoriteItem);
+    });
+
+    document.body.appendChild(favoritesContainer);
+}
+
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
