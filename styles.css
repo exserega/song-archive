@@ -66,6 +66,7 @@ button {
     cursor: pointer;
     border: none;
     font-weight: 600;
+    transition: transform 0.2s ease, background-color 0.3s ease;
 }
 
 button:hover {
@@ -80,8 +81,10 @@ button:hover {
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
     margin-top: 20px;
+    transform: scale(1.05);
 }
 
+/* Улучшаем отображение текста песен */
 pre {
     font-family: 'Courier New', Courier, monospace;
     white-space: pre-wrap;
@@ -89,6 +92,19 @@ pre {
     font-size: 16px;
     color: var(--text-color);
     margin: 0;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border-color);
+}
+
+/* Добавляем стили для индикатора загрузки */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: var(--primary-color);
 }
 
 .chord {
@@ -120,7 +136,7 @@ pre {
     background-color: var(--hover-color);
 }
 
-#hidden-controls button {
+#hidden-controls {
     font-size: 14px;
     padding: 8px 12px;
     width: auto;
@@ -148,7 +164,7 @@ pre {
         font-size: 2rem;
     }
 
-    select, input, button {
+    select, input, {
         font-size: 14px;
         padding: 10px;
     }
