@@ -140,8 +140,12 @@ pre {
 }
 
 @media (max-width: 768px) {
-    .controls {
-        grid-template-columns: 1fr;
+    #song-content pre {
+        font-size: 18px; /* Увеличиваем размер шрифта */
+        line-height: 1.8; /* Увеличиваем межстрочный интервал */
+        padding: 15px; /* Добавляем отступы */
+        white-space: pre-wrap; /* Перенос строк */
+        word-wrap: break-word; /* Перенос длинных слов */
     }
 
     h1 {
@@ -163,8 +167,8 @@ pre {
         padding: 10px;
     }
 
-    .container {
-        padding: 10px;
+     .container {
+        padding: 10px; /* Уменьшаем отступы контейнера */
     }
 
     h1 {
