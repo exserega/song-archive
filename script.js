@@ -143,11 +143,7 @@ function transposeLyrics(lyrics, transposition) {
 // Функция для обработки строк с аккордами и уменьшения пробелов
 function processLyrics(lyrics) {
     return lyrics.split('\n').map(line => {
-        // Сохраняем пробелы между аккордами и текстом
-        return line.replace(/(\[.*?\])/g, match => {
-            // Добавляем пробелы вокруг аккордов для лучшего форматирования
-            return ` ${match} `;
-        }).replace(/\s+/g, ' ').trim(); // Убираем лишние пробелы, но сохраняем один пробел между элементами
+        return line.replace(/ {2,}/g, match => ' '.repeat(Math.ceil(match.length / 2)));
     }).join('\n');
 }
 
