@@ -113,10 +113,6 @@ pre {
     background-color: var(--secondary-color);
 }
 
-#song-content pre {
-    column-count: 2; /* Разделение на две колонки */
-    column-gap: 20px; /* Расстояние между колонками */
-}
 
 #search-results {
     background-color: #fff;
