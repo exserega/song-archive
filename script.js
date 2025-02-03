@@ -345,6 +345,27 @@ splitTextButton.addEventListener('click', () => {
     }
 });
 
+const splitTextButton = document.getElementById('split-text-button');
+const songContent = document.getElementById('song-content');
+
+splitTextButton.addEventListener('click', () => {
+    const lyricsElement = document.querySelector('#song-content pre');
+    if (!lyricsElement || !lyricsElement.textContent.trim()) {
+        alert('Текст песни отсутствует или пуст.');
+        return;
+    }
+
+    // Переключаем класс для разделения текста на две колонки
+    songContent.classList.toggle('split-columns');
+
+    // Меняем текст кнопки
+    if (songContent.classList.contains('split-columns')) {
+        splitTextButton.textContent = 'Объединить текст';
+    } else {
+        splitTextButton.textContent = 'Разделить текст';
+    }
+});
+
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
