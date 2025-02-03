@@ -140,12 +140,7 @@ function transposeLyrics(lyrics, transposition) {
 }
 
 
-// Функция для обработки строк с аккордами и уменьшения пробелов
-function processLyrics(lyrics) {
-    return lyrics.split('\n').map(line => {
-        return line.replace(/ {2,}/g, match => ' '.repeat(Math.ceil(match.length / 2)));
-    }).join('\n');
-}
+
 
 // Функция для добавления песни в избранное
 favoriteButton.addEventListener('click', () => {
