@@ -7,36 +7,47 @@ const SHEETS = {
     'Поклонение (горизонталь)': 'Поклонение (горизонталь)'
 };
 
+const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
+let cachedData = {};
+let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+// Элементы DOM
 const sheetSelect = document.getElementById('sheet-select');
 const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
-const transposeControls = document.getElementById('transpose-controls');
 const keySelect = document.getElementById('key-select');
-const transposeUp = document.getElementById('transpose-up');
-const transposeDown = document.getElementById('transpose-down');
 const searchInput = document.getElementById('search-input');
 const searchResults = document.getElementById('search-results');
-const bpmDisplay = document.getElementById('bpm-display'); // Новый элемент для отображения BPM
-const holychordsButton = document.getElementById('holychords-button'); // Кнопка перехода
+const bpmDisplay = document.getElementById('bpm-display');
+const holychordsButton = document.getElementById('holychords-button');
+const favoriteButton = document.getElementById('favorite-button');
+const loadingIndicator = document.getElementById('loading-indicator');
 
-const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
-let cachedData = {};
-
+// Загрузка данных при старте
 document.addEventListener('DOMContentLoaded', () => {
     loadLastSession();
 });
 
-// Функция для получения данных из Google Sheets с кэшированием
+// Функция для загрузки данных из Google Sheets
 async function fetchSheetData(sheetName) {
     if (cachedData[sheetName]) return cachedData[sheetName];
 
-    const range = `${sheetName}!A2:E`;
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
-    const response = await fetch(url);
-    const data = await response.json();
+    loadingIndicator.style.display = 'block'; // Показываем индикатор загрузки
 
-    cachedData[sheetName] = data.values || [];
-    return cachedData[sheetName];
+    try {
+        const range = `${sheetName}!A2:E`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        cachedData[sheetName] = data.values || [];
+        return cachedData[sheetName];
+    } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+        return [];
+    } finally {
+        loadingIndicator.style.display = 'none'; // Скрываем индикатор загрузки
+    }
 }
 
 // Функция для поиска песен по названию
@@ -136,6 +147,31 @@ function processLyrics(lyrics) {
     }).join('\n');
 }
 
+// Функция для добавления песни в избранное
+favoriteButton.addEventListener('click', () => {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const songData = cachedData[sheetName][songIndex];
+    if (!songData) return;
+
+    const song = {
+        name: songData[0],
+        sheet: sheetName,
+        index: songIndex
+    };
+
+    if (!favorites.some(fav => fav.name === song.name && fav.sheet === song.sheet)) {
+        favorites.push(song);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        alert('Песня добавлена в избранное!');
+    } else {
+        alert('Песня уже в избранном!');
+    }
+});
+
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
@@ -234,32 +270,25 @@ async function loadSheetSongs() {
     songSelect.disabled = false;
 }
 
+// Функция для отображения текста песни
 function displaySongDetails(songData, index) {
     if (!songData) return;
 
-    // Исправляем индексы столбцов согласно структуре данных:
-    // A - название (0)
-    // B - текст (1)
-    // C - тональность (2)
-    // D - ссылка (3)
-    // E - BPM (4)
-    const originalKey = songData[2]; // Столбец C
-    const bpm = songData[4] || 'N/A'; // Столбец E
-    const lyrics = songData[1] || ''; // Столбец B
-    const sourceUrl = songData[3] || '#'; // Столбец D
+    const originalKey = songData[2];
+    const bpm = songData[4] || 'N/A';
+    const lyrics = songData[1] || '';
+    const sourceUrl = songData[3] || '#';
 
     bpmDisplay.textContent = `BPM: ${bpm}`;
     holychordsButton.href = sourceUrl;
 
-    // Добавляем обработку текста
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
         <pre>${processLyrics(lyrics)}</pre>
     `;
-    
+
     keySelect.value = originalKey;
     keySelect.dataset.index = index;
-    transposeControls.style.display = 'block';
 }
 
 // Обработчик кнопки Holychords
