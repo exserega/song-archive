@@ -279,7 +279,7 @@ function displaySongDetails(songData, index) {
     const lyrics = songData[1] || '';
     const sourceUrl = songData[3] || '#';
 
-    bpmDisplay.textContent = `BPM: ${bpm}`;
+    bpmDisplay.textContent = `: ${bpm}`;
     holychordsButton.href = sourceUrl;
 
     songContent.innerHTML = `
