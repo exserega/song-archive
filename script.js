@@ -140,7 +140,12 @@ function transposeLyrics(lyrics, transposition) {
 }
 
 
-
+// Функция для обработки строк с аккордами и уменьшения пробелов
+function processLyrics(lyrics) {
+    return lyrics.split('\n').map(line => {
+        return line.replace(/ {2,}/g, match => ' '.repeat(Math.ceil(match.length / 2)));
+    }).join('\n');
+}
 
 // Функция для добавления песни в избранное
 favoriteButton.addEventListener('click', () => {
@@ -265,37 +270,26 @@ async function loadSheetSongs() {
     songSelect.disabled = false;
 }
 
+// Функция для отображения текста песни
 function displaySongDetails(songData, index) {
     if (!songData) return;
 
-    // Исправляем индексы столбцов согласно структуре данных:
-    // A - название (0)
-    // B - текст (1)
-    // C - тональность (2)
-    // D - ссылка (3)
-    // E - BPM (4)
-    const originalKey = songData[2]; // Столбец C
-    const bpm = songData[4] || 'N/A'; // Столбец E
-    const lyrics = songData[1] || ''; // Столбец B
-    const sourceUrl = songData[3] || '#'; // Столбец D
+    const originalKey = songData[2];
+    const bpm = songData[4] || 'N/A';
+    const lyrics = songData[1] || '';
+    const sourceUrl = songData[3] || '#';
 
     bpmDisplay.textContent = `BPM: ${bpm}`;
     holychordsButton.href = sourceUrl;
 
-    // Добавляем обработку текста
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
         <pre>${processLyrics(lyrics)}</pre>
     `;
-    
+
     keySelect.value = originalKey;
     keySelect.dataset.index = index;
-    transposeControls.style.display = 'block';
 }
-
-
-// Обработчик для мобильных устройств
-document.addEventListener('touchstart', function () {}, { passive: true });
 
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
