@@ -317,15 +317,19 @@ let textParts = [];
 
 splitTextButton.addEventListener('click', () => {
     const lyricsElement = document.querySelector('#song-content pre');
-    if (!lyricsElement) return;
+    if (!lyricsElement || !lyricsElement.textContent.trim()) {
+        alert('Текст песни отсутствует или пуст.');
+        return;
+    }
 
     if (!isTextSplit) {
         // Разделяем текст на две части
         const lyrics = lyricsElement.textContent;
-        const middle = Math.ceil(lyrics.split('\n').length / 2);
+        const lines = lyrics.split('\n');
+        const middle = Math.ceil(lines.length / 2);
         textParts = [
-            lyrics.split('\n').slice(0, middle).join('\n'),
-            lyrics.split('\n').slice(middle).join('\n')
+            lines.slice(0, middle).join('\n'),
+            lines.slice(middle).join('\n')
         ];
 
         // Отображаем первую часть
