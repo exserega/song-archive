@@ -116,12 +116,18 @@ function cleanChord(chord) {
 // Обработка текста с аккордами и транспонирование
 function transposeLyrics(lyrics, transposition) {
     return lyrics.split('\n').map(line => {
-        if (line.trim() === '') return line;
+        // Разделяем строку на слова и пробелы
         return line.split(/(\S+)/).map(word => {
-            return chords.includes(cleanChord(word)) ? transposeChord(cleanChord(word), transposition) : word;
+            // Если слово — это аккорд, транспонируем его
+            if (chords.some(ch => word.startsWith(ch))) {
+                return transposeChord(cleanChord(word), transposition);
+            }
+            // Иначе оставляем слово без изменений
+            return word;
         }).join('');
     }).join('\n');
 }
+
 
 // Функция для обработки строк с аккордами и уменьшения пробелов
 function processLyrics(lyrics) {
@@ -135,20 +141,31 @@ function processLyrics(lyrics) {
 function updateTransposedLyrics() {
     const index = keySelect.dataset.index;
     if (!index) return;
-    
+
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
-    
+
     const songData = cachedData[sheetName][index];
-    const originalKey = songData[1];
-    const lyrics = songData[2] || '';
+    if (!songData) return;
+
+    const originalKey = songData[2]; // Тональность из столбца C
+    const lyrics = songData[1] || ''; // Текст песни из столбца B
     const newKey = keySelect.value;
-    
+
+    // Вычисляем транспозицию
     const transposition = getTransposition(originalKey, newKey);
+
+    // Транспонируем текст песни
     const transposedLyrics = transposeLyrics(lyrics, transposition);
+
+    // Обрабатываем текст для корректного отображения
     const processedLyrics = processLyrics(transposedLyrics);
-    
-    songContent.innerHTML = `<h2>${songData[0]} — ${newKey}</h2><pre>${processedLyrics}</pre>`;
+
+    // Обновляем содержимое страницы
+    songContent.innerHTML = `
+        <h2>${songData[0]} — ${newKey}</h2>
+        <pre>${processedLyrics}</pre>
+    `;
 }
 
 sheetSelect.addEventListener('change', async () => {
