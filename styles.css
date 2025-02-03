@@ -82,12 +82,14 @@ button:hover {
     margin-top: 20px;
 }
 
+/* Стили для разделения текста на две колонки */
 #song-content.split-columns pre {
     column-count: 2; /* Разделение на две колонки */
     column-gap: 20px; /* Расстояние между колонками */
     white-space: pre-wrap; /* Перенос строк */
     word-wrap: break-word; /* Перенос длинных слов */
 }
+
 
 /* Стили для кнопки "Разделить текст" */
 #split-text-button {
