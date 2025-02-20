@@ -9,8 +9,9 @@
     --radius: 8px; /* Скругление углов */
 }
 
+/* Базовые стили */
 body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
     padding: 20px;
     background-color: var(--background-color);
@@ -24,97 +25,76 @@ body {
     padding: 20px;
 }
 
-h1 {
+/* Заголовки */
+h1, h2 {
     text-align: center;
-    color: var(--text-color);
-    margin-bottom: 30px;
-    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
     font-weight: 700;
 }
 
+/* Панель управления */
 .controls {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    margin-bottom: 30px;
-}
-
-.control-group {
     display: flex;
-    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
-select, input, button {
+#sheet-select, #search-input {
+    flex: 1;
     padding: 12px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
     font-size: 16px;
-    background-color: #fff;
-    box-shadow: var(--shadow);
+}
+
+/* Кнопки управления */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.control-buttons button {
+    padding: 10px 15px;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
     transition: all 0.3s ease;
 }
 
-select:focus, input:focus, button:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+#transpose-up, #transpose-down {
+    background-color: var(--secondary-color);
+    color: #fff;
 }
 
-button {
+#favorite-button {
     background-color: var(--primary-color);
     color: #fff;
-    cursor: pointer;
-    border: none;
-    font-weight: 600;
 }
 
-button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-2px);
+#split-text-button {
+    background-color: var(--hover-color);
+    color: var(--text-color);
 }
 
+/* Текст песни */
 #song-content {
     background-color: #fff;
-    padding: 25px;
+    padding: 20px;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
     margin-top: 20px;
 }
 
-/* Стили для разделения текста на две колонки */
-#song-content.split-columns pre {
-    column-count: 2; /* Разделение на две колонки */
-    column-gap: 20px; /* Расстояние между колонками */
-    white-space: pre-wrap; /* Перенос строк */
-    word-wrap: break-word; /* Перенос длинных слов */
-}
-
-
-/* Стили для кнопки "Разделить текст" */
-#split-text-button {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-#split-text-button:hover {
-    background-color: var(--secondary-color);
-}
-
-pre {
-    font-family: 'Courier New', Courier, monospace;
+#lyrics {
+    font-family: 'Courier New', monospace;
     white-space: pre-wrap;
     line-height: 1.8;
-    font-size: 16px;
-    color: var(--text-color);
-    margin: 0;
+    font-size: 18px;
 }
 
 .chord {
@@ -123,74 +103,30 @@ pre {
     margin-right: 4px;
 }
 
-#split-text-button {
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-#split-text-button:hover {
-    background-color: var(--secondary-color);
-}
-
-
-#search-results {
-    background-color: #fff;
-    border: 1px solid var(--border-color);
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
-    margin-top: 10px;
-    max-height: 200px;
-    overflow-y: auto;
-    position: absolute;
-    width: calc(100% - 40px);
-    z-index: 10;
-}
-
-.search-result {
-    padding: 12px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.search-result:hover {
-    background-color: var(--hover-color);
-}
-
-#hidden-controls button {
-    font-size: 14px;
-    padding: 8px 12px;
-    width: auto;
-    display: inline-block;
-    background-color: var(--primary-color);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius);
-    cursor: pointer;
-    margin: 0 5px;
-    transition: all 0.3s ease;
-}
-
-#hidden-controls button:hover {
-    background-color: var(--secondary-color);
-    transform: translateY(-2px);
-}
-
+/* Адаптивность */
 @media (max-width: 768px) {
-    #song-content pre {
-        font-size: 18px; /* Увеличиваем размер шрифта */
-        line-height: 1.8; /* Увеличиваем межстрочный интервал */
-        padding: 15px; /* Добавляем отступы */
-        white-space: pre-wrap; /* Перенос строк */
-        word-wrap: break-word; /* Перенос длинных слов */
+    .controls {
+        flex-direction: column;
     }
 
+    #lyrics {
+        font-size: 16px;
+    }
+
+    .control-buttons {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 10px;
+    }
+
+    #lyrics {
+        font-size: 14px;
+    }
+}
     h1 {
         font-size: 2rem;
     }
