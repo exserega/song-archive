@@ -7,78 +7,82 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Agape Worship</h1>
-        </header>
+    <header>
+        <h1>Agape Worship</h1>
+    </header>
 
-        <main>
-            <div class="controls">
-                <div class="control-group">
-                    <label for="sheet-select">Выберите лист:</label>
-                    <select id="sheet-select">
-                        <option value="">-- Выберите лист --</option>
-                        <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
-                        <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
-                        <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
-                        <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label for="song-select">Выберите песню:</label>
-                    <select id="song-select" disabled>
-                        <option value="">-- Сначала выберите лист --</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label for="key-select">Тональность:</label>
-                    <select id="key-select">
-                        <option value="C">C</option>
-                        <option value="C#">C#</option>
-                        <option value="D">D</option>
-                        <option value="D#">D#</option>
-                        <option value="E">E</option>
-                        <option value="F">F</option>
-                        <option value="F#">F#</option>
-                        <option value="G">G</option>
-                        <option value="G#">G#</option>
-                        <option value="A">A</option>
-                        <option value="A#">A#</option>
-                        <option value="H">H</option>
-                    </select>
-                </div>
-
-                <div class="control-group">
-                    <label for="bpm-display">BPM</label>
-                    <span id="bpm-display">-</span>
-                </div>
-
-                <div class="control-group">
-                    <label for="search-input">Поиск песни:</label>
-                    <input type="text" id="search-input" placeholder="Введите название песни...">
-                </div>
-
-                <div class="control-group">
-                    <a id="holychords-button" href="#" target="_blank">Holychords</a>
-                    <button id="favorite-button">Добавить в избранное</button>
-                    <button id="split-text-button">Разделить текст</button>
-                </div>
+    <main class="container">
+        <!-- Панель управления -->
+        <section class="controls">
+            <div class="control-group">
+                <label for="sheet-select">Выберите лист:</label>
+                <select id="sheet-select">
+                    <option value="">-- Выберите лист --</option>
+                    <option value="Быстрые (вертикаль)">Быстрые (вертикаль)</option>
+                    <option value="Быстрые (горизонталь)">Быстрые (горизонталь)</option>
+                    <option value="Поклонение (вертикаль)">Поклонение (вертикаль)</option>
+                    <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
+                </select>
             </div>
 
-            <!-- Контейнер для результатов поиска -->
-            <div id="search-results"></div>
-
-            <!-- Контейнер для текста песни -->
-            <div id="song-content">
-                <div id="results-container"></div>
+            <div class="control-group">
+                <label for="search-input">Поиск песни:</label>
+                <input type="text" id="search-input" placeholder="Введите название песни...">
+                <div id="search-results"></div>
             </div>
 
-            <!-- Индикатор загрузки -->
-            <div id="loading-indicator" class="loading" aria-live="polite">Загрузка...</div>
-        </main>
-    </div>
+            <div class="control-group">
+                <label for="song-select">Выберите песню:</label>
+                <select id="song-select" disabled>
+                    <option value="">-- Сначала выберите лист --</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label for="key-select">Тональность:</label>
+                <select id="key-select">
+                    <option value="C">C</option>
+                    <option value="C#">C#</option>
+                    <option value="D">D</option>
+                    <option value="D#">D#</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="F#">F#</option>
+                    <option value="G">G</option>
+                    <option value="G#">G#</option>
+                    <option value="A">A</option>
+                    <option value="A#">A#</option>
+                    <option value="H">H</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <button id="transpose-up">▲</button>
+                <button id="transpose-down">▼</button>
+            </div>
+        </section>
+
+        <!-- Текст песни -->
+        <section id="song-content">
+            <h2 id="song-title">Название песни — Тональность</h2>
+            <pre id="lyrics"></pre>
+        </section>
+
+        <!-- Дополнительные кнопки -->
+        <div class="control-buttons">
+            <button id="favorite-button">❤️ Избранное</button>
+            <button id="split-text-button">Разделить текст</button>
+        </div>
+
+        <!-- Информация о BPM -->
+        <footer>
+            <p>BPM: <span id="bpm-display">-</span></p>
+            <a id="holychords-button" href="#" target="_blank">Holychords</a>
+        </footer>
+    </main>
+
+    <!-- Индикатор загрузки -->
+    <div id="loading-indicator">Загрузка...</div>
 
     <script src="script.js"></script>
 </body>
