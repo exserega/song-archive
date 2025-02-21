@@ -360,6 +360,16 @@ function displaySongDetails(songData, index) {
     const sourceUrl = songData[3] || '#';
 
     bpmDisplay.textContent = `: ${bpm}`;
+
+// Обновляем ссылку для кнопки Holychords
+    if (sourceUrl && sourceUrl.trim() !== '') {
+        holychordsButton.href = sourceUrl; // Устанавливаем ссылку
+        holychordsButton.style.display = 'inline-block'; // Показываем кнопку
+    } else {
+        holychordsButton.href = '#'; // Если ссылки нет, делаем её неактивной
+        holychordsButton.style.display = 'none'; // Скрываем кнопку
+    }
+
     holychordsButton.href = sourceUrl;
 
     songContent.innerHTML = `
