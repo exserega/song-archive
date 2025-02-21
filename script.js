@@ -11,7 +11,7 @@ const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"]
 let cachedData = {};
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// Элементы DOM
+// Объявление всех элементов DOM в начале файла
 const sheetSelect = document.getElementById('sheet-select');
 const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
@@ -22,12 +22,8 @@ const bpmDisplay = document.getElementById('bpm-display');
 const holychordsButton = document.getElementById('holychords-button');
 const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
-const splitTextButton = document.getElementById('split-text-button'); // Добавлено здесь
+const splitTextButton = document.getElementById('split-text-button');
 
-// Загрузка данных при старте
-document.addEventListener('DOMContentLoaded', () => {
-    loadLastSession();
-});
 
 // Функция для загрузки данных из Google Sheets
 async function fetchSheetData(sheetName) {
@@ -255,25 +251,7 @@ songSelect.addEventListener('change', () => {
 
     displaySongDetails(cachedData[sheetName][songIndex], songIndex);
 });
-keySelect.addEventListener('change', updateTransposedLyrics);
-transposeUp.addEventListener('click', () => {
-    keySelect.selectedIndex = (keySelect.selectedIndex + 1) % keySelect.options.length;
-    updateTransposedLyrics();
-});
 
-transposeUp.addEventListener('click', () => {
-    const currentKey = keySelect.value;
-    const newKey = chords[(chords.indexOf(currentKey) + 1) % chords.length];
-    keySelect.value = newKey;
-    updateTransposedLyrics();
-});
-
-transposeDown.addEventListener('click', () => {
-    const currentKey = keySelect.value;
-    const newKey = chords[(chords.indexOf(currentKey) - 1 + chords.length) % chords.length];
-    keySelect.value = newKey;
-    updateTransposedLyrics();
-});
 
 // Добавляем отсутствующую функцию loadSheetSongs
 async function loadSheetSongs() {
@@ -324,9 +302,6 @@ keySelect.addEventListener('change', () => {
 });
 
 // Функционал кнопки "Разделить текст"
-const splitTextButton = document.getElementById('split-text-button');
-const songContent = document.getElementById('song-content');
-
 if (!splitTextButton || !songContent) {
     console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
 } else {
