@@ -68,46 +68,56 @@ function createSearchIndex() {
 }
 
 // Модифицированная функция поиска
+// Функция для поиска песен по названию
 async function searchSongs(query) {
-    const lowerQuery = query.toLowerCase().trim();
+    const lowerQuery = query.trim().toLowerCase(); // Приводим запрос к нижнему регистру и удаляем лишние пробелы
     if (!lowerQuery) {
-        searchResults.innerHTML = '';
+        searchResults.innerHTML = ''; // Очищаем результаты, если запрос пустой
         return;
     }
 
-    // Бинарный поиск в отсортированном индексе
-    const results = [];
-    let left = 0;
-    let right = searchIndex.length - 1;
-    
-    while (left <= right) {
-        const mid = Math.floor((left + right) / 2);
-        const item = searchIndex[mid];
-        
-        if (item.name.startsWith(lowerQuery)) {
-            // Нашли совпадение, собираем все соседние совпадения
-            results.push(item);
-            
-            // Ищем совпадения влево
-            for (let i = mid - 1; i >= 0 && searchIndex[i].name.startsWith(lowerQuery); i--) {
-                results.unshift(searchIndex[i]);
-            }
-            
-            // Ищем совпадения вправо
-            for (let i = mid + 1; i < searchIndex.length && searchIndex[i].name.startsWith(lowerQuery); i++) {
-                results.push(searchIndex[i]);
-            }
-            
-            break;
-        } else if (item.name < lowerQuery) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
+    // Получаем данные со всех листов
+    const allRows = Object.values(SHEETS).flatMap(sheetName => cachedData[sheetName] || []);
+
+    // Фильтруем песни по запросу
+    const matchingSongs = allRows.filter(row => {
+        const name = row[0]?.trim().toLowerCase(); // Приводим название песни к нижнему регистру
+        return name && name.includes(lowerQuery); // Проверяем, содержит ли название запрос
+    });
+
+    // Очищаем предыдущие результаты
+    searchResults.innerHTML = '';
+
+    if (matchingSongs.length === 0) {
+        searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
+        return;
     }
-    
-    // Отображаем результаты
-    displaySearchResults(results);
+
+    // Отображаем результаты поиска
+    matchingSongs.forEach((song, index) => {
+        const resultItem = document.createElement('div');
+        resultItem.textContent = song[0]; // Название песни
+        resultItem.className = 'search-result';
+        resultItem.addEventListener('click', () => {
+            // Находим лист, к которому относится песня
+            const sheetName = Object.keys(SHEETS).find(sheet =>
+                cachedData[SHEETS[sheet]]?.some(row => row[0] === song[0])
+            );
+
+            if (sheetName) {
+                sheetSelect.value = sheetName; // Выбираем соответствующий лист
+                loadSheetSongs().then(() => {
+                    const songIndex = cachedData[SHEETS[sheetName]].findIndex(row => row[0] === song[0]);
+                    if (songIndex !== -1) {
+                        songSelect.value = songIndex; // Выбираем песню
+                        displaySongDetails(song, songIndex);
+                        searchResults.innerHTML = ''; // Очищаем результаты поиска
+                    }
+                });
+            }
+        });
+        searchResults.appendChild(resultItem);
+    });
 }
 
 // Функция отображения результатов поиска
