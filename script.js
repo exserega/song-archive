@@ -322,3 +322,27 @@ holychordsButton.addEventListener('click', () => {
 keySelect.addEventListener('change', () => {
     updateTransposedLyrics();
 });
+
+// Функционал кнопки "Разделить текст"
+const splitTextButton = document.getElementById('split-text-button');
+const songContent = document.getElementById('song-content');
+
+if (!splitTextButton || !songContent) {
+    console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
+} else {
+    splitTextButton.addEventListener('click', () => {
+        const lyricsElement = document.querySelector('#song-content pre');
+        if (!lyricsElement || !lyricsElement.textContent.trim()) {
+            alert('Текст песни отсутствует или пуст.');
+            return;
+        }
+
+        songContent.classList.toggle('split-columns');
+
+        if (songContent.classList.contains('split-columns')) {
+            splitTextButton.textContent = 'Объединить текст';
+        } else {
+            splitTextButton.textContent = 'Разделить текст';
+        }
+    });
+}
