@@ -56,13 +56,13 @@ async function searchSongs(query) {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
 
-    const rows = await fetchSheetData(sheetName);
+    const rows = await fetchSheetData(sheetName); // Используем кэшированные данные
     const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
-    searchResults.innerHTML = '';
+    searchResults.innerHTML = ''; // Очищаем результаты поиска
 
     if (matchingSongs.length === 0) {
-        searchResults.innerHTML = 'Ничего не найдено';
+        searchResults.innerHTML = '<p>Ничего не найдено</p>';
     } else {
         matchingSongs.forEach((song, index) => {
             const resultItem = document.createElement('div');
@@ -71,7 +71,7 @@ async function searchSongs(query) {
             resultItem.addEventListener('click', () => {
                 songSelect.value = index;
                 displaySongDetails(song, index);
-                searchResults.innerHTML = '';
+                searchResults.innerHTML = ''; // Убираем результаты поиска после выбора песни
             });
             searchResults.appendChild(resultItem);
         });
@@ -244,7 +244,6 @@ sheetSelect.addEventListener('change', async () => {
 });
 
 // Обработчики событий
-/ Функция поиска песен
 searchInput.addEventListener('input', () => searchSongs(searchInput.value));
 sheetSelect.addEventListener('change', loadSheetSongs);
 songSelect.addEventListener('change', () => {
@@ -316,7 +315,9 @@ function displaySongDetails(songData, index) {
 
 
 
-
+// Элементы DOM
+const splitTextButton = document.getElementById('split-text-button');
+const songContent = document.getElementById('song-content');
 
 if (!splitTextButton || !songContent) {
     console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
