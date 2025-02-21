@@ -269,6 +269,11 @@ function displayFavorites() {
     document.body.appendChild(favoritesContainer);
 }
 
+function highlightChords(lyrics) {
+    return lyrics.split('\n').map(line => {
+        return line.replace(/([A-H][#b]?(?:maj7|m7|7|m|dim|aug|sus2|sus4|add9|dim7|aug7|sus)?(?:\/[A-H][#b]?)?)/g, '<span class="chord">$1</span>');
+    }).join('\n');
+}
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
@@ -375,6 +380,14 @@ function displaySongDetails(songData, index) {
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
         <pre>${processLyrics(lyrics)}</pre>
+    `;
+
+// Выделяем аккорды и форматируем текст
+    const highlightedLyrics = highlightChords(processLyrics(lyrics));
+
+    songContent.innerHTML = `
+        <h2>${songData[0]} — ${originalKey}</h2>
+        <pre class="lyrics">${highlightedLyrics}</pre>
     `;
 
     keySelect.value = originalKey;
