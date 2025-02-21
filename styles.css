@@ -1,44 +1,72 @@
 :root {
-    --primary-color: #4a90e2; /* Современный синий */
-    --secondary-color: #357abd; /* Темный синий */
-    --background-color: #f5f7fa; /* Светлый фон */
-    --text-color: #2c3e50; /* Темный текст */
-    --border-color: #dfe3e8; /* Светлая граница */
-    --hover-color: #e9ecef; /* Цвет при наведении */
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
-    --radius: 8px; /* Скругление углов */
+    --primary: #673ab7;
+    --secondary: #512da8;
+    --accent: #ff4081;
+    --bg: #f9fafb;
+    --text: #212121;
+    --subtle: #757575;
+    --border: #e0e0e0;
 }
 
-/* Базовые стили */
+
+
 body {
-    font-family: 'Inter', sans-serif;
-    margin: 0;
-    padding: 10px; /* Уменьшаем отступы */
-    background-color: var(--background-color);
-    color: var(--text-color);
+    font-family: 'Roboto', sans-serif;
+    background: var(--bg);
+    color: var(--text);
     line-height: 1.6;
+    margin: 0;
+    padding: 20px;
 }
 
 .container {
-    max-width: 100%; /* Убираем ограничение ширины */
-    margin: 0 auto;
-    padding: 10px; /* Уменьшаем отступы */
+    max-width: 1200px;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 20px;
+}
+
+header {
+    grid-column: span 2;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 /* Заголовки */
 h1, h2 {
     text-align: center;
-    color: var(--primary-color);
+    color: var(--primary);
     margin-bottom: 15px; /* Уменьшаем отступы */
     font-size: 1.5rem; /* Уменьшаем размер шрифта */
+    margin: 0;
 }
 
-/* Панель управления */
 .controls {
-    display: flex;
-    flex-direction: column;
-    gap: 10px; /* Уменьшаем расстояние между элементами */
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.control-group {
     margin-bottom: 15px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: var(--subtle);
+    font-size: 0.9rem;
+}
+
+select, input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
 #sheet-select, #search-input, #key-select {
@@ -48,12 +76,17 @@ h1, h2 {
     font-size: 14px; /* Уменьшаем размер шрифта */
 }
 
+select:focus, input:focus {
+    border-color: var(--primary);
+    outline: none;
+}
+
 /* Кнопки управления */
 .control-buttons {
     display: flex;
+    gap: 10px;
     justify-content: center;
-    gap: 8px; /* Уменьшаем расстояние между кнопками */
-    margin-top: 15px;
+    margin-top: 20px;
 }
 
 .control-buttons button {
@@ -84,13 +117,26 @@ h1, h2 {
 #song-content {
     background-color: #fff;
     padding: 15px; /* Уменьшаем отступы */
-    border-radius: var(--radius);
+    border-radius: 12px;
     border: 1px solid var(--border-color);
-    box-shadow: var(--shadow);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     margin-top: 15px;
     overflow: hidden; /* Скрываем всё, что выходит за пределы */
     max-width: 100%; /* Ограничиваем ширину */
     box-sizing: border-box; /* Учитываем padding и border в ширине */
+}
+
+#song-title {
+    font-size: 1.5rem;
+    margin: 0 0 15px;
+    color: var(--primary);
+}
+
+pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 1rem;
+    white-space: pre-wrap;
+    line-height: 1.8;
 }
 
 #song-content pre {
@@ -114,31 +160,27 @@ h1, h2 {
     overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
 }
 
-/* Стиль для контейнера результатов поиска */
 #search-results {
-    max-height: 200px; /* Ограничение высоты для прокрутки */
-    overflow-y: auto; /* Добавляем прокрутку, если результатов много */
-    border: 1px solid #ddd; /* Легкая рамка вокруг результатов */
-    border-radius: 4px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Фон для контейнера */
+    max-height: 150px;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-top: 5px;
 }
 
-/* Стиль для каждого результата поиска */
 .search-result {
-    padding: 8px 12px; /* Отступы внутри элемента */
-    cursor: pointer; /* Курсор "рука" при наведении */
-    border-bottom: 1px solid #eaeaea; /* Легкая линия между элементами */
-    transition: background-color 0.2s ease; /* Плавный переход при наведении */
+    padding: 8px 12px;
+    cursor: pointer;
 }
+
 
 /* Убираем границу после последнего элемента */
 .search-result:last-child {
     border-bottom: none;
 }
 
-/* Эффект при наведении на результат */
 .search-result:hover {
-    background-color: #e6f7ff; /* Легкий голубой фон */
+    background: rgba(103, 58, 183, 0.1);
 }
 
 #lyrics {
@@ -149,9 +191,8 @@ h1, h2 {
 }
 
 .chord {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-right: 4px;
+    color: var(--accent);
+    font-weight: 500;
 }
 
 /* Адаптивность */
@@ -166,6 +207,39 @@ h1, h2 {
     }
 }
 
+button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#favorite-button {
+    background: var(--primary);
+    color: #fff;
+}
+
+#split-text-button {
+    background: var(--secondary);
+    color: #fff;
+}
+
+footer {
+    grid-column: span 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: var(--subtle);
+}
+
+#holychords-button {
+    color: var(--accent);
+    text-decoration: none;
+}
 
 @media (max-width: 480px) {
     body {
