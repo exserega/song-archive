@@ -291,21 +291,6 @@ async function loadSheetSongs() {
     songSelect.disabled = false;
 }
 
-function processLyrics(lyrics) {
-    return lyrics.split('\n').map(line => {
-        // Разбиваем строку на части по 40 символов
-        const words = line.split(' ');
-        let processedLine = '';
-        words.forEach(word => {
-            if ((processedLine + word).length > 40) {
-                processedLine += '\n' + word;
-            } else {
-                processedLine += ' ' + word;
-            }
-        });
-        return processedLine.trim();
-    }).join('\n');
-}
 
 // Функция для отображения текста песни
 function displaySongDetails(songData, index) {
