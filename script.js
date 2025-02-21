@@ -24,10 +24,6 @@ const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
 const splitTextButton = document.getElementById('split-text-button');
 
-// Загрузка данных при старте
-document.addEventListener('DOMContentLoaded', () => {
-    loadLastSession();
-});
 
 // Функция для загрузки данных из Google Sheets
 async function fetchSheetData(sheetName) {
