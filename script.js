@@ -121,28 +121,31 @@ async function searchSongs(query) {
 }
 
 // Функция отображения результатов поиска
+/ Функция для отображения результатов поиска
 function displaySearchResults(results) {
-    searchResults.innerHTML = '';
-    
+    searchResults.innerHTML = ''; // Очищаем предыдущие результаты
+
     if (results.length === 0) {
         searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
         return;
     }
-    
+
     results.forEach(result => {
-        const songData = allSheetsData.find(sheet => sheet.sheetName === result.sheetName).data[result.index];
         const resultItem = document.createElement('div');
-        resultItem.textContent = `${songData[0]} (${result.sheetName})`;
-        resultItem.className = 'search-result';
+        resultItem.textContent = result.name; // Название песни
+        resultItem.className = 'search-result'; // Добавляем класс для стилизации
+
         resultItem.addEventListener('click', () => {
-            sheetSelect.value = result.sheetName;
+            // Логика выбора песни
+            sheetSelect.value = result.sheetName; // Выбираем соответствующий лист
             loadSheetSongs().then(() => {
-                songSelect.value = result.index;
-                displaySongDetails(songData, result.index);
-                searchResults.innerHTML = '';
+                songSelect.value = result.index; // Выбираем песню
+                displaySongDetails(cachedData[result.sheetName][result.index], result.index);
+                searchResults.innerHTML = ''; // Очищаем результаты поиска
             });
         });
-        searchResults.appendChild(resultItem);
+
+        searchResults.appendChild(resultItem); // Добавляем элемент в контейнер
     });
 }
 
