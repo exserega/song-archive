@@ -241,10 +241,16 @@ footer {
     text-decoration: none;
 }
 
-@media (max-width: 480px) {
-    body {
-        padding: 5px; /* Минимальные отступы */
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
     }
+    
+    pre {
+        font-size: 0.9rem;
+    }
+}
+
 
     h1, h2 {
         font-size: 1.2rem; /* Ещё меньше заголовки */
