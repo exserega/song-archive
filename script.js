@@ -302,10 +302,11 @@ function updateTransposedLyrics() {
 // Выделяем аккорды
     const highlightedLyrics = highlightChords(processedLyrics);
 
+
     // Обновляем содержимое страницы
     songContent.innerHTML = `
         <h2>${songData[0]} — ${newKey}</h2>
-        <pre>${processedLyrics}</pre>
+        <pre>${highlightedLyrics}</pre>
     `;
 }
 
@@ -388,9 +389,10 @@ function displaySongDetails(songData, index) {
 // Выделяем аккорды и форматируем текст
     const highlightedLyrics = highlightChords(processLyrics(lyrics));
 
+    // Обновляем содержимое страницы
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
-        <pre class="lyrics">${highlightedLyrics}</pre>
+        <pre>${highlightedLyrics}</pre>
     `;
 
     keySelect.value = originalKey;
