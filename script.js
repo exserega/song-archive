@@ -314,6 +314,7 @@ function displaySongDetails(songData, index) {
 }
 
 
+// Кнопка "Разделить текст"
 splitTextButton.addEventListener('click', () => {
     const lyricsElement = document.querySelector('#song-content pre');
     if (!lyricsElement || !lyricsElement.textContent.trim()) {
@@ -324,7 +325,7 @@ splitTextButton.addEventListener('click', () => {
     // Переключаем класс для разделения текста на две колонки
     songContent.classList.toggle('split-columns');
 
-    // Меняем текст кнопки
+    // Меняем текст кнопки в зависимости от текущего состояния
     if (songContent.classList.contains('split-columns')) {
         splitTextButton.textContent = 'Объединить текст';
     } else {
