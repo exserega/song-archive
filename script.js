@@ -383,8 +383,11 @@ function displaySongDetails(songData, index) {
 
 
 // Обработчик кнопки Holychords
-holychordsButton.addEventListener('click', () => {
-    window.open('https://holychords.com', '_blank');
+holychordsButton.addEventListener('click', (event) => {
+    if (holychordsButton.href === '#' || holychordsButton.href === '') {
+        event.preventDefault(); // Предотвращаем переход, если ссылка пустая
+        alert('Ссылка на Holychords отсутствует для этой песни.');
+    }
 });
 
 keySelect.addEventListener('change', () => {
