@@ -360,19 +360,7 @@ function displaySongDetails(songData, index) {
     const sourceUrl = songData[3] || '#';
 
     bpmDisplay.textContent = `: ${bpm}`;
-
- // Обновляем ссылку для кнопки Holychords
-    if (sourceUrl && sourceUrl.trim() !== '') {
-        holychordsButton.href = sourceUrl; // Устанавливаем ссылку
-        holychordsButton.style.display = 'inline-block'; // Показываем кнопку
-    } else {
-        holychordsButton.href = '#'; // Если ссылки нет, делаем её неактивной
-        holychordsButton.style.display = 'none'; // Скрываем кнопку
-    }
-
     holychordsButton.href = sourceUrl;
-
-
 
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
@@ -385,11 +373,12 @@ function displaySongDetails(songData, index) {
 
 
 // Обработчик кнопки Holychords
-holychordsButton.addEventListener('click', (event) => {
-    if (holychordsButton.href === '#' || holychordsButton.href === '') {
-        event.preventDefault(); // Предотвращаем переход, если ссылка пустая
-        alert('Ссылка на Holychords отсутствует для этой песни.');
-    }
+holychordsButton.addEventListener('click', () => {
+    window.open('https://holychords.com', '_blank');
+});
+
+keySelect.addEventListener('change', () => {
+    updateTransposedLyrics();
 });
 
 // Функционал кнопки "Разделить текст"
