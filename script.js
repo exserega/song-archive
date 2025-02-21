@@ -442,3 +442,24 @@ async function loadAllSheetsData() {
         loadingIndicator.style.display = 'none';
     }
 }
+
+let currentFontSize = 14; // Начальный размер шрифта
+
+document.getElementById('zoom-in').addEventListener('click', () => {
+    currentFontSize += 2;
+    updateFontSize();
+});
+
+document.getElementById('zoom-out').addEventListener('click', () => {
+    if (currentFontSize > 10) {
+        currentFontSize -= 2;
+        updateFontSize();
+    }
+});
+
+function updateFontSize() {
+    const lyricsElement = document.querySelector('#song-content pre');
+    if (lyricsElement) {
+        lyricsElement.style.fontSize = `${currentFontSize}px`;
+    }
+}
