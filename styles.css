@@ -7,6 +7,7 @@
     --hover-color: #e9ecef; /* Цвет при наведении */
     --shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Тень */
     --radius: 8px; /* Скругление углов */
+    --accent-color: #0d6efd; /* Синий цвет */
 }
 
 /* Базовые стили */
@@ -157,18 +158,23 @@ h1, h2 {
 }
 
 #lyrics {
-    font-family: 'Courier New', monospace;
+    font-family: 'Courier New', monospace; /* Моноширинный шрифт для лучшего выравнивания */
     white-space: pre-wrap;
     line-height: 1.8;
     font-size: 18px;
 }
 
+/* Базовый стиль для аккордов */
 .chord {
-    font-weight: bold;
-    color: var(--primary-color);
-    margin-right: 4px;
+    font-weight: bold; /* Жирный шрифт */
+    color: var(--accent-color); /* Яркий цвет (например, синий или фиолетовый) */
+    margin-right: 4px; /* Отступ между аккордами */
 }
 
+/* Темная тема (если используется) */
+body.dark-theme .chord {
+    color: #bb86fc; /* Фиолетовый цвет для темной темы */
+}
 
 /* Адаптивность */
 @media (max-width: 768px) {
