@@ -158,7 +158,7 @@ h1, h2 {
 }
 
 #lyrics {
-    font-family: 'Courier New', monospace; /* Моноширинный шрифт для лучшего выравнивания */
+    font-family: 'Open Sans', monospace; /* Моноширинный шрифт для лучшего выравнивания */
     white-space: pre-wrap;
     line-height: 1.8;
     font-size: 18px;
