@@ -110,7 +110,7 @@ h1, h2 {
 }
 
 #song-content pre {
-    font-family: 'Courier New', Courier, monospace;
+    font-family: 'Open Sans', monospace;
     white-space: pre-wrap; /* Перенос строк */
     word-wrap: break-word; /* Перенос длинных слов */
     overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
