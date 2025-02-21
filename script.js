@@ -315,7 +315,7 @@ function displaySongDetails(songData, index) {
 
 
 const splitTextButton = document.getElementById('split-text-button');
-const songContent = document.getElementById('song-content');
+
 
 splitTextButton.addEventListener('click', () => {
     const lyricsElement = document.querySelector('#song-content pre');
