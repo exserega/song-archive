@@ -316,9 +316,7 @@ function displaySongDetails(songData, index) {
 
 
 
-// Элементы DOM
-const splitTextButton = document.getElementById('split-text-button');
-const songContent = document.getElementById('song-content');
+
 
 if (!splitTextButton || !songContent) {
     console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
