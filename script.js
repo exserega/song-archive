@@ -11,7 +11,7 @@ const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"]
 let cachedData = {};
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-// Объявление всех элементов DOM в начале файла
+// Элементы DOM
 const sheetSelect = document.getElementById('sheet-select');
 const songSelect = document.getElementById('song-select');
 const songContent = document.getElementById('song-content');
@@ -22,8 +22,12 @@ const bpmDisplay = document.getElementById('bpm-display');
 const holychordsButton = document.getElementById('holychords-button');
 const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
-const splitTextButton = document.getElementById('split-text-button');
+const splitTextButton = document.getElementById('split-text-button'); // Добавлено здесь
 
+// Загрузка данных при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadLastSession();
+});
 
 // Функция для загрузки данных из Google Sheets
 async function fetchSheetData(sheetName) {
@@ -47,112 +51,32 @@ async function fetchSheetData(sheetName) {
     }
 }
 
-// Функция для создания индекса поиска
-function createSearchIndex() {
-    searchIndex = [];
-    
-    allSheetsData.forEach(({sheetName, data}) => {
-        data.forEach((row, index) => {
-            if (row[0]) { // Проверяем, что название песни существует
-                searchIndex.push({
-                    name: row[0].toLowerCase(),
-                    sheetName: sheetName,
-                    index: index
-                });
-            }
-        });
-    });
-    
-    // Сортируем индекс для более быстрого поиска
-    searchIndex.sort((a, b) => a.name.localeCompare(b.name));
-}
-
-// Модифицированная функция поиска
 // Функция для поиска песен по названию
 async function searchSongs(query) {
-    const lowerQuery = query.trim().toLowerCase(); // Приводим запрос к нижнему регистру и удаляем лишние пробелы
-    if (!lowerQuery) {
-        searchResults.innerHTML = ''; // Очищаем результаты, если запрос пустой
-        return;
-    }
+    const sheetName = SHEETS[sheetSelect.value];
+    if (!sheetName) return;
 
-    // Получаем данные со всех листов
-    const allRows = Object.values(SHEETS).flatMap(sheetName => cachedData[sheetName] || []);
+    const rows = await fetchSheetData(sheetName); // Используем кэшированные данные
+    const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
-    // Фильтруем песни по запросу
-    const matchingSongs = allRows.filter(row => {
-        const name = row[0]?.trim().toLowerCase(); // Приводим название песни к нижнему регистру
-        return name && name.includes(lowerQuery); // Проверяем, содержит ли название запрос
-    });
-
-    // Очищаем предыдущие результаты
-    searchResults.innerHTML = '';
+    searchResults.innerHTML = ''; // Очищаем результаты поиска
 
     if (matchingSongs.length === 0) {
-        searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
-        return;
-    }
-
-    // Отображаем результаты поиска
-    matchingSongs.forEach((song, index) => {
-        const resultItem = document.createElement('div');
-        resultItem.textContent = song[0]; // Название песни
-        resultItem.className = 'search-result';
-        resultItem.addEventListener('click', () => {
-            // Находим лист, к которому относится песня
-            const sheetName = Object.keys(SHEETS).find(sheet =>
-                cachedData[SHEETS[sheet]]?.some(row => row[0] === song[0])
-            );
-
-            if (sheetName) {
-                sheetSelect.value = sheetName; // Выбираем соответствующий лист
-                loadSheetSongs().then(() => {
-                    const songIndex = cachedData[SHEETS[sheetName]].findIndex(row => row[0] === song[0]);
-                    if (songIndex !== -1) {
-                        songSelect.value = songIndex; // Выбираем песню
-                        displaySongDetails(song, songIndex);
-                        searchResults.innerHTML = ''; // Очищаем результаты поиска
-                    }
-                });
-            }
-        });
-        searchResults.appendChild(resultItem);
-    });
-}
-
-// Функция отображения результатов поиска
-function displaySearchResults(results) {
-    searchResults.innerHTML = ''; // Очищаем предыдущие результаты
-
-    if (results.length === 0) {
-        searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
-        return;
-    }
-
-    results.forEach(result => {
-        const resultItem = document.createElement('div');
-        resultItem.textContent = result.name; // Название песни
-        resultItem.className = 'search-result'; // Добавляем класс для стилизации
-
-        resultItem.addEventListener('click', () => {
-            // Логика выбора песни
-            sheetSelect.value = result.sheetName; // Выбираем соответствующий лист
-            loadSheetSongs().then(() => {
-                songSelect.value = result.index; // Выбираем песню
-                displaySongDetails(cachedData[result.sheetName][result.index], result.index);
-                searchResults.innerHTML = ''; // Очищаем результаты поиска
+        searchResults.innerHTML = '<p>Ничего не найдено</p>';
+    } else {
+        matchingSongs.forEach((song, index) => {
+            const resultItem = document.createElement('div');
+            resultItem.textContent = song[0];
+            resultItem.className = 'search-result';
+            resultItem.addEventListener('click', () => {
+                songSelect.value = index;
+                displaySongDetails(song, index);
+                searchResults.innerHTML = ''; // Убираем результаты поиска после выбора песни
             });
+            searchResults.appendChild(resultItem);
         });
-
-        searchResults.appendChild(resultItem); // Добавляем элемент в контейнер
-    });
+    }
 }
-
-// Загружаем данные при старте
-document.addEventListener('DOMContentLoaded', () => {
-    loadAllSheetsData();
-});
-
 
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
@@ -272,41 +196,35 @@ function displayFavorites() {
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
-    console.log('Обновление транспонированного текста'); // Отладочный вывод
-
     const index = keySelect.dataset.index;
-    if (!index) {
-        console.error('Индекс песни не найден.');
-        return;
-    }
+    if (!index) return;
 
     const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) {
-        console.error('Лист не выбран.');
-        return;
-    }
+    if (!sheetName) return;
 
     const songData = cachedData[sheetName][index];
-    if (!songData) {
-        console.error('Данные песни не найдены.');
-        return;
-    }
+    if (!songData) return;
 
-    const originalKey = songData[2];
-    const lyrics = songData[1] || '';
+    const originalKey = songData[2]; // Тональность из столбца C
+    const lyrics = songData[1] || ''; // Текст песни из столбца B
     const newKey = keySelect.value;
 
+    // Вычисляем транспозицию
     const transposition = getTransposition(originalKey, newKey);
-    console.log('Транспозиция:', transposition); // Отладочный вывод
 
+    // Транспонируем текст песни
     const transposedLyrics = transposeLyrics(lyrics, transposition);
+
+    // Обрабатываем текст для корректного отображения
     const processedLyrics = processLyrics(transposedLyrics);
 
+    // Обновляем содержимое страницы
     songContent.innerHTML = `
-        ${songData[0]} — ${newKey}
-        ${processedLyrics}
+        <h2>${songData[0]} — ${newKey}</h2>
+        <pre>${processedLyrics}</pre>
     `;
 }
+
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
@@ -337,7 +255,25 @@ songSelect.addEventListener('change', () => {
 
     displaySongDetails(cachedData[sheetName][songIndex], songIndex);
 });
+keySelect.addEventListener('change', updateTransposedLyrics);
+transposeUp.addEventListener('click', () => {
+    keySelect.selectedIndex = (keySelect.selectedIndex + 1) % keySelect.options.length;
+    updateTransposedLyrics();
+});
 
+transposeUp.addEventListener('click', () => {
+    const currentKey = keySelect.value;
+    const newKey = chords[(chords.indexOf(currentKey) + 1) % chords.length];
+    keySelect.value = newKey;
+    updateTransposedLyrics();
+});
+
+transposeDown.addEventListener('click', () => {
+    const currentKey = keySelect.value;
+    const newKey = chords[(chords.indexOf(currentKey) - 1 + chords.length) % chords.length];
+    keySelect.value = newKey;
+    updateTransposedLyrics();
+});
 
 // Добавляем отсутствующую функцию loadSheetSongs
 async function loadSheetSongs() {
@@ -366,19 +302,7 @@ function displaySongDetails(songData, index) {
     const sourceUrl = songData[3] || '#';
 
     bpmDisplay.textContent = `: ${bpm}`;
-
- // Обновляем ссылку для кнопки Holychords
-    if (sourceUrl && sourceUrl.trim() !== '') {
-        holychordsButton.href = sourceUrl; // Устанавливаем ссылку
-        holychordsButton.style.display = 'inline-block'; // Показываем кнопку
-    } else {
-        holychordsButton.href = '#'; // Если ссылки нет, делаем её неактивной
-        holychordsButton.style.display = 'none'; // Скрываем кнопку
-    }
-
     holychordsButton.href = sourceUrl;
-
-
 
     songContent.innerHTML = `
         <h2>${songData[0]} — ${originalKey}</h2>
@@ -391,14 +315,18 @@ function displaySongDetails(songData, index) {
 
 
 // Обработчик кнопки Holychords
-holychordsButton.addEventListener('click', (event) => {
-    if (holychordsButton.href === '#' || holychordsButton.href === '') {
-        event.preventDefault(); // Предотвращаем переход, если ссылка пустая
-        alert('Ссылка на Holychords отсутствует для этой песни.');
-    }
+holychordsButton.addEventListener('click', () => {
+    window.open('https://holychords.com', '_blank');
+});
+
+keySelect.addEventListener('change', () => {
+    updateTransposedLyrics();
 });
 
 // Функционал кнопки "Разделить текст"
+const splitTextButton = document.getElementById('split-text-button');
+const songContent = document.getElementById('song-content');
+
 if (!splitTextButton || !songContent) {
     console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
 } else {
@@ -417,32 +345,4 @@ if (!splitTextButton || !songContent) {
             splitTextButton.textContent = 'Разделить текст';
         }
     });
-}
-
-// Добавьте массив для хранения данных всех листов
-let allSheetsData = [];
-let searchIndex = [];
-
-// Функция для загрузки данных со всех листов
-async function loadAllSheetsData() {
-    loadingIndicator.style.display = 'block';
-    
-    try {
-        // Получаем все листы параллельно
-        const sheetPromises = Object.values(SHEETS).map(sheetName => fetchSheetData(sheetName));
-        const results = await Promise.all(sheetPromises);
-        
-        // Сохраняем данные всех листов
-        allSheetsData = results.map((data, index) => ({
-            sheetName: Object.keys(SHEETS)[index],
-            data: data
-        }));
-        
-        // Создаем индекс для поиска
-        createSearchIndex();
-    } catch (error) {
-        console.error('Ошибка загрузки данных:', error);
-    } finally {
-        loadingIndicator.style.display = 'none';
-    }
 }
