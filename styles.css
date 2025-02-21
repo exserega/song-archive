@@ -105,9 +105,13 @@ h1, h2 {
     max-width: 100%; /* Ограничиваем ширину */
 }
 
+/* Стили для разделения текста на две колонки */
 #song-content.split-columns pre {
     column-count: 2; /* Разделение на две колонки */
-    column-gap: 15px; /* Расстояние между колонками */
+    column-gap: 20px; /* Расстояние между колонками */
+    white-space: pre-wrap; /* Перенос строк */
+    word-wrap: break-word; /* Перенос длинных слов */
+    overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
 }
 
 #lyrics {
