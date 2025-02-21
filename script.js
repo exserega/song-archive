@@ -461,7 +461,7 @@ async function loadAllSheetsData() {
     }
 }
 
-let currentFontSize = 14; // Начальный размер шрифта
+let currentFontSize = 8; // Начальный размер шрифта
 
 document.getElementById('zoom-in').addEventListener('click', () => {
     currentFontSize += 2;
