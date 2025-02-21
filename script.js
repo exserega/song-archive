@@ -299,6 +299,9 @@ function updateTransposedLyrics() {
     // Обрабатываем текст для корректного отображения
     const processedLyrics = processLyrics(transposedLyrics);
 
+// Выделяем аккорды
+    const highlightedLyrics = highlightChords(processedLyrics);
+
     // Обновляем содержимое страницы
     songContent.innerHTML = `
         <h2>${songData[0]} — ${newKey}</h2>
