@@ -269,12 +269,6 @@ function displayFavorites() {
     document.body.appendChild(favoritesContainer);
 }
 
-const songData = cachedData[sheetName][index];
-    if (!songData) {
-        console.error('Данные песни не найдены.');
-        return;
-    }
-
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
