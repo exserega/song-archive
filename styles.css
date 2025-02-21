@@ -114,6 +114,33 @@ h1, h2 {
     overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
 }
 
+/* Стиль для контейнера результатов поиска */
+#search-results {
+    max-height: 200px; /* Ограничение высоты для прокрутки */
+    overflow-y: auto; /* Добавляем прокрутку, если результатов много */
+    border: 1px solid #ddd; /* Легкая рамка вокруг результатов */
+    border-radius: 4px; /* Закругленные углы */
+    background-color: #f9f9f9; /* Фон для контейнера */
+}
+
+/* Стиль для каждого результата поиска */
+.search-result {
+    padding: 8px 12px; /* Отступы внутри элемента */
+    cursor: pointer; /* Курсор "рука" при наведении */
+    border-bottom: 1px solid #eaeaea; /* Легкая линия между элементами */
+    transition: background-color 0.2s ease; /* Плавный переход при наведении */
+}
+
+/* Убираем границу после последнего элемента */
+.search-result:last-child {
+    border-bottom: none;
+}
+
+/* Эффект при наведении на результат */
+.search-result:hover {
+    background-color: #e6f7ff; /* Легкий голубой фон */
+}
+
 #lyrics {
     font-family: 'Courier New', monospace;
     white-space: pre-wrap;
