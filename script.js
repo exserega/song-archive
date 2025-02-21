@@ -56,13 +56,13 @@ async function searchSongs(query) {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
 
-    const rows = await fetchSheetData(sheetName); // Используем кэшированные данные
+    const rows = await fetchSheetData(sheetName);
     const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
 
-    searchResults.innerHTML = ''; // Очищаем результаты поиска
+    searchResults.innerHTML = '';
 
     if (matchingSongs.length === 0) {
-        searchResults.innerHTML = '<p>Ничего не найдено</p>';
+        searchResults.innerHTML = 'Ничего не найдено';
     } else {
         matchingSongs.forEach((song, index) => {
             const resultItem = document.createElement('div');
@@ -71,7 +71,7 @@ async function searchSongs(query) {
             resultItem.addEventListener('click', () => {
                 songSelect.value = index;
                 displaySongDetails(song, index);
-                searchResults.innerHTML = ''; // Убираем результаты поиска после выбора песни
+                searchResults.innerHTML = '';
             });
             searchResults.appendChild(resultItem);
         });
@@ -244,6 +244,7 @@ sheetSelect.addEventListener('change', async () => {
 });
 
 // Обработчики событий
+/ Функция поиска песен
 searchInput.addEventListener('input', () => searchSongs(searchInput.value));
 sheetSelect.addEventListener('change', loadSheetSongs);
 songSelect.addEventListener('change', () => {
