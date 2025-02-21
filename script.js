@@ -272,35 +272,41 @@ function displayFavorites() {
 
 // Функция обновления транспонированного текста
 function updateTransposedLyrics() {
+    console.log('Обновление транспонированного текста'); // Отладочный вывод
+
     const index = keySelect.dataset.index;
-    if (!index) return;
+    if (!index) {
+        console.error('Индекс песни не найден.');
+        return;
+    }
 
     const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) return;
+    if (!sheetName) {
+        console.error('Лист не выбран.');
+        return;
+    }
 
     const songData = cachedData[sheetName][index];
-    if (!songData) return;
+    if (!songData) {
+        console.error('Данные песни не найдены.');
+        return;
+    }
 
-    const originalKey = songData[2]; // Тональность из столбца C
-    const lyrics = songData[1] || ''; // Текст песни из столбца B
+    const originalKey = songData[2];
+    const lyrics = songData[1] || '';
     const newKey = keySelect.value;
 
-    // Вычисляем транспозицию
     const transposition = getTransposition(originalKey, newKey);
+    console.log('Транспозиция:', transposition); // Отладочный вывод
 
-    // Транспонируем текст песни
     const transposedLyrics = transposeLyrics(lyrics, transposition);
-
-    // Обрабатываем текст для корректного отображения
     const processedLyrics = processLyrics(transposedLyrics);
 
-    // Обновляем содержимое страницы
     songContent.innerHTML = `
-        <h2>${songData[0]} — ${newKey}</h2>
-        <pre>${processedLyrics}</pre>
+        ${songData[0]} — ${newKey}
+        ${processedLyrics}
     `;
 }
-
 sheetSelect.addEventListener('change', async () => {
     const sheetName = SHEETS[sheetSelect.value];
     if (!sheetName) return;
