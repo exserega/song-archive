@@ -314,34 +314,6 @@ function displaySongDetails(songData, index) {
 }
 
 
-
-// Элементы DOM
-const splitTextButton = document.getElementById('split-text-button');
-const songContent = document.getElementById('song-content');
-
-if (!splitTextButton || !songContent) {
-    console.error('Не удалось найти элементы с id "split-text-button" или "song-content".');
-} else {
-    splitTextButton.addEventListener('click', () => {
-        const lyricsElement = document.querySelector('#song-content pre');
-        if (!lyricsElement || !lyricsElement.textContent.trim()) {
-            alert('Текст песни отсутствует или пуст.');
-            return;
-        }
-
-        songContent.classList.toggle('split-columns');
-
-        if (songContent.classList.contains('split-columns')) {
-            splitTextButton.textContent = 'Объединить текст';
-        } else {
-            splitTextButton.textContent = 'Разделить текст';
-        }
-    });
-}
-
-
-
-
 // Обработчик кнопки Holychords
 holychordsButton.addEventListener('click', () => {
     window.open('https://holychords.com', '_blank');
