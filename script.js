@@ -47,32 +47,100 @@ async function fetchSheetData(sheetName) {
     }
 }
 
-// Функция для поиска песен по названию
-async function searchSongs(query) {
-    const sheetName = SHEETS[sheetSelect.value];
-    if (!sheetName) return;
-
-    const rows = await fetchSheetData(sheetName); // Используем кэшированные данные
-    const matchingSongs = rows.filter(row => row[0].toLowerCase().includes(query.toLowerCase()));
-
-    searchResults.innerHTML = ''; // Очищаем результаты поиска
-
-    if (matchingSongs.length === 0) {
-        searchResults.innerHTML = '<p>Ничего не найдено</p>';
-    } else {
-        matchingSongs.forEach((song, index) => {
-            const resultItem = document.createElement('div');
-            resultItem.textContent = song[0];
-            resultItem.className = 'search-result';
-            resultItem.addEventListener('click', () => {
-                songSelect.value = index;
-                displaySongDetails(song, index);
-                searchResults.innerHTML = ''; // Убираем результаты поиска после выбора песни
-            });
-            searchResults.appendChild(resultItem);
+// Функция для создания индекса поиска
+function createSearchIndex() {
+    searchIndex = [];
+    
+    allSheetsData.forEach(({sheetName, data}) => {
+        data.forEach((row, index) => {
+            if (row[0]) { // Проверяем, что название песни существует
+                searchIndex.push({
+                    name: row[0].toLowerCase(),
+                    sheetName: sheetName,
+                    index: index
+                });
+            }
         });
-    }
+    });
+    
+    // Сортируем индекс для более быстрого поиска
+    searchIndex.sort((a, b) => a.name.localeCompare(b.name));
 }
+
+// Модифицированная функция поиска
+async function searchSongs(query) {
+    const lowerQuery = query.toLowerCase().trim();
+    if (!lowerQuery) {
+        searchResults.innerHTML = '';
+        return;
+    }
+
+    // Бинарный поиск в отсортированном индексе
+    const results = [];
+    let left = 0;
+    let right = searchIndex.length - 1;
+    
+    while (left <= right) {
+        const mid = Math.floor((left + right) / 2);
+        const item = searchIndex[mid];
+        
+        if (item.name.startsWith(lowerQuery)) {
+            // Нашли совпадение, собираем все соседние совпадения
+            results.push(item);
+            
+            // Ищем совпадения влево
+            for (let i = mid - 1; i >= 0 && searchIndex[i].name.startsWith(lowerQuery); i--) {
+                results.unshift(searchIndex[i]);
+            }
+            
+            // Ищем совпадения вправо
+            for (let i = mid + 1; i < searchIndex.length && searchIndex[i].name.startsWith(lowerQuery); i++) {
+                results.push(searchIndex[i]);
+            }
+            
+            break;
+        } else if (item.name < lowerQuery) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    // Отображаем результаты
+    displaySearchResults(results);
+}
+
+// Функция отображения результатов поиска
+function displaySearchResults(results) {
+    searchResults.innerHTML = '';
+    
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
+        return;
+    }
+    
+    results.forEach(result => {
+        const songData = allSheetsData.find(sheet => sheet.sheetName === result.sheetName).data[result.index];
+        const resultItem = document.createElement('div');
+        resultItem.textContent = `${songData[0]} (${result.sheetName})`;
+        resultItem.className = 'search-result';
+        resultItem.addEventListener('click', () => {
+            sheetSelect.value = result.sheetName;
+            loadSheetSongs().then(() => {
+                songSelect.value = result.index;
+                displaySongDetails(songData, result.index);
+                searchResults.innerHTML = '';
+            });
+        });
+        searchResults.appendChild(resultItem);
+    });
+}
+
+// Загружаем данные при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadAllSheetsData();
+});
+
 
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
@@ -320,4 +388,32 @@ if (!splitTextButton || !songContent) {
             splitTextButton.textContent = 'Разделить текст';
         }
     });
+}
+
+// Добавьте массив для хранения данных всех листов
+let allSheetsData = [];
+let searchIndex = [];
+
+// Функция для загрузки данных со всех листов
+async function loadAllSheetsData() {
+    loadingIndicator.style.display = 'block';
+    
+    try {
+        // Получаем все листы параллельно
+        const sheetPromises = Object.values(SHEETS).map(sheetName => fetchSheetData(sheetName));
+        const results = await Promise.all(sheetPromises);
+        
+        // Сохраняем данные всех листов
+        allSheetsData = results.map((data, index) => ({
+            sheetName: Object.keys(SHEETS)[index],
+            data: data
+        }));
+        
+        // Создаем индекс для поиска
+        createSearchIndex();
+    } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+    } finally {
+        loadingIndicator.style.display = 'none';
+    }
 }
