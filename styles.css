@@ -41,6 +41,21 @@ h1, h2 {
     margin-bottom: 15px;
 }
 
+.font-size-controls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.font-size-controls button {
+    padding: 5px 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: var(--radius);
+    cursor: pointer;
+}
+
 #sheet-select, #search-input, #key-select {
     padding: 8px; /* Уменьшаем внутренние отступы */
     border: 1px solid var(--border-color);
