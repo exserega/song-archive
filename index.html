@@ -10,7 +10,6 @@
     <header>
         <h1>Agape Worship</h1>
     </header>
-
     <main class="container">
         <!-- Панель управления -->
         <section class="controls">
@@ -24,20 +23,17 @@
                     <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
                 </select>
             </div>
-
             <div class="control-group">
                 <label for="search-input">Поиск песни:</label>
                 <input type="text" id="search-input" placeholder="Введите название песни...">
                 <div id="search-results"></div>
             </div>
-
             <div class="control-group">
                 <label for="song-select">Выберите песню:</label>
                 <select id="song-select" disabled>
                     <option value="">-- Сначала выберите лист --</option>
                 </select>
             </div>
-
             <div class="control-group">
                 <label for="key-select">Тональность:</label>
                 <select id="key-select">
@@ -55,35 +51,29 @@
                     <option value="H">H</option>
                 </select>
             </div>
-
             <div class="control-group">
-                <button id="transpose-up">▲</button>
-                <button id="transpose-down">▼</button>
+                <button id="transpose-up" aria-label="Повысить тональность">▲</button>
+                <button id="transpose-down" aria-label="Понизить тональность">▼</button>
             </div>
         </section>
-
         <!-- Текст песни -->
         <section id="song-content">
             <h2 id="song-title">Название песни — Тональность</h2>
             <pre id="lyrics"></pre>
         </section>
-
         <!-- Дополнительные кнопки -->
         <div class="control-buttons">
-            <button id="favorite-button">❤️ Избранное</button>
-           <button id="split-text-button">Разделить текст</button>
+            <button id="favorite-button" aria-label="Добавить в избранное">❤️ Избранное</button>
+            <button id="split-text-button" aria-label="Разделить текст">Разделить текст</button>
         </div>
-
         <!-- Информация о BPM -->
         <footer>
             <p>BPM: <span id="bpm-display">-</span></p>
             <a id="holychords-button" href="#" target="_blank">Holychords</a>
         </footer>
     </main>
-
     <!-- Индикатор загрузки -->
     <div id="loading-indicator">Загрузка...</div>
-
     <script src="script.js"></script>
 </body>
 </html>
