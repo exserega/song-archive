@@ -255,25 +255,7 @@ songSelect.addEventListener('change', () => {
 
     displaySongDetails(cachedData[sheetName][songIndex], songIndex);
 });
-keySelect.addEventListener('change', updateTransposedLyrics);
-transposeUp.addEventListener('click', () => {
-    keySelect.selectedIndex = (keySelect.selectedIndex + 1) % keySelect.options.length;
-    updateTransposedLyrics();
-});
 
-transposeUp.addEventListener('click', () => {
-    const currentKey = keySelect.value;
-    const newKey = chords[(chords.indexOf(currentKey) + 1) % chords.length];
-    keySelect.value = newKey;
-    updateTransposedLyrics();
-});
-
-transposeDown.addEventListener('click', () => {
-    const currentKey = keySelect.value;
-    const newKey = chords[(chords.indexOf(currentKey) - 1 + chords.length) % chords.length];
-    keySelect.value = newKey;
-    updateTransposedLyrics();
-});
 
 // Добавляем отсутствующую функцию loadSheetSongs
 async function loadSheetSongs() {
