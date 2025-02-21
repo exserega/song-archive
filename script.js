@@ -47,6 +47,7 @@ async function fetchSheetData(sheetName) {
     }
 }
 
+
 // Функция для поиска песен по названию
 async function searchSongs(query) {
     const sheetName = SHEETS[sheetSelect.value];
@@ -72,6 +73,34 @@ async function searchSongs(query) {
             searchResults.appendChild(resultItem);
         });
     }
+}
+
+// Функция для отображения результатов поиска
+function displaySearchResults(results) {
+    searchResults.innerHTML = ''; // Очищаем предыдущие результаты
+
+    if (results.length === 0) {
+        searchResults.innerHTML = '<div class="search-result">Ничего не найдено</div>';
+        return;
+    }
+
+    results.forEach(result => {
+        const resultItem = document.createElement('div');
+        resultItem.textContent = result.name; // Название песни
+        resultItem.className = 'search-result'; // Добавляем класс для стилизации
+
+        resultItem.addEventListener('click', () => {
+            // Логика выбора песни
+            sheetSelect.value = result.sheetName; // Выбираем соответствующий лист
+            loadSheetSongs().then(() => {
+                songSelect.value = result.index; // Выбираем песню
+                displaySongDetails(cachedData[result.sheetName][result.index], result.index);
+                searchResults.innerHTML = ''; // Очищаем результаты поиска
+            });
+        });
+
+        searchResults.appendChild(resultItem); // Добавляем элемент в контейнер
+    });
 }
 
 function getTransposition(originalKey, newKey) {
