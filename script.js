@@ -121,7 +121,6 @@ async function searchSongs(query) {
 }
 
 // Функция отображения результатов поиска
-/ Функция для отображения результатов поиска
 function displaySearchResults(results) {
     searchResults.innerHTML = ''; // Очищаем предыдущие результаты
 
