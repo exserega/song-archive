@@ -23,6 +23,9 @@ const holychordsButton = document.getElementById('holychords-button');
 const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
 const splitTextButton = document.getElementById('split-text-button');
+const favoritesPanel = document.getElementById('favorites-panel');
+const toggleFavoritesButton = document.getElementById('toggle-favorites');
+const favoritesList = document.getElementById('favorites-list');
 
 
 // Функция для загрузки данных из Google Sheets
@@ -481,3 +484,83 @@ function updateFontSize() {
         lyricsElement.style.fontSize = `${currentFontSize}px`;
     }
 }
+
+
+// Функция для загрузки избранных песен из localStorage
+function loadFavorites() {
+    const storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    favoritesList.innerHTML = ''; // Очищаем список
+
+    storedFavorites.forEach((fav, index) => {
+        const favItem = document.createElement('div');
+        favItem.textContent = fav.name;
+
+        // Кнопка удаления
+        const removeBtn = document.createElement('span');
+        removeBtn.textContent = '×';
+        removeBtn.className = 'remove-btn';
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Предотвращаем клик по самой песне
+            removeFromFavorites(index);
+        });
+
+        favItem.appendChild(removeBtn);
+
+        // Обработчик клика по песне
+        favItem.addEventListener('click', () => {
+            sheetSelect.value = fav.sheet;
+            songSelect.value = fav.index;
+            displaySongDetails(cachedData[fav.sheet][fav.index], fav.index);
+        });
+
+        favoritesList.appendChild(favItem);
+    });
+}
+
+// Функция для добавления песни в избранное
+favoriteButton.addEventListener('click', () => {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const songData = cachedData[sheetName][songIndex];
+    if (!songData) return;
+
+    const song = {
+        name: songData[0],
+        sheet: sheetName,
+        index: songIndex
+    };
+
+    let storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+    if (!storedFavorites.some(fav => fav.name === song.name && fav.sheet === song.sheet)) {
+        storedFavorites.push(song);
+        localStorage.setItem('favorites', JSON.stringify(storedFavorites));
+        alert('Песня добавлена в избранное!');
+    } else {
+        alert('Песня уже в избранном!');
+    }
+
+    loadFavorites(); // Обновляем список избранного
+});
+
+// Функция для удаления песни из избранного
+function removeFromFavorites(index) {
+    let storedFavorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    storedFavorites.splice(index, 1); // Удаляем песню по индексу
+    localStorage.setItem('favorites', JSON.stringify(storedFavorites));
+    loadFavorites(); // Обновляем список избранного
+}
+
+// Переключение видимости панели
+toggleFavoritesButton.addEventListener('click', () => {
+    favoritesPanel.classList.toggle('open');
+    loadFavorites(); // Загружаем избранные песни при открытии панели
+});
+
+// Загрузка избранных песен при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadFavorites();
+});
