@@ -315,7 +315,12 @@ function displaySongDetails(songData, index) {
 
 
 
+const splitTextButton = document.getElementById('split-text-button');
+const songContent = document.getElementById('song-content');
+
 splitTextButton.addEventListener('click', () => {
+    console.log('Кнопка "Разделить текст" нажата'); // Отладочный вывод
+
     const lyricsElement = document.querySelector('#song-content pre');
     if (!lyricsElement || !lyricsElement.textContent.trim()) {
         alert('Текст песни отсутствует или пуст.');
@@ -325,11 +330,15 @@ splitTextButton.addEventListener('click', () => {
     songContent.classList.toggle('split-columns');
 
     if (songContent.classList.contains('split-columns')) {
+        console.log('Текст разделён на две колонки'); // Отладочный вывод
         splitTextButton.textContent = 'Объединить текст';
     } else {
+        console.log('Текст объединён в одну колонку'); // Отладочный вывод
         splitTextButton.textContent = 'Разделить текст';
     }
 });
+
+
 
 
 // Обработчик кнопки Holychords
