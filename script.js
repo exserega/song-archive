@@ -565,21 +565,10 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFavorites();
 });
 
-// Добавляем кнопку "Тест" в HTML (если её ещё нет)
-document.addEventListener('DOMContentLoaded', () => {
-    const testButton = document.createElement('button');
-    testButton.id = 'test-button';
-    testButton.textContent = 'Тест';
-    document.body.appendChild(testButton);
-
-    // Добавляем обработчик события для кнопки "Тест"
-    testButton.addEventListener('click', testAddToSheet);
-});
-
-// Функция для тестовой записи в таблицу
 async function testAddToSheet() {
     const sheetName = 'listsongs'; // Название листа
     const range = `${sheetName}!A2`; // Диапазон для записи (ячейка A2)
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`;
 
     // Получаем название текущей открытой песни
     const currentSongName = getCurrentSongName();
@@ -588,9 +577,6 @@ async function testAddToSheet() {
         return;
     }
 
-    // URL для запроса к Google Sheets API
-    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`;
-
     // Данные для записи
     const body = {
         values: [[currentSongName]] // Массив массивов (одна строка с одним значением)
@@ -598,7 +584,7 @@ async function testAddToSheet() {
 
     try {
         const response = await fetch(url, {
-            method: 'PUT', // Используем PUT для обновления конкретной ячейки
+            method: 'POST', // Используем POST для добавления новой строки
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         });
@@ -611,26 +597,9 @@ async function testAddToSheet() {
 
         const result = await response.json();
         console.log('Данные успешно записаны:', result);
-        alert(`Название песни "${currentSongName}" успешно записано в таблицу!`);
+        alert('Данные успешно записаны в таблицу!');
     } catch (error) {
         console.error('Ошибка записи данных:', error);
         alert('Произошла ошибка при записи данных.');
     }
 }
-
-// Функция для получения текущего названия песни
-function getCurrentSongName() {
-    // Предполагается, что название песни отображается в элементе с id="song-title"
-    const songNameElement = document.getElementById('song-title');
-    if (songNameElement && songNameElement.textContent.trim()) {
-        return songNameElement.textContent.trim();
-    }
-
-    // Если элемент с id="song-title" не найден, пытаемся получить название из select
-    const songSelect = document.getElementById('song-select');
-    if (songSelect && songSelect.value !== '-- Выберите песню --') {
-        return songSelect.options[songSelect.selectedIndex].text;
-    }
-
-    return null; // Если название песни не найдено
-} // тытыт
