@@ -91,24 +91,6 @@ h1, h2 {
     color: #fff;
 }
 
-#list-button {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    z-index: 1001;
-}
-
-#list-panel {
-    overflow-y: auto;
-    padding: 20px;
-}
-
 #split-text-button {
     background-color: var(--hover-color);
     color: var(--text-color);
