@@ -564,3 +564,49 @@ toggleFavoritesButton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     loadFavorites();
 });
+
+
+// Добавляем кнопку "Тест" в HTML (если её ещё нет)
+document.addEventListener('DOMContentLoaded', () => {
+    const testButton = document.createElement('button');
+    testButton.id = 'test-button';
+    testButton.textContent = 'Тест';
+    document.body.appendChild(testButton);
+
+    // Добавляем обработчик события для кнопки "Тест"
+    testButton.addEventListener('click', testAddToSheet);
+});
+
+// Функция для тестовой записи в таблицу
+async function testAddToSheet() {
+    const sheetName = 'listsongs'; // Название листа
+    const range = `${sheetName}!A2`; // Диапазон для записи (ячейка A2)
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`;
+
+    // Данные для записи (например, название песни)
+    const songName = 'Тестовая песня'; // Можно заменить на любое значение
+    const body = {
+        values: [[songName]] // Массив массивов (одна строка с одним значением)
+    };
+
+    try {
+        const response = await fetch(url, {
+            method: 'PUT', // Используем PUT для обновления конкретной ячейки
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        if (!response.ok) {
+            console.error('Ошибка HTTP:', response.status, response.statusText);
+            alert('Не удалось записать данные в таблицу.');
+            return;
+        }
+
+        const result = await response.json();
+        console.log('Данные успешно записаны:', result);
+        alert('Данные успешно записаны в таблицу!');
+    } catch (error) {
+        console.error('Ошибка записи данных:', error);
+        alert('Произошла ошибка при записи данных.');
+    }
+}м
