@@ -652,11 +652,19 @@ async function addSongToList() {
         };
 
         try {
-            await fetch(url, {
+            const response = await fetch(url, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(body)
             });
+
+            if (!response.ok) {
+                console.error('Ошибка HTTP:', response.status, response.statusText);
+                return;
+            }
+
+            const result = await response.json();
+            console.log('Данные успешно добавлены:', result);
 
             cachedData['listsongs'] = listSongs; // Обновляем кэш
             displayListSongs(); // Обновляем отображение
