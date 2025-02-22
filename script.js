@@ -609,4 +609,4 @@ async function testAddToSheet() {
         console.error('Ошибка записи данных:', error);
         alert('Произошла ошибка при записи данных.');
     }
-}м
+}
