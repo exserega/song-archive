@@ -620,13 +620,13 @@ async function testAddToSheet() {
 
 // Функция для получения текущего названия песни
 function getCurrentSongName() {
-    // Предполагается, что название песни отображается в элементе с id="song-name"
-    const songNameElement = document.getElementById('song-name');
+    // Предполагается, что название песни отображается в элементе с id="song-title"
+    const songNameElement = document.getElementById('song-title');
     if (songNameElement && songNameElement.textContent.trim()) {
         return songNameElement.textContent.trim();
     }
 
-    // Если элемент с id="song-name" не найден, пытаемся получить название из select
+    // Если элемент с id="song-title" не найден, пытаемся получить название из select
     const songSelect = document.getElementById('song-select');
     if (songSelect && songSelect.value !== '-- Выберите песню --') {
         return songSelect.options[songSelect.selectedIndex].text;
