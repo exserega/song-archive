@@ -23,23 +23,30 @@
                     <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
                 </select>
             </div>
-<div id="favorites-panel" class="favorites-panel">
-    <button id="toggle-favorites" class="toggle-favorites">Группа</button>
-    <div id="favorites-list" class="favorites-list">
-        <!-- Список избранных песен будет здесь -->
-    </div>
-</div>
+
+            <!-- Кнопка "Список" -->
+            <button id="list-button" class="list-button">Список</button>
+
+            <div id="favorites-panel" class="favorites-panel">
+                <button id="toggle-favorites" class="toggle-favorites">Группа</button>
+                <div id="favorites-list" class="favorites-list">
+                    <!-- Список избранных песен будет здесь -->
+                </div>
+            </div>
+
             <div class="control-group">
                 <label for="search-input">Поиск песни:</label>
                 <input type="text" id="search-input" placeholder="Введите название песни...">
                 <div id="search-results"></div>
             </div>
+
             <div class="control-group">
                 <label for="song-select">Выберите песню:</label>
                 <select id="song-select" disabled>
                     <option value="">-- Сначала выберите лист --</option>
                 </select>
             </div>
+
             <div class="control-group">
                 <label for="key-select">Тональность:</label>
                 <select id="key-select">
@@ -57,26 +64,38 @@
                     <option value="H">H</option>
                 </select>
             </div>
-<div class="font-size-controls">
-    <button id="zoom-in">+</button>
-    <button id="zoom-out">-</button>
-</div>
+
+            <div class="font-size-controls">
+                <button id="zoom-in">+</button>
+                <button id="zoom-out">-</button>
+            </div>
         </section>
+
         <!-- Текст песни -->
-      <section id="song-content">
-    <h2 id="song-title">Название песни — Тональность</h2>
-</section>
+        <section id="song-content">
+            <h2 id="song-title">Название песни — Тональность</h2>
+        </section>
+
         <!-- Дополнительные кнопки -->
         <div class="control-buttons">
             <button id="favorite-button" aria-label="Добавить в избранное">❤️ Избранное</button>
             <button id="split-text-button" aria-label="Разделить текст">Разделить текст</button>
+            <!-- Кнопка "Добавить в список" -->
+            <button id="add-to-list-button" aria-label="Добавить в список">Добавить в список</button>
         </div>
+
         <!-- Информация о BPM -->
         <footer>
             <p>BPM: <span id="bpm-display">-</span></p>
             <a id="holychords-button" href="#" target="_blank">Holychords</a>
         </footer>
     </main>
+
+    <!-- Панель списка -->
+    <div id="list-panel" class="panel">
+        <div id="list-container"></div>
+    </div>
+
     <!-- Индикатор загрузки -->
     <div id="loading-indicator">Загрузка...</div>
     <script src="script.js"></script>
