@@ -1,3 +1,5 @@
+const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
+const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
 const SHEETS = {
     'Быстрые (вертикаль)': 'Быстрые (вертикаль)',
     'Быстрые (горизонталь)': 'Быстрые (горизонталь)',
@@ -9,6 +11,7 @@ const SHEETS = {
 const chords = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "H"];
 let cachedData = {};
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
 
 // Объявление всех элементов DOM в начале файла
 const sheetSelect = document.getElementById('sheet-select');
@@ -22,16 +25,16 @@ const holychordsButton = document.getElementById('holychords-button');
 const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
 const splitTextButton = document.getElementById('split-text-button');
-const favoritesPanel = document.getElementById('favorites-panel');
-const toggleFavoritesButton = document.getElementById('toggle-favorites');
-const favoritesList = document.getElementById('favorites-list');
+const listButton = document.getElementById('list-button'); // Новая кнопка "Список"
+const listPanel = document.getElementById('list-panel'); // Панель списка
+const listContainer = document.getElementById('list-container'); // Контейнер для песен('favorites-list');
 
 
 // Функция для загрузки данных из Google Sheets
 async function fetchSheetData(sheetName) {
     if (cachedData[sheetName]) return cachedData[sheetName];
 
-    loadingIndicator.style.display = 'block'; // Показываем индикатор загрузки
+    loadingIndicator.style.display = 'block';
 
     try {
         const range = `${sheetName}!A2:E`;
@@ -45,9 +48,28 @@ async function fetchSheetData(sheetName) {
         console.error('Ошибка загрузки данных:', error);
         return [];
     } finally {
-        loadingIndicator.style.display = 'none'; // Скрываем индикатор загрузки
+        loadingIndicator.style.display = 'none';
     }
 }
+
+async function fetchListSongs() {
+    const sheetName = 'listsongs';
+    if (cachedData[sheetName]) return cachedData[sheetName];
+
+    try {
+        const range = `${sheetName}!A2:C`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        cachedData[sheetName] = data.values || [];
+        return cachedData[sheetName];
+    } catch (error) {
+        console.error('Ошибка загрузки данных списка:', error);
+        return [];
+    }
+}
+
 
 // Функция для создания индекса поиска
 function createSearchIndex() {
@@ -585,28 +607,26 @@ async function fetchListSongs() {
 
 function displayListSongs() {
     const listContainer = document.getElementById('list-container');
-    listContainer.innerHTML = ''; // Очищаем контейнер
+    listContainer.innerHTML = '';
 
     const listSongs = cachedData['listsongs'] || [];
     listSongs.forEach((song, index) => {
         const songItem = document.createElement('div');
         songItem.textContent = song[0]; // Название песни
 
-        // Кнопка удаления
         const removeBtn = document.createElement('span');
         removeBtn.textContent = '×';
         removeBtn.className = 'remove-btn';
         removeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Предотвращаем клик по самой песне
+            e.stopPropagation();
             removeFromList(index);
         });
 
         songItem.appendChild(removeBtn);
 
-        // Обработчик клика по песне
         songItem.addEventListener('click', () => {
-            const sheetName = song[1]; // Лист
-            const songIndex = song[2]; // Индекс
+            const sheetName = song[1];
+            const songIndex = song[2];
             sheetSelect.value = sheetName;
             songSelect.value = songIndex;
             displaySongDetails(cachedData[sheetName][songIndex], songIndex);
@@ -635,7 +655,6 @@ async function addSongToList() {
     if (!listSongs.some(s => s[0] === song.name && s[1] === song.sheet)) {
         listSongs.push([song.name, song.sheet, song.index]);
 
-        // Обновляем данные в Google Sheets
         const range = 'listsongs!A2:C';
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`;
         const body = {
@@ -649,8 +668,8 @@ async function addSongToList() {
                 body: JSON.stringify(body)
             });
 
-            cachedData['listsongs'] = listSongs; // Обновляем кэш
-            displayListSongs(); // Обновляем отображение
+            cachedData['listsongs'] = listSongs;
+            displayListSongs();
             alert('Песня добавлена в список!');
         } catch (error) {
             console.error('Ошибка добавления песни в список:', error);
