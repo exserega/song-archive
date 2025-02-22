@@ -582,26 +582,22 @@ async function testAddToSheet() {
     const sheetName = 'listsongs'; // Название листа
     const range = `${sheetName}!A2`; // Диапазон для записи (ячейка A2)
     const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`;
-
     // Данные для записи (например, название песни)
     const songName = 'Тестовая песня'; // Можно заменить на любое значение
     const body = {
         values: [[songName]] // Массив массивов (одна строка с одним значением)
     };
-
     try {
         const response = await fetch(url, {
             method: 'PUT', // Используем PUT для обновления конкретной ячейки
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(body)
         });
-
         if (!response.ok) {
             console.error('Ошибка HTTP:', response.status, response.statusText);
             alert('Не удалось записать данные в таблицу.');
             return;
         }
-
         const result = await response.json();
         console.log('Данные успешно записаны:', result);
         alert('Данные успешно записаны в таблицу!');
@@ -609,4 +605,4 @@ async function testAddToSheet() {
         console.error('Ошибка записи данных:', error);
         alert('Произошла ошибка при записи данных.');
     }
-}
+} // Убедитесь, что здесь нет лишних символов
