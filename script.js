@@ -564,3 +564,131 @@ toggleFavoritesButton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     loadFavorites();
 });
+
+const listButton = document.getElementById('list-button');
+const listPanel = document.getElementById('list-panel');
+
+listButton.addEventListener('click', () => {
+    if (listPanel.style.display === 'none') {
+        listPanel.style.display = 'block';
+        loadListSongs(); // Загружаем песни из Google Sheets
+    } else {
+        listPanel.style.display = 'none';
+    }
+});
+
+async function fetchListSongs() {
+    try {
+        const range = `ListSongs!A2:C`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        return data.values?.map(row => ({
+            name: row[0],
+            sheet: row[1],
+            index: parseInt(row[2])
+        })) || [];
+    } catch (error) {
+        console.error('Ошибка загрузки списка песен:', error);
+        return [];
+    }
+}
+
+function displayListSongs(songs) {
+    const listContainer = document.getElementById('list-container');
+    listContainer.innerHTML = ''; // Очищаем предыдущие результаты
+
+    if (songs.length === 0) {
+        listContainer.innerHTML = '<p>Нет песен в списке.</p>';
+        return;
+    }
+
+    songs.forEach((song, index) => {
+        const songItem = document.createElement('div');
+        songItem.textContent = song.name;
+
+        // Кнопка удаления
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Удалить';
+        deleteButton.style.marginLeft = '10px';
+        deleteButton.addEventListener('click', () => {
+            removeSongFromList(index); // Удаляем песню по индексу
+        });
+
+        songItem.appendChild(deleteButton);
+
+        // При клике на название песни — выбираем её
+        songItem.addEventListener('click', () => {
+            sheetSelect.value = song.sheet;
+            songSelect.value = song.index;
+            displaySongDetails(cachedData[song.sheet][song.index], song.index);
+            listPanel.style.display = 'none'; // Закрываем панель
+        });
+
+        listContainer.appendChild(songItem);
+    });
+}
+
+async function addSongToList(song) {
+    try {
+        const range = `ListSongs!A:C`;
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`;
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                values: [[song.name, song.sheet, song.index]]
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Ошибка при добавлении песни в список.');
+        }
+
+        alert('Песня добавлена в список!');
+        loadListSongs(); // Обновляем список песен
+    } catch (error) {
+        console.error('Ошибка добавления песни в список:', error);
+    }
+}
+
+async function removeSongFromList(index) {
+    try {
+        const range = `ListSongs!A${index + 2}:C${index + 2}`; // Удаляем строку по индексу
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}:clear?key=${API_KEY}`;
+        const response = await fetch(url, { method: 'POST' });
+
+        if (response.ok) {
+            alert('Песня удалена из списка!');
+            loadListSongs(); // Обновляем список песен
+        } else {
+            throw new Error('Ошибка при удалении песни.');
+        }
+    } catch (error) {
+        console.error('Ошибка удаления песни:', error);
+    }
+}
+
+document.getElementById('add-to-list-button').addEventListener('click', async () => {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const songData = cachedData[sheetName][songIndex];
+    if (!songData) return;
+
+    const song = {
+        name: songData[0],
+        sheet: sheetName,
+        index: songIndex
+    };
+
+    await addSongToList(song);
+});
+
+async function loadListSongs() {
+    const songs = await fetchListSongs();
+    displayListSongs(songs);
+}
