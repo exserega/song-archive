@@ -564,3 +564,136 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFavorites();
 });
 
+
+async function fetchListSongs() {
+    const sheetName = 'listsongs';
+    if (cachedData[sheetName]) return cachedData[sheetName];
+
+    try {
+        const range = `${sheetName}!A2:C`; // Загружаем столбцы Name, Sheet, Index
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?key=${API_KEY}`;
+        const response = await fetch(url);
+        const data = await response.json();
+
+        cachedData[sheetName] = data.values || [];
+        return cachedData[sheetName];
+    } catch (error) {
+        console.error('Ошибка загрузки данных списка:', error);
+        return [];
+    }
+}
+
+function displayListSongs() {
+    const listContainer = document.getElementById('list-container');
+    listContainer.innerHTML = ''; // Очищаем контейнер
+
+    const listSongs = cachedData['listsongs'] || [];
+    listSongs.forEach((song, index) => {
+        const songItem = document.createElement('div');
+        songItem.textContent = song[0]; // Название песни
+
+        // Кнопка удаления
+        const removeBtn = document.createElement('span');
+        removeBtn.textContent = '×';
+        removeBtn.className = 'remove-btn';
+        removeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Предотвращаем клик по самой песне
+            removeFromList(index);
+        });
+
+        songItem.appendChild(removeBtn);
+
+        // Обработчик клика по песне
+        songItem.addEventListener('click', () => {
+            const sheetName = song[1]; // Лист
+            const songIndex = song[2]; // Индекс
+            sheetSelect.value = sheetName;
+            songSelect.value = songIndex;
+            displaySongDetails(cachedData[sheetName][songIndex], songIndex);
+        });
+
+        listContainer.appendChild(songItem);
+    });
+}
+
+async function addSongToList() {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const songData = cachedData[sheetName][songIndex];
+    if (!songData) return;
+
+    const song = {
+        name: songData[0],
+        sheet: sheetName,
+        index: songIndex
+    };
+
+    const listSongs = cachedData['listsongs'] || [];
+    if (!listSongs.some(s => s[0] === song.name && s[1] === song.sheet)) {
+        listSongs.push([song.name, song.sheet, song.index]);
+
+        // Обновляем данные в Google Sheets
+        const range = 'listsongs!A2:C';
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}:append?valueInputOption=RAW&key=${API_KEY}`;
+        const body = {
+            values: [[song.name, song.sheet, song.index]]
+        };
+
+        try {
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(body)
+            });
+
+            cachedData['listsongs'] = listSongs; // Обновляем кэш
+            displayListSongs(); // Обновляем отображение
+            alert('Песня добавлена в список!');
+        } catch (error) {
+            console.error('Ошибка добавления песни в список:', error);
+        }
+    } else {
+        alert('Песня уже в списке!');
+    }
+}
+
+async function removeFromList(index) {
+    const listSongs = cachedData['listsongs'] || [];
+    listSongs.splice(index, 1);
+
+    // Обновляем данные в Google Sheets
+    const range = 'listsongs!A2:C';
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${range}?valueInputOption=RAW&key=${API_KEY}`;
+    const body = {
+        values: listSongs
+    };
+
+    try {
+        await fetch(url, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+
+        cachedData['listsongs'] = listSongs; // Обновляем кэш
+        displayListSongs(); // Обновляем отображение
+    } catch (error) {
+        console.error('Ошибка удаления песни из списка:', error);
+    }
+}
+
+document.getElementById('list-button').addEventListener('click', () => {
+    const listPanel = document.getElementById('list-panel');
+    listPanel.classList.toggle('open');
+    displayListSongs();
+});
+
+document.getElementById('add-to-list-button').addEventListener('click', addSongToList);
+document.addEventListener('DOMContentLoaded', async () => {
+    await fetchListSongs();
+});
+
+
