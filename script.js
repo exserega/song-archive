@@ -1,3 +1,24 @@
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyBlkjVQFtFpMRFexAi6nBqEkIfjFlU5cDo",
+  authDomain: "song-archive-389a6.firebaseapp.com",
+  projectId: "song-archive-389a6",
+  storageBucket: "song-archive-389a6.firebasestorage.app",
+  messagingSenderId: "619735277668",
+  appId: "1:619735277668:web:51d2684bd8d4444eaf3f71",
+  measurementId: "G-Z6QYH5YD2E"
+};
+
+// Initialize Firebase
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+import { getFirestore, collection, addDoc, query, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Reference to the shared list collection
+const sharedListCollection = collection(db, "sharedList");
+
 const API_KEY = 'AIzaSyDO2gwifAnZzC3ooJ0A_4vAD76iYakwzlk'; // Ваш API-ключ
 const SHEET_ID = '1C3gFjj9LAub_Nk9ogqKp3LKpdAxq6j8xlPAsc8OmM5s'; // Ваш ID таблицы
 const SHEETS = {
