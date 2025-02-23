@@ -279,3 +279,47 @@ body.dark-theme .chord {
         line-height: 1.2; /* Минимальный межстрочный интервал */
     }
 }
+
+
+
+.shared-list-panel {
+    position: fixed;
+    top: 60px;
+    right: -300px;
+    width: 300px;
+    background: #f9f9f9;
+    border-left: 1px solid #ddd;
+    transition: right 0.3s;
+}
+
+.shared-list-panel.open {
+    right: 0;
+}
+
+.toggle-shared-list {
+    position: absolute;
+    top: 0;
+    left: -60px;
+    width: 60px;
+    height: 30px;
+    background: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+.shared-list {
+    padding: 10px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.shared-item {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+}
+
+.shared-item:hover {
+    background: #e9ecef;
+}
