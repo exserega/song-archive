@@ -11,7 +11,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -673,7 +673,8 @@ function loadSharedList() {
 // Функция для удаления песни из общего списка
 async function deleteFromSharedList(docId) {
     try {
-        await deleteDoc(doc(db, "sharedList", docId));
+        const docRef = doc(db, "sharedList", docId); // Создаем ссылку на документ
+        await deleteDoc(docRef); // Удаляем документ
         alert("Песня успешно удалена из общего списка!");
     } catch (error) {
         console.error("Ошибка при удалении песни:", error);
