@@ -597,7 +597,7 @@ function removeFromFavorites(fav) {
 }
 
 // Переключение видимости панели
-toggleFavoritesButton.addEventListener('click', () => {
+toggleFavorites.addEventListener('click', () => {
     favoritesPanel.classList.toggle('open');
     loadFavorites(); // Загружаем избранные песни при открытии панели
 });
