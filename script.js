@@ -11,7 +11,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, onSnapshot, deleteDoc } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
+import { getFirestore, collection, addDoc, query, onSnapshot } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js";
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
@@ -635,48 +635,31 @@ function loadSharedList() {
     onSnapshot(q, (snapshot) => {
         snapshot.docs.forEach((doc) => {
             const song = doc.data();
-            const docId = doc.id; // Получаем ID документа для удаления
 
             const listItem = document.createElement('div');
+            listItem.textContent = song.name;
             listItem.className = 'shared-item';
 
-            // Отображаем название песни
-            const songNameElement = document.createElement('span');
-            songNameElement.textContent = song.name;
-            songNameElement.className = 'song-name';
-            songNameElement.addEventListener('click', () => {
+            listItem.addEventListener('click', () => {
                 sheetSelect.value = song.sheet;
                 songSelect.value = song.index;
                 keySelect.value = song.key; // Устанавливаем сохраненную тональность
                 displaySongDetails(cachedData[song.sheet][song.index], song.index);
             });
 
-            // Кнопка удаления
-            const deleteButton = document.createElement('button');
-            deleteButton.textContent = '❌'; // Символ крестика
-            deleteButton.className = 'delete-button';
-            deleteButton.addEventListener('click', () => {
-                if (confirm(`Удалить песню "${song.name}" из списка?`)) {
-                    deleteFromSharedList(docId); // Вызываем функцию удаления
-                }
-            });
-
-            // Добавляем элементы в контейнер песни
-            listItem.appendChild(songNameElement);
-            listItem.appendChild(deleteButton);
-
             sharedListContainer.appendChild(listItem);
         });
     });
 }
 
-// Функция для удаления песни из общего списка
-async function deleteFromSharedList(docId) {
-    try {
-        await deleteDoc(doc(db, "sharedList", docId));
-        alert("Песня успешно удалена из списка!");
-    } catch (error) {
-        console.error("Ошибка при удалении песни:", error);
-        alert("Не удалось удалить песню. Попробуйте еще раз.");
-    }
-}
+// Загрузка списка при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadAllSheetsData();
+    loadSharedList(); // Загружаем общий список песен
+});
+
+// Переключение видимости панели
+document.getElementById('toggle-shared-list').addEventListener('click', () => {
+    const panel = document.getElementById('shared-list-panel');
+    panel.classList.toggle('open');
+});
