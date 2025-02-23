@@ -315,6 +315,9 @@ body.dark-theme .chord {
 }
 
 .shared-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 8px;
     border-bottom: 1px solid #ddd;
     cursor: pointer;
@@ -322,4 +325,17 @@ body.dark-theme .chord {
 
 .shared-item:hover {
     background: #e9ecef;
+}
+
+
+.delete-button {
+    background: none;
+    border: none;
+    color: red;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    text-decoration: underline;
 }
