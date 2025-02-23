@@ -293,33 +293,6 @@ body.dark-theme .chord {
     color: #333;
 }
 
-
-.shared-list-panel {
-    position: fixed;
-    top: 60px;
-    right: -300px;
-    width: 300px;
-    background: #f9f9f9;
-    border-left: 1px solid #ddd;
-    transition: right 0.3s;
-}
-
-.shared-list-panel.open {
-    right: 0;
-}
-
-.toggle-shared-list {
-    position: absolute;
-    top: 0;
-    left: -60px;
-    width: 60px;
-    height: 30px;
-    background: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
 .shared-list {
     padding: 10px;
     max-height: 400px;
