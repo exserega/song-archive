@@ -721,9 +721,13 @@ document.getElementById('toggle-favorites').addEventListener('click', () => {
         return;
     }
 
+    console.log("Переключение класса 'open'"); // Логирование
     panel.classList.toggle('open');
 
     if (panel.classList.contains('open')) {
-        loadGroupPanel(); // Загружаем содержимое панели
+        console.log("Панель открыта, загружаем данные."); // Логирование
+        loadGroupPanel();
+    } else {
+        console.log("Панель закрыта."); // Логирование
     }
 });
