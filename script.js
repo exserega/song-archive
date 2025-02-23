@@ -173,11 +173,6 @@ function displaySearchResults(results) {
     });
 }
 
-// Загружаем данные при старте
-document.addEventListener('DOMContentLoaded', () => {
-    loadAllSheetsData();
-});
-
 
 function getTransposition(originalKey, newKey) {
     const originalIndex = chords.indexOf(originalKey);
@@ -575,10 +570,6 @@ toggleFavoritesButton.addEventListener('click', () => {
     loadFavorites(); // Загружаем избранные песни при открытии панели
 });
 
-// Загрузка избранных песен при старте
-document.addEventListener('DOMContentLoaded', () => {
-    loadFavorites();
-});
 
 
 
@@ -708,7 +699,23 @@ async function deleteFromSharedList(docId) {
 
 // Загрузка списка при старте
 document.addEventListener('DOMContentLoaded', () => {
-    loadAllSheetsData();
+    const toggleFavoritesButton = document.getElementById('toggle-favorites');
+    const favoritesPanel = document.getElementById('favorites-panel');
+
+    if (!toggleFavoritesButton || !favoritesPanel) {
+        console.error("Элементы 'toggle-favorites' или 'favorites-panel' не найдены.");
+        return;
+    }
+
+    toggleFavoritesButton.addEventListener('click', () => {
+        favoritesPanel.classList.toggle('open');
+
+        if (favoritesPanel.classList.contains('open')) {
+            loadGroupPanel(); // Загружаем содержимое панели
+        }
+    });
+
+    loadAllSheetsData(); // Загружаем данные при старте
     loadFavorites(); // Загружаем избранные песни
     loadSharedList(); // Загружаем общий список песен
 });
