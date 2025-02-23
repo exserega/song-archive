@@ -14,31 +14,31 @@
 body {
     font-family: 'Inter', sans-serif;
     margin: 0;
-    padding: 10px; /* Уменьшаем отступы */
+    padding: 10px;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
 }
 
 .container {
-    max-width: 100%; /* Убираем ограничение ширины */
+    max-width: 100%;
     margin: 0 auto;
-    padding: 10px; /* Уменьшаем отступы */
+    padding: 10px;
 }
 
 /* Заголовки */
 h1, h2 {
     text-align: center;
     color: var(--primary-color);
-    margin-bottom: 15px; /* Уменьшаем отступы */
-    font-size: 1.5rem; /* Уменьшаем размер шрифта */
+    margin-bottom: 15px;
+    font-size: 1.5rem;
 }
 
 /* Панель управления */
 .controls {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Уменьшаем расстояние между элементами */
+    gap: 10px;
     margin-bottom: 15px;
 }
 
@@ -58,23 +58,23 @@ h1, h2 {
 }
 
 #sheet-select, #search-input, #key-select {
-    padding: 8px; /* Уменьшаем внутренние отступы */
+    padding: 8px;
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
-    font-size: 14px; /* Уменьшаем размер шрифта */
+    font-size: 14px;
 }
 
 /* Кнопки управления */
 .control-buttons {
     display: flex;
     justify-content: center;
-    gap: 8px; /* Уменьшаем расстояние между кнопками */
+    gap: 8px;
     margin-top: 15px;
 }
 
 .control-buttons button {
-    padding: 8px 12px; /* Уменьшаем размер кнопок */
-    font-size: 14px; /* Уменьшаем размер шрифта */
+    padding: 8px 12px;
+    font-size: 14px;
     border: none;
     border-radius: var(--radius);
     cursor: pointer;
@@ -99,118 +99,121 @@ h1, h2 {
 /* Текст песни */
 #song-content {
     background-color: #fff;
-    padding: 15px; /* Уменьшаем отступы */
+    padding: 15px;
     border-radius: var(--radius);
     border: 1px solid var(--border-color);
     box-shadow: var(--shadow);
     margin-top: 15px;
-    overflow: hidden; /* Скрываем всё, что выходит за пределы */
-    max-width: 100%; /* Ограничиваем ширину */
-    box-sizing: border-box; /* Учитываем padding и border в ширине */
+    overflow: hidden;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #song-content pre {
     font-family: 'Roboto', monospace;
-    white-space: pre-wrap; /* Перенос строк */
-    word-wrap: break-word; /* Перенос длинных слов */
-    overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
-    line-height: 1.6; /* Уменьшаем межстрочный интервал */
-    font-size: 14px; /* Уменьшаем размер шрифта */
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+    font-size: 14px;
     color: var(--text-color);
     margin: 0;
-    max-width: 100%; /* Ограничиваем ширину */
-}
-
-/* Стили для разделения текста на две колонки */
-#song-content.split-columns pre {
-    column-count: 2; /* Разделение на две колонки */
-    column-gap: 20px; /* Расстояние между колонками */
-    white-space: pre-wrap; /* Перенос строк */
-    word-wrap: break-word; /* Перенос длинных слов */
-    overflow-wrap: anywhere; /* Принудительный перенос при необходимости */
+    max-width: 100%;
 }
 
 /* Стиль для контейнера результатов поиска */
 #search-results {
-    max-height: 200px; /* Ограничение высоты для прокрутки */
-    overflow-y: auto; /* Добавляем прокрутку, если результатов много */
-    border: 1px solid #ddd; /* Легкая рамка вокруг результатов */
-    border-radius: 4px; /* Закругленные углы */
-    background-color: #f9f9f9; /* Фон для контейнера */
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
 }
 
-/* Стиль для каждого результата поиска */
 .search-result {
-    padding: 8px 12px; /* Отступы внутри элемента */
-    cursor: pointer; /* Курсор "рука" при наведении */
-    border-bottom: 1px solid #eaeaea; /* Легкая линия между элементами */
-    transition: background-color 0.2s ease; /* Плавный переход при наведении */
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #eaeaea;
+    transition: background-color 0.2s ease;
 }
 
-/* Убираем границу после последнего элемента */
 .search-result:last-child {
     border-bottom: none;
 }
 
-/* Эффект при наведении на результат */
 .search-result:hover {
-    background-color: #e6f7ff; /* Легкий голубой фон */
-}
-
-#lyrics {
-    font-family: 'Roboto', monospace; /* Моноширинный шрифт для лучшего выравнивания */
-    white-space: pre-wrap;
-    line-height: 1.8;
-    font-size: 18px;
+    background-color: #e6f7ff;
 }
 
 /* Базовый стиль для аккордов */
 .chord {
-    font-weight: bold; /* Жирный шрифт */
-    color: var(--accent-color); /* Яркий цвет (например, синий или фиолетовый) */
-    margin-right: 4px; /* Отступ между аккордами */
-    
+    font-weight: bold;
+    color: var(--accent-color);
+    margin-right: 4px;
 }
 
-/* Темная тема (если используется) */
 body.dark-theme .chord {
-    color: #bb86fc; /* Фиолетовый цвет для темной темы */
+    color: #bb86fc;
 }
 
 /* Адаптивность */
 @media (max-width: 768px) {
     #song-content pre {
-        font-size: 12px; /* Ещё меньше шрифт */
-        line-height: 1.4; /* Уменьшаем межстрочный интервал */
+        font-size: 12px;
+        line-height: 1.4;
     }
 
     .control-buttons {
-        flex-direction: column; /* Кнопки в столбик */
+        flex-direction: column;
     }
 }
 
-/* Стили для выдвижной панели */
+@media (max-width: 480px) {
+    body {
+        padding: 5px;
+    }
+
+    h1, h2 {
+        font-size: 1.2rem;
+    }
+
+    select, input, button {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    #song-content {
+        padding: 15px;
+    }
+
+    #song-content pre {
+        font-size: 10px;
+        line-height: 1.2;
+    }
+}
+
+/* Стили для выдвижной панели "Группа" */
 .favorites-panel {
     position: fixed;
     top: 0;
-    left: -300px; /* Панель скрыта за пределами экрана */
+    left: -300px;
     width: 300px;
     height: 100%;
     background-color: #f4f4f4;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transition: left 0.3s ease;
     z-index: 1000;
-    overflow-y: auto; /* Добавляем прокрутку, если контента много */
+    overflow-y: auto;
 }
 
 .favorites-panel.open {
-    left: 0; /* Панель видна */
+    left: 0;
 }
 
 .toggle-favorites {
     position: absolute;
     top: 10px;
-    right: -50px; /* Кнопка находится справа от панели */
+    right: -50px;
     width: 50px;
     height: 50px;
     background-color: #0d6efd;
@@ -225,64 +228,6 @@ body.dark-theme .chord {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.favorites-list {
-    margin-top: 70px;
-    padding: 10px;
-    max-height: calc(100% - 80px);
-    overflow-y: auto;
-}
-
-.favorites-list div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    margin-bottom: 5px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.favorites-list div:hover {
-    background-color: #f0f8ff;
-}
-
-.favorites-list .remove-btn {
-    color: red;
-    font-size: 14px;
-    cursor: pointer;
-}
-
-
-@media (max-width: 480px) {
-    body {
-        padding: 5px; /* Минимальные отступы */
-    }
-
-    h1, h2 {
-        font-size: 1.2rem; /* Ещё меньше заголовки */
-    }
-
-
-    select, input, button {
-        font-size: 14px;
-        padding: 10px;
-    }
-
-    #song-content {
-        padding: 15px;
-    }
-}
-
-#song-content pre {
-        font-size: 10px; /* Минимальный шрифт */
-        line-height: 1.2; /* Минимальный межстрочный интервал */
-    }
-}
-
-
-
 .list-section {
     margin-bottom: 20px;
 }
@@ -293,23 +238,26 @@ body.dark-theme .chord {
     color: #333;
 }
 
-.shared-list {
+.favorites-list, .shared-songs-list {
     padding: 10px;
-    max-height: 400px;
+    max-height: calc(100vh - 100px);
     overflow-y: auto;
 }
 
-.shared-item {
+.favorites-list div, .shared-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 8px;
-    border-bottom: 1px solid #ddd;
+    margin-bottom: 5px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     cursor: pointer;
 }
 
-.shared-item:hover {
-    background: #e9ecef;
+.favorites-list div:hover, .shared-item:hover {
+    background-color: #f0f8ff;
 }
 
 .song-name {
@@ -317,8 +265,7 @@ body.dark-theme .chord {
     margin-right: 10px;
 }
 
-
-.delete-button {
+.remove-btn, .delete-button {
     background: none;
     border: none;
     color: red;
@@ -326,6 +273,61 @@ body.dark-theme .chord {
     cursor: pointer;
 }
 
-.delete-button:hover {
+.remove-btn:hover, .delete-button:hover {
     text-decoration: underline;
+}
+
+/* Стиль для кнопки Holychords */
+#holychords-button {
+    display: inline-block;
+    margin-top: 10px;
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+#holychords-button.hidden {
+    display: none;
+}
+
+/* Стиль для индикатора загрузки */
+#loading-indicator {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    z-index: 1001;
+    display: none;
+}
+
+#loading-indicator.show {
+    display: block;
+}
+
+/* Стиль для разделения текста на две колонки */
+#song-content.split-columns pre {
+    column-count: 2;
+    column-gap: 20px;
+}
+
+/* Общие стили для кнопок */
+button {
+    outline: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+button:hover {
+    background-color: var(--hover-color);
+}
+
+/* Стиль для пустых сообщений */
+.empty-message {
+    text-align: center;
+    color: #aaa;
+    font-size: 14px;
+    padding: 10px;
 }
