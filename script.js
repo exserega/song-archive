@@ -47,6 +47,7 @@ const splitTextButton = document.getElementById('split-text-button');
 const favoritesPanel = document.getElementById('favorites-panel');
 const toggleFavoritesButton = document.getElementById('toggle-favorites');
 const favoritesList = document.getElementById('favorites-list');
+const sharedSongsList = document.getElementById('shared-songs-list');
 
 
 // Функция для загрузки данных из Google Sheets
