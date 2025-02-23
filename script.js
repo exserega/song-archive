@@ -592,7 +592,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-/ Функция для добавления песни в общий список
+// Функция для добавления песни в общий список
 function addToSharedList(songData) {
     const sheetName = SHEETS[sheetSelect.value];
     const songIndex = songSelect.value;
