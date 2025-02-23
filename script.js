@@ -628,8 +628,8 @@ document.getElementById('add-to-list-button').addEventListener('click', () => {
 
 // Функция для загрузки и отображения общего списка песен
 function loadSharedList() {
-    const sharedListContainer = document.getElementById('shared-list');
-    sharedListContainer.innerHTML = ''; // Очищаем предыдущие результаты
+    const sharedSongsContainer = document.getElementById('shared-songs-list');
+    sharedSongsContainer.innerHTML = ''; // Очищаем предыдущие результаты
 
     const q = query(sharedListCollection);
     onSnapshot(q, (snapshot) => {
@@ -665,9 +665,17 @@ function loadSharedList() {
             listItem.appendChild(songNameElement);
             listItem.appendChild(deleteButton);
 
-            sharedListContainer.appendChild(listItem);
+            sharedSongsContainer.appendChild(listItem);
         });
     });
+}
+
+function loadGroupPanel() {
+    // Загружаем "Мой список"
+    loadFavorites();
+
+    // Загружаем "Общий список"
+    loadSharedList();
 }
 
 // Функция для удаления песни из общего списка
@@ -692,4 +700,13 @@ document.addEventListener('DOMContentLoaded', () => {
 document.getElementById('toggle-shared-list').addEventListener('click', () => {
     const panel = document.getElementById('shared-list-panel');
     panel.classList.toggle('open');
+});
+
+document.getElementById('toggle-favorites').addEventListener('click', () => {
+    const panel = document.getElementById('favorites-panel');
+    panel.classList.toggle('open');
+
+    if (panel.classList.contains('open')) {
+        loadGroupPanel(); // Загружаем содержимое панели
+    }
 });
