@@ -585,3 +585,81 @@ toggleFavoritesButton.addEventListener('click', () => {
 document.addEventListener('DOMContentLoaded', () => {
     loadFavorites();
 });
+
+
+
+
+
+
+
+/ Функция для добавления песни в общий список
+function addToSharedList(songData) {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const song = {
+        name: songData[0],
+        sheet: sheetName,
+        index: songIndex,
+        key: keySelect.value, // Сохраняем текущую тональность
+        timestamp: new Date().toISOString() // Для сортировки
+    };
+
+    addDoc(sharedListCollection, song)
+        .then(() => alert("Песня добавлена в общий список!"))
+        .catch((error) => console.error("Ошибка при добавлении песни:", error));
+}
+
+// Обработчик кнопки "Добавить в список"
+document.getElementById('add-to-list-button').addEventListener('click', () => {
+    const sheetName = SHEETS[sheetSelect.value];
+    const songIndex = songSelect.value;
+
+    if (!sheetName || !songIndex) return;
+
+    const songData = cachedData[sheetName][songIndex];
+    if (!songData) return;
+
+    addToSharedList(songData);
+});
+
+
+// Функция для загрузки и отображения общего списка песен
+function loadSharedList() {
+    const sharedListContainer = document.getElementById('shared-list');
+    sharedListContainer.innerHTML = ''; // Очищаем предыдущие результаты
+
+    const q = query(sharedListCollection);
+    onSnapshot(q, (snapshot) => {
+        snapshot.docs.forEach((doc) => {
+            const song = doc.data();
+
+            const listItem = document.createElement('div');
+            listItem.textContent = song.name;
+            listItem.className = 'shared-item';
+
+            listItem.addEventListener('click', () => {
+                sheetSelect.value = song.sheet;
+                songSelect.value = song.index;
+                keySelect.value = song.key; // Устанавливаем сохраненную тональность
+                displaySongDetails(cachedData[song.sheet][song.index], song.index);
+            });
+
+            sharedListContainer.appendChild(listItem);
+        });
+    });
+}
+
+// Загрузка списка при старте
+document.addEventListener('DOMContentLoaded', () => {
+    loadAllSheetsData();
+    loadSharedList(); // Загружаем общий список песен
+});
+
+// Переключение видимости панели
+document.getElementById('toggle-shared-list').addEventListener('click', () => {
+    const panel = document.getElementById('shared-list-panel');
+    panel.classList.toggle('open');
+});
