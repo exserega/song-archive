@@ -743,11 +743,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.getElementById('toggle-favorites').addEventListener('click', () => {
     const panel = document.getElementById('favorites-panel');
+    if (!panel) {
+        console.error("Элемент 'favorites-panel' не найден.");
+        return;
+    }
+
     panel.classList.toggle('open');
 
     if (panel.classList.contains('open')) {
         loadGroupPanel(); // Загружаем содержимое панели
     }
 });
-
 
