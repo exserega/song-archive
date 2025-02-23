@@ -327,6 +327,11 @@ body.dark-theme .chord {
     background: #e9ecef;
 }
 
+.song-name {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
 
 .delete-button {
     background: none;
