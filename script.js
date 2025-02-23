@@ -511,7 +511,12 @@ function updateFontSize() {
 
 
 // Функция для загрузки избранных песен из localStorage
-function loadFavorites(container) {
+function loadFavorites(container = document.getElementById('favorites-list')) {
+    if (!container) {
+        console.error("Контейнер для избранных песен не найден.");
+        return;
+    }
+
     container.innerHTML = ''; // Очищаем предыдущие результаты
 
     if (favorites.length === 0) {
@@ -643,7 +648,12 @@ document.getElementById('add-to-list-button').addEventListener('click', () => {
 
 
 // Функция для загрузки и отображения общего списка песен
-function loadSharedList(container) {
+function loadSharedList(container = document.getElementById('shared-songs-list')) {
+    if (!container) {
+        console.error("Контейнер для общего списка песен не найден.");
+        return;
+    }
+
     container.innerHTML = ''; // Очищаем предыдущие результаты
 
     const q = query(sharedListCollection);
@@ -697,15 +707,16 @@ function loadGroupPanel() {
     const myFavoritesContainer = document.getElementById('favorites-list');
     const sharedSongsContainer = document.getElementById('shared-songs-list');
 
-    // Очищаем предыдущие результаты
-    myFavoritesContainer.innerHTML = '';
-    sharedSongsContainer.innerHTML = '';
+    if (!myFavoritesContainer || !sharedSongsContainer) {
+        console.error("Контейнеры для списков не найдены.");
+        return;
+    }
 
-    // Загружаем "Мой список"
-    loadFavorites(myFavoritesContainer);
+    myFavoritesContainer.innerHTML = ''; // Очищаем предыдущие результаты
+    sharedSongsContainer.innerHTML = ''; // Очищаем предыдущие результаты
 
-    // Загружаем "Общий список"
-    loadSharedList(sharedSongsContainer);
+    loadFavorites(myFavoritesContainer); // Загружаем "Мой список"
+    loadSharedList(sharedSongsContainer); // Загружаем "Общий список"
 }
 
 // Функция для удаления песни из общего списка
@@ -724,6 +735,7 @@ async function deleteFromSharedList(docId) {
 // Загрузка списка при старте
 document.addEventListener('DOMContentLoaded', () => {
     loadAllSheetsData();
+    loadFavorites(); // Загружаем избранные песни
     loadSharedList(); // Загружаем общий список песен
 });
 
