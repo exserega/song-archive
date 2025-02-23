@@ -249,33 +249,6 @@ function processLyrics(lyrics) {
     }).join('\n');
 }
 
-// Функция для добавления песни в избранное
-favoriteButton.addEventListener('click', () => {
-    const sheetName = SHEETS[sheetSelect.value];
-    const songIndex = songSelect.value;
-
-    if (!sheetName || !songIndex) return;
-
-    const songData = cachedData[sheetName][songIndex];
-    if (!songData) return;
-
-    const song = {
-        name: songData[0],
-        sheet: sheetName,
-        index: songIndex
-    };
-
-    if (!favorites.some(fav => fav.name === song.name && fav.sheet === song.sheet)) {
-        favorites.push(song);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        alert('Песня добавлена в избранное!');
-    } else {
-        alert('Песня уже в избранном!');
-    }
-
-    loadGroupPanel(); // Перезагружаем панель "Группа"
-});
-
 
 function displayFavorites() {
     const favoritesContainer = document.createElement('div');
@@ -597,7 +570,7 @@ function removeFromFavorites(fav) {
 }
 
 // Переключение видимости панели
-toggleFavorites.addEventListener('click', () => {
+toggleFavoritesButton.addEventListener('click', () => {
     favoritesPanel.classList.toggle('open');
     loadFavorites(); // Загружаем избранные песни при открытии панели
 });
