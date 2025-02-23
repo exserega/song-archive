@@ -228,6 +228,10 @@ body.dark-theme .chord {
     box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
 }
 
+.toggle-favorites {
+    z-index: 1001; /* Выше, чем у панели */
+}
+
 .list-section {
     margin-bottom: 20px;
 }
