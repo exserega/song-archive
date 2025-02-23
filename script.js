@@ -755,3 +755,8 @@ document.getElementById('toggle-favorites').addEventListener('click', () => {
     }
 });
 
+
+document.getElementById('toggle-shared-list').addEventListener('click', () => {
+const panel = document.getElementById('shared-list-panel');
+panel.classList.toggle('open');
+});
