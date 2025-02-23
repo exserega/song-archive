@@ -282,6 +282,17 @@ body.dark-theme .chord {
 
 
 
+.list-section {
+    margin-bottom: 20px;
+}
+
+.list-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+
 .shared-list-panel {
     position: fixed;
     top: 60px;
