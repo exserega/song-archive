@@ -739,11 +739,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadSharedList(); // Загружаем общий список песен
 });
 
-// Переключение видимости панели
-document.getElementById('toggle-shared-list').addEventListener('click', () => {
-    const panel = document.getElementById('shared-list-panel');
-    panel.classList.toggle('open');
-});
 
 document.getElementById('toggle-favorites').addEventListener('click', () => {
     const panel = document.getElementById('favorites-panel');
