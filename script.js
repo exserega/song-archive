@@ -45,7 +45,7 @@ const favoriteButton = document.getElementById('favorite-button');
 const loadingIndicator = document.getElementById('loading-indicator');
 const splitTextButton = document.getElementById('split-text-button');
 const favoritesPanel = document.getElementById('favorites-panel');
-const toggleFavorites = document.getElementById('toggle-favorites');
+const toggleFavoritesButton = document.getElementById('toggle-favorites');
 const favoritesList = document.getElementById('favorites-list');
 const sharedSongsList = document.getElementById('shared-songs-list');
 
