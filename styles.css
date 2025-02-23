@@ -200,6 +200,7 @@ body.dark-theme .chord {
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
     transition: left 0.3s ease;
     z-index: 1000;
+    overflow-y: auto; /* Добавляем прокрутку, если контента много */
 }
 
 .favorites-panel.open {
