@@ -670,7 +670,7 @@ function loadSharedList() {
     });
 }
 
-/ Функция для удаления песни из общего списка
+// Функция для удаления песни из общего списка
 async function deleteFromSharedList(docId) {
     try {
         await deleteDoc(doc(db, "sharedList", docId));
