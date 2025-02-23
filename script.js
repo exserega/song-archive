@@ -1,3 +1,18 @@
+const toggleFavoritesButton = document.getElementById('toggle-favorites');
+const favoritesPanel = document.getElementById('favorites-panel');
+
+if (!toggleFavoritesButton || !favoritesPanel) {
+    console.error("Элементы 'toggle-favorites' или 'favorites-panel' не найдены.");
+} else {
+    toggleFavoritesButton.addEventListener('click', () => {
+        favoritesPanel.classList.toggle('open');
+
+        if (favoritesPanel.classList.contains('open')) {
+            loadGroupPanel(); // Загружаем содержимое панели
+        }
+    });
+}
+
 // Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBlkjVQFtFpMRFexAi6nBqEkIfjFlU5cDo",
