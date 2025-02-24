@@ -727,14 +727,12 @@ document.getElementById('toggle-favorites').addEventListener('click', () => {
         console.error("Элемент 'favorites-panel' не найден.");
         return;
     }
-
-    console.log("Переключение класса 'open'"); // Логирование
+    console.log("Переключение класса 'open'");
     panel.classList.toggle('open');
-
     if (panel.classList.contains('open')) {
-        console.log("Панель открыта, загружаем данные."); // Логирование
+        console.log("Панель открыта, загружаем данные.");
         loadGroupPanel();
     } else {
-        console.log("Панель закрыта."); // Логирование
+        console.log("Панель закрыта.");
     }
 });
