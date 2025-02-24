@@ -238,21 +238,24 @@ body.dark-theme .chord {
 }
 
 .favorites-list, .shared-songs-list {
-    padding: 10px;
-    max-height: calc(100vh - 100px);
+    max-height: 300px; /* Ограничение высоты для прокрутки */
     overflow-y: auto;
-}
-
-.favorites-list div, .shared-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 8px;
-    margin-bottom: 5px;
-    background-color: #fff;
+    padding: 10px;
     border: 1px solid #ddd;
     border-radius: 5px;
-    cursor: pointer;
+    background-color: #f9f9f9;
+}
+
+.favorite-item, .shared-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.favorite-item:last-child, .shared-item:last-child {
+    border-bottom: none;
 }
 
 .favorites-list div:hover, .shared-item:hover {
@@ -264,11 +267,10 @@ body.dark-theme .chord {
     margin-right: 10px;
 }
 
-.remove-btn, .delete-button {
+.remove-button, .delete-button {
     background: none;
     border: none;
     color: red;
-    font-size: 16px;
     cursor: pointer;
 }
 
