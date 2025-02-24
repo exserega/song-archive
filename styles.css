@@ -12,18 +12,18 @@
 
 /* Базовые стили */
 body {
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Inter', sans-serif;
     margin: 0;
-    padding: 10px;
+    padding: 15px;
     background-color: var(--background-color);
     color: var(--text-color);
     line-height: 1.6;
 }
 
 .container {
-    max-width: 100%;
+    max-width: 800px; /* Ограничиваем ширину контейнера */
     margin: 0 auto;
-    padding: 10px;
+    padding: 15px;
 }
 
 /* Заголовки */
@@ -38,8 +38,18 @@ h1, h2 {
 .controls {
     display: flex;
     flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
     gap: 10px;
-    margin-bottom: 15px;
+}
+
+.control-group label {
+    font-weight: bold;
 }
 
 .font-size-controls {
@@ -68,8 +78,13 @@ h1, h2 {
 .control-buttons {
     display: flex;
     justify-content: center;
-    gap: 8px;
-    margin-top: 15px;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
 }
 
 .control-buttons button {
@@ -196,7 +211,7 @@ body.dark-theme .chord {
 .favorites-panel {
     position: fixed;
     top: 0;
-    left: -300px; /* Панель скрыта */
+    left: -300px;
     width: 300px;
     height: 100%;
     background-color: #f4f4f4;
@@ -249,7 +264,7 @@ body.dark-theme .chord {
     overflow-y: auto;
 }
 
-.favorites-list div, .shared-item {
+.favorites-item, .shared-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
