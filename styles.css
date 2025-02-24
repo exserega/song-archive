@@ -46,6 +46,7 @@ h1, h2 {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap; /* Добавляем перенос строк для маленьких экранов */
 }
 
 .control-group label {
@@ -65,6 +66,11 @@ h1, h2 {
     border: none;
     border-radius: var(--radius);
     cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.font-size-controls button:hover {
+    background-color: var(--hover-color);
 }
 
 #sheet-select, #search-input, #key-select {
@@ -72,6 +78,8 @@ h1, h2 {
     border: 1px solid var(--border-color);
     border-radius: var(--radius);
     font-size: 14px;
+    flex: 1; /* Добавляем гибкость для полей ввода */
+    min-width: 100px; /* Минимальная ширина */
 }
 
 /* Кнопки управления */
@@ -79,11 +87,6 @@ h1, h2 {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin-top: 20px;
-}
-
-footer {
-    text-align: center;
     margin-top: 20px;
 }
 
@@ -96,6 +99,10 @@ footer {
     transition: all 0.3s ease;
 }
 
+.control-buttons button:hover {
+    background-color: var(--hover-color);
+}
+
 #transpose-up, #transpose-down {
     background-color: var(--secondary-color);
     color: #fff;
@@ -103,6 +110,11 @@ footer {
 
 #favorite-button {
     background-color: var(--primary-color);
+    color: #fff;
+}
+
+#add-to-list-button {
+    background-color: var(--accent-color);
     color: #fff;
 }
 
@@ -138,11 +150,13 @@ footer {
 
 /* Стиль для контейнера результатов поиска */
 #search-results {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius);
     max-height: 200px;
     overflow-y: auto;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    background-color: #f9f9f9;
 }
 
 .search-result {
@@ -157,7 +171,7 @@ footer {
 }
 
 .search-result:hover {
-    background-color: #e6f7ff;
+    background-color: #f0f8ff;
 }
 
 /* Базовый стиль для аккордов */
@@ -173,13 +187,68 @@ body.dark-theme .chord {
 
 /* Адаптивность */
 @media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .controls {
+        gap: 10px;
+    }
+
+    .control-group {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .control-group label {
+        font-size: 14px;
+    }
+
+    .control-group select, .control-group input {
+        font-size: 14px;
+        padding: 8px;
+    }
+
     #song-content pre {
         font-size: 12px;
         line-height: 1.4;
     }
 
-    .control-buttons {
-        flex-direction: column;
+    .control-buttons button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    .favorites-panel, .shared-list-panel {
+        width: 100%;
+        left: -100%; /* Полностью скрываем панель */
+    }
+
+    .favorites-panel.open, .shared-list-panel.open {
+        left: 0;
+    }
+
+    .list-section h3 {
+        font-size: 16px;
+    }
+
+    .favorites-item, .shared-item {
+        font-size: 14px;
+        padding: 8px;
+        margin-bottom: 5px;
+    }
+
+    .remove-btn, .delete-button {
+        font-size: 14px;
+    }
+
+    .search-result {
+        font-size: 14px;
+        padding: 8px;
     }
 }
 
@@ -205,14 +274,44 @@ body.dark-theme .chord {
         font-size: 10px;
         line-height: 1.2;
     }
+
+    .control-group label {
+        font-size: 12px;
+    }
+
+    .control-group select, .control-group input {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .control-buttons button {
+        font-size: 12px;
+        padding: 5px 10px;
+    }
+
+    .favorites-item, .shared-item {
+        font-size: 12px;
+        padding: 6px;
+        margin-bottom: 4px;
+    }
+
+    .remove-btn, .delete-button {
+        font-size: 12px;
+    }
+
+    .search-result {
+        font-size: 12px;
+        padding: 6px;
+    }
 }
 
 /* Стили для выдвижной панели "Группа" */
 .favorites-panel {
     position: fixed;
     top: 0;
-    left: -300px;
-    width: 300px;
+    left: -100%; /* Полностью скрываем панель */
+    width: 100%;
+    max-width: 300px; /* Максимальная ширина для больших экранов */
     height: 100%;
     background-color: #f4f4f4;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
@@ -244,10 +343,6 @@ body.dark-theme .chord {
     z-index: 1001;
 }
 
-.toggle-favorites {
-    z-index: 1001; /* Выше, чем у панели */
-}
-
 .list-section {
     margin-bottom: 20px;
 }
@@ -274,9 +369,10 @@ body.dark-theme .chord {
     border: 1px solid #ddd;
     border-radius: 5px;
     cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-.favorites-list div:hover, .shared-item:hover {
+.favorites-item:hover, .shared-item:hover {
     background-color: #f0f8ff;
 }
 
@@ -291,6 +387,7 @@ body.dark-theme .chord {
     color: red;
     font-size: 16px;
     cursor: pointer;
+    transition: text-decoration 0.2s ease;
 }
 
 .remove-btn:hover, .delete-button:hover {
@@ -304,6 +401,11 @@ body.dark-theme .chord {
     color: var(--primary-color);
     text-decoration: none;
     font-size: 14px;
+    transition: color 0.3s ease;
+}
+
+#holychords-button:hover {
+    color: var(--accent-color);
 }
 
 #holychords-button.hidden {
