@@ -12,7 +12,7 @@
 
 /* Базовые стили */
 body {
-    font-family: 'Inter', sans-serif;
+    font-family: 'Manrope', sans-serif;
     margin: 0;
     padding: 10px;
     background-color: var(--background-color);
@@ -110,7 +110,7 @@ h1, h2 {
 }
 
 #song-content pre {
-    font-family: 'Roboto', monospace;
+    font-family: 'Manrope', monospace;
     white-space: pre-wrap;
     word-wrap: break-word;
     overflow-wrap: anywhere;
