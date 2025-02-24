@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agape Worship</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
 <header>
@@ -25,19 +26,6 @@
                 <option value="Поклонение (горизонталь)">Поклонение (горизонталь)</option>
             </select>
         </div>
-
-        <!-- Панель "Группа" -->
-        <div id="favorites-panel" class="favorites-panel">
-            <div id="my-list" class="list-section">
-                <h3>Мой список</h3>
-                <div id="favorites-list" class="favorites-list"></div>
-            </div>
-            <div id="shared-list" class="list-section">
-                <h3>Общий список</h3>
-                <div id="shared-songs-list" class="shared-songs-list"></div>
-            </div>
-        </div>
-
         <div class="control-group">
             <label for="search-input">Поиск песни:</label>
             <input type="text" id="search-input" placeholder="Введите название песни...">
@@ -87,6 +75,19 @@
         <a id="holychords-button" href="#" target="_blank">Holychords</a>
     </footer>
 </main>
+<!-- Панель "Группа" -->
+<div id="favorites-panel" class="favorites-panel">
+    <div id="my-list" class="list-section">
+        <h3>Мой список</h3>
+        <div id="favorites-list" class="favorites-list"></div>
+    </div>
+    <div id="shared-list" class="list-section">
+        <h3>Общий список</h3>
+        <div id="shared-songs-list" class="shared-songs-list"></div>
+    </div>
+</div>
 <!-- Индикатор загрузки -->
 <div id="loading-indicator">Загрузка...</div>
 <script type="module" src="script.js"></script>
+</body>
+</html>
