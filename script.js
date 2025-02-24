@@ -677,8 +677,8 @@ function loadGroupPanel() {
         return;
     }
 
-    myFavoritesContainer.innerHTML = ''; // Очищаем предыдущие результаты
-    sharedSongsContainer.innerHTML = ''; // Очищаем предыдущие результаты
+    myFavoritesContainer.innerHTML = ''; // Очищаем "Мой список"
+    sharedSongsContainer.innerHTML = ''; // Очищаем "Общий список"
 
     loadFavorites(myFavoritesContainer); // Загружаем "Мой список"
     loadSharedList(sharedSongsContainer); // Загружаем "Общий список"
@@ -736,5 +736,15 @@ document.getElementById('toggle-favorites').addEventListener('click', () => {
         loadGroupPanel();
     } else {
         console.log("Панель закрыта."); // Логирование
+    }
+});
+
+
+document.addEventListener('click', (event) => {
+    const favoritesPanel = document.getElementById('favorites-panel');
+    if (!favoritesPanel.classList.contains('open')) return;
+
+    if (!favoritesPanel.contains(event.target)) {
+        favoritesPanel.classList.remove('open');
     }
 });
