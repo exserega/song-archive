@@ -189,10 +189,10 @@ body.dark-theme .chord {
 }
 
 /* Стили для выдвижной панели "Группа" */
-.favorites-panel {
+#favorites-panel {
     position: fixed;
     top: 0;
-    left: -80%; /* Меньшая ширина для мобильных устройств */
+    left: -80%;
     width: 80%;
     height: 100%;
     background-color: #f4f4f4;
@@ -202,8 +202,8 @@ body.dark-theme .chord {
     overflow-y: auto;
 }
 
-.favorites-panel.open {
-    transform: translateX(0);
+#favorites-panel.open {
+    transform: translateX(100%);
 }
 
 .toggle-favorites {
